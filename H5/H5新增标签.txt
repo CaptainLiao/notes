@@ -1,0 +1,29 @@
+1 标签类别
+<header>
+<footer>
+<aside>
+<section>
+<article>
+<nav>
+<time datatime="2016-6-11">
+<video>
+
+1.1 <video>属性
+src ---- URL,告诉video元素在哪里查找源文件；
+controls ---- 布尔属性，如果有，浏览器会为视频增加内置控件；
+loop ---- 布尔属性，表示循环播放；
+autoplay ---- 布尔属性，如果有，表示浏览器加载完毕自动播放；
+poster ---- 把视频的一帧显示为“海报”图，来表示这个视频；例：poster="image/poster.png"
+width & height ----  
+preload ---- 用于细粒度地控制视频如何加载。
+----none：用户点击播放前不下载视频；
+----metadata：下载视频元数据，但不下载视频内容；
+----auto：让浏览器来做决定。
+
+1.1.1 <source>元素
+为<video>提供一组不同格式的视频,浏览器从上向下直到找到它能播放的一种格式。
+<video autoplay controls width="" height="">
+<source src="video/xxx.mp4">
+<source src="video/xxx.webm">
+<soruce src="video/xxx.ogv">
+</video>
