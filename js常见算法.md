@@ -139,3 +139,33 @@ function randomStr(n) {
     return Math.random().toString(36).substr(2,n);
 }
 ```
+### 6. 对象、字符串、布尔值深度复制
+
+    function deepCopy (p, c) {
+        var c = c || {};
+        switch(typeof p) {
+            case "string":
+                c = p;
+                break;
+            case "boolean":
+                c = p;
+                break;
+            case 'object':
+                for(var i in p) {
+                    if(typeof p[i] === 'object'){
+                        c[i] = (p[i].constructor === Array) ? [] : {};
+                        deepCopy(p[i], c[i]);
+                    }else {
+                        c[i] = p[i];
+                    }
+                };
+                break;
+            default:
+                alert("请输入正确的值")
+        }
+    
+        return c;
+    }
+    var m = "sss"
+    var n = deepCopy(m)
+    console.log(n)
