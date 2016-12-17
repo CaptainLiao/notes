@@ -1,13 +1,12 @@
+# 一、gulp的基本使用
+
 [gulpjs](http://gulpjs.com/)是一个前端构建工具，与[gruntjs](http://gruntjs.com/)相比，gulpjs无需写一大堆繁杂的配置参数，API也非常简单，学习起来很容易，而且gulpjs使用的是nodejs中[stream](http://nodejs.org/api/stream.html)来读取和操作数据，其速度更快。如果你还没有使用过前端构建工具，或者觉得gruntjs太难用的话，那就尝试一下gulp吧。
 
-本文导航：
+#### a:[官方 github](https://github.com/gulpjs/gulp)
 
-1. [gulp的安装](http://www.cnblogs.com/2050/p/4198792.html#part1)
-2. [开始使用gulp](http://www.cnblogs.com/2050/p/4198792.html#part2)
-3. [gulp的API介绍](http://www.cnblogs.com/2050/p/4198792.html#part3)
-4. [一些常用的gulp插件](http://www.cnblogs.com/2050/p/4198792.html#part4)
+#### b: [gulp简体中文文档](https://github.com/lisposter/gulp-docs-zh-cn)
 
-# 1、gulp的安装
+## 1、gulp的安装
 
 首先确保你已经正确安装了nodejs环境。然后以全局方式安装gulp：
 
@@ -29,7 +28,7 @@ npm install --save-dev gulp
 
 这样就完成了gulp的安装。至于为什么在全局安装gulp后，还需要在项目中本地安装一次，有兴趣的可以看下stackoverflow上有人做出的回答：[why-do-we-need-to-install-gulp-globally-and-locally](http://stackoverflow.com/questions/22115400/why-do-we-need-to-install-gulp-globally-and-locally)、[what-is-the-point-of-double-install-in-gulp](http://stackoverflow.com/questions/25713618/what-is-the-point-of-double-install-in-gulp)。大体就是为了版本的灵活性，但如果没理解那也不必太去纠结这个问题，只需要知道通常我们是要这样做就行了。
 
-# 2、开始使用gulp
+## 2、开始使用gulp
 
 ### 2.1 建立gulpfile.js文件
 
@@ -53,7 +52,7 @@ gulp.task('default',function(){
 
 要运行gulp任务，只需切换到存放`gulpfile.js`文件的目录(windows平台请使用cmd或者Power Shell等工具)，然后在命令行中执行`gulp`命令就行了，`gulp`后面可以加上要执行的任务名，例如`gulp task1`，如果没有指定任务名，则会执行任务名为`default`的默认任务。
 
-# 3、gulp的API介绍
+## 3、gulp的API介绍
 
 使用gulp，仅需知道4个API即可：`gulp.task()`,`gulp.src()`,`gulp.dest()`,`gulp.watch()`，所以很容易就能掌握，但有几个地方需理解透彻才行，我会在下面一一说明。为了避免出现理解偏差，建议先看一遍[官方文档](https://github.com/gulpjs/gulp/blob/master/docs/API.md)。
 
@@ -333,7 +332,7 @@ gulp.watch('js/**/*.js', function(event){
 }); 
 ```
 
-# 4、一些常用的gulp插件
+## 4、一些常用的gulp插件
 
 gulp的插件数量虽然没有grunt那么多，但也可以说是应有尽有了，下面列举一些常用的插件。
 
@@ -569,4 +568,557 @@ gulp.task('watch', function() {
 });
 ```
 
-如对gulp还有什么不明白之处，或者本文有什么遗漏或错误，欢迎一起交流和探讨~
+## 5、 gulp使用秘籍
+
+### 5.1 只重新编译被更改过的文件
+
+````
+通过使用 gulp-watch:
+
+var gulp = require('gulp'),
+	less = require('gulp-less'),
+	watcht = require('gulp-watch');
+	
+gulp.task('default', function() {
+  return gulp.src('less/*.less')
+  	.pipe(watch('less/*.less'))
+  	.pipe(less())
+  	.pipe(gulp.dest('dist'))
+})
+````
+
+### 5.2 使用外部配置文件
+
+这有很多好处，因为它能让任务更加符合 DRY 原则，并且 config.json 可以被其他的任务运行器使用，比如 `grunt`。
+
+````
+// config.json
+{
+  "desktop": {
+    "src": [
+      "dev/desktop/js/**/*.js",
+      "!dev/destop/js/vendor/**"
+    ],
+    "dest": "build/desktop/js"
+  },
+  "mobile": {
+    "src": [
+      "dev/mobile/js/**/*.js",
+      "!dev/mobile/js/vendor/**"
+    ],
+    "dest": "build/mobile/js"
+  }
+}
+````
+
+````
+// gulpfile.js
+// npm install --save-dev gulp gulp-uglify
+var gulp = require("gulp"),
+	uglify = require("gulp-uglify"),
+	config = require("./config.json");
+	
+function doStuff(cfg) {
+  return gulp.src(cfg.src)
+  	.pipe(uglifi())
+  	.pipe(gulp.dest(cfg.dest))
+}
+gulp.task("dry", function(){
+  doStuff(config.desktop);
+  doStuff(config.mobile);
+})
+````
+
+### 5.3 拥有实时重载（live-reloading）和 CSS 注入的服务器
+
+使用 [BrowserSync](http://browsersync.io/) 和 gulp，你可以轻松地创建一个开发服务器，然后同一个 WiFi 中的任何设备都可以方便地访问到。BrowserSync 同时集成了 live-reload 所以不需要另外做配置了。
+
+首先安装模块：
+
+```
+$ npm install --save-dev browser-sync
+```
+
+然后，考虑拥有如下的目录结构...
+
+```
+gulpfile.js
+app/
+  styles/
+    main.css
+  scripts/
+    main.js
+  index.html
+
+```
+
+... 通过如下的 `gulpfile.js`，你可以轻松地将 `app` 目录中的文件加到服务器中，并且所有的浏览器都会在文件发生改变之后自动刷新：
+
+```
+var gulp = require('gulp');
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
+
+// 监视文件改动并重新载入
+gulp.task('serve', function() {
+  browserSync({
+    server: {
+      baseDir: 'app'
+    }
+  });
+
+  gulp.watch(['*.html', 'styles/**/*.css', 'scripts/**/*.js'], {cwd: 'app'}, reload);
+});
+
+```
+
+在 `index.html` 中引入 CSS：
+
+```
+<html>
+  <head>
+    ...
+    <link rel="stylesheet" href="styles/main.css">
+    ...
+
+```
+
+通过如下命令启动服务，并且打开一个浏览器，访问默认的 URL (http://localhost:3000)：
+
+```
+gulp serve
+```
+
+#### + CSS 预处理器
+
+一个常见的使用案例是当 CSS 文件文件预处理之后重载它们。以 sass 为例，这便是你如何指示浏览器无需刷新整个页面而只是重载 CSS。
+
+考虑有如下的文件目录结构...
+
+```
+gulpfile.js
+app/
+  scss/
+    main.scss
+  scripts/
+    main.js
+  index.html
+
+```
+
+... 通过如下的 `gulpfile.js`，你可以轻松地监视 `scss` 目录中的文件，并且所有的浏览器都会在文件发生改变之后自动刷新：
+
+```
+var gulp = require('gulp');
+var sass = require('gulp-ruby-sass');
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
+
+gulp.task('sass', function() {
+  return sass('scss/styles.scss')
+    .pipe(gulp.dest('app/css'))
+    .pipe(reload({ stream:true }));
+});
+
+// 监视 Sass 文件的改动，如果发生变更，运行 'sass' 任务，并且重载文件
+gulp.task('serve', ['sass'], function() {
+  browserSync({
+    server: {
+      baseDir: 'app'
+    }
+  });
+
+  gulp.watch('app/scss/*.scss', ['sass']);
+});
+```
+
+在 `index.html` 文件中引入预处理后的 CSS 文件：
+
+```
+<html>
+  <head>
+    ...
+    <link rel="stylesheet" href="css/main.css">
+    ...
+
+```
+
+通过如下命令启动服务，并且打开一个浏览器，访问默认的 URL (http://localhost:3000)：
+
+```
+gulp serve
+```
+
+#### 附注：
+
+- 实时重载（Live reload），CSS 注入以及同步滚动可以在 [BrowserStack](http://www.browserstack.com/) 虚拟机里无缝执行。
+- 设置 `tunnel: true` 来使用一个公开的 URL 来访问你本地的站点 (支持所有 BrowserSync 功能)。
+
+
+
+# 二、使用gulp构建项目
+
+## 创建gulpfile.js
+
+在项目根目录下新建一个`gulpfile.js`文件，粘贴如下代码：
+
+```
+//在项目根目录引入gulp和uglify插件
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+
+gulp.task('compress',function(){
+    return gulp.src('script/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('dist'));
+});
+```
+
+注：`gulpfile.js`文件名不可更改。
+项目需要用到`uglify`和rename插件，执行以下命令安装：
+
+```
+npm install --save-dev gulp-uglify
+npm install --save-dev gulp-rename
+```
+
+以我的为例，进入`gulpfile.js`所在目录：
+
+```
+cd /Users/trigkit4/gulp-test
+```
+
+然后输入：
+
+```
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
+
+gulp.task('compress',function(){
+    return gulp.src('script/*.js')
+    .pipe(uglify())
+    .pipe(rename('jquery.ui.min.js'))
+    .pipe(gulp.dest('dist'));
+});
+```
+
+该命令会安装`package.json`下的全部依赖，如下图所示：
+
+![img](https://segmentfault.com/img/bVnaty)
+
+## 完整的gulpfile.js
+
+```
+// 载入外挂
+var gulp = require('gulp'), 
+    sass = require('gulp-ruby-sass'),
+    autoprefixer = require('gulp-autoprefixer'),
+    minifycss = require('gulp-minify-css'),
+    jshint = require('gulp-jshint'),
+    uglify = require('gulp-uglify'),
+    imagemin = require('gulp-imagemin'),
+    rename = require('gulp-rename'),
+    clean = require('gulp-clean'),
+    concat = require('gulp-concat'),
+    notify = require('gulp-notify'),
+    cache = require('gulp-cache'),
+    livereload = require('gulp-livereload');
+ 
+// 样式
+gulp.task('styles', function() { 
+  return gulp.src('src/styles/main.scss')
+    .pipe(sass({ style: 'expanded', }))
+    .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+    .pipe(gulp.dest('dist/styles'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(minifycss())
+    .pipe(gulp.dest('dist/styles'))
+    .pipe(notify({ message: 'Styles task complete' }));
+});
+ 
+// 脚本
+gulp.task('scripts', function() { 
+  return gulp.src('src/scripts/**/*.js')
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'))
+    .pipe(concat('main.js'))
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(notify({ message: 'Scripts task complete' }));
+});
+ 
+// 图片
+gulp.task('images', function() { 
+  return gulp.src('src/images/**/*')
+    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
+    .pipe(gulp.dest('dist/images'))
+    .pipe(notify({ message: 'Images task complete' }));
+});
+ 
+// 清理
+gulp.task('clean', function() { 
+  return gulp.src(['dist/styles', 'dist/scripts', 'dist/images'], {read: false})
+    .pipe(clean());
+});
+ 
+// 预设任务
+gulp.task('default', ['clean'], function() { 
+    gulp.start('styles', 'scripts', 'images');
+});
+ 
+// 看守
+gulp.task('watch', function() {
+ 
+  // 看守所有.scss档
+  gulp.watch('src/styles/**/*.scss', ['styles']);
+ 
+  // 看守所有.js档
+  gulp.watch('src/scripts/**/*.js', ['scripts']);
+ 
+  // 看守所有图片档
+  gulp.watch('src/images/**/*', ['images']);
+ 
+  // 建立即时重整伺服器
+  var server = livereload();
+ 
+  // 看守所有位在 dist/  目录下的档案，一旦有更动，便进行重整
+  gulp.watch(['dist/**']).on('change', function(file) {
+    server.changed(file.path);
+  });
+ 
+});
+
+```
+
+注：`pipe()`是`stream`模块里传递数据流的一个方法，第一个参数为插件方法，插件会接收从上游流下的文件，进行处理加工后，再往下流。
+
+```
+gulp.task('任务名称', function () {
+    return gulp.src('文件路径')
+        .pipe(...)
+        .pipe(...)
+        // 直到任务的最后一步
+        .pipe(...);
+});
+
+```
+
+## gulp插件
+
+### 2.1`gulp-gh-pages`
+
+使用`gulp`来把`markdown`生成`html`文档并上传到`git pages`上
+
+[https://github.com/shinnn/gulp-gh-pages](https://github.com/shinnn/gulp-gh-pages)
+
+```
+var gulp = require('gulp');
+var ghPages = require('gulp-gh-pages');
+
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
+});
+```
+
+### 2.2 `gulp-jade`插件：
+
+将jade编译成html文件
+
+### 2.3 `gulp-less`插件：
+
+将less编译成css文件
+
+```
+var less = require('gulp-less');
+var path = require('path');
+
+gulp.task('less', function () {
+  return gulp.src('./less/**/*.less')
+    .pipe(less({
+      paths: [ path.join(__dirname, 'less', 'includes') ]
+    }))
+    .pipe(gulp.dest('./public/css'));
+
+});
+```
+
+### 2.4 `gulp-live-server` ：方便的，轻量级的服务器
+
+```
+	var gulp = require('gulp');
+	var gls = require('gulp-live-server');
+
+  gulp.task('serve', function() {
+  
+  //1. serve with default settings
+  var server = gls.static(); //equals to gls.static('public', 3000);
+  server.start();
+  
+  //2. serve at custom port
+  var server = gls.static('dist', 8888);
+  server.start();
+
+  //3. serve multi folders
+  var server = gls.static(['dist', '.tmp']);
+  server.start();
+
+  //use gulp.watch to trigger server actions(notify, start or stop)
+  gulp.watch(['static/**/*.css', 'static/**/*.html'], function (file) {
+    server.notify.apply(server, [file]);
+  });
+});
+```
+
+### 2.5 `gulp-livereload`
+
+可以实时保存刷新，那样就不用按F5和切换界面了
+
+### 2.6 `gulp-load-plugins`
+
+在你的`package.json`文件中自动加载任意的`gulp`插件
+
+```
+$ npm install --save-dev gulp-load-plugins
+
+```
+
+例如一个给定的`package.json`文件如下：
+
+```
+{
+    "dependencies": {
+        "gulp-jshint": "*",
+        "gulp-concat": "*"
+    }
+}
+```
+
+在`gulpfile.js`中添加如下代码：
+
+```
+var gulp = require('gulp');
+
+var gulpLoadPlugins = require('gulp-load-plugins');
+
+var plugins = gulpLoadPlugins();
+```
+
+`plugins.jshint = require('gulp-jshint');`
+
+`plugins.concat = require('gulp-concat');`
+
+### 2.7 `gulp-babel`：
+
+gulp 的babel插件，
+
+```
+$ npm install --save-dev gulp-babel babel-preset-es2015
+```
+
+使用方法：
+
+```
+const gulp = require('gulp');
+const babel = require('gulp-babel');
+
+gulp.task('default', () => {
+    return gulp.src('src/app.js')
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(gulp.dest('dist'));
+});
+```
+
+
+ ![4087646309-54f96958a7b1f_articlex](C:\Users\Administrator\Desktop\4087646309-54f96958a7b1f_articlex.png)
+
+# 三、我的gulp工作流
+
+````
+var gulp = require('gulp'),
+	gulpLoadPlugins = require('gulp-load-plugins'),
+	del = require('del'),
+	browserSync = require('browser-sync').create(),
+	reload = browserSync.reload,
+	plugins = gulpLoadPlugins();
+
+gulp.task("clean", function() {
+	return del(['dist']);
+})
+gulp.task('css', function() {
+	return gulp.src('./src/less/*.less')
+		//.pipe(plugins.watch('./src/less/*.less')) // 只重新编译被更改过的文件
+		.pipe(plugins.less())
+		.pipe(plugins.autoprefixer({
+			browsers: ['last 2 version','Android >= 4.0'],
+			cascade: true,
+			remove: true
+		}))
+		.pipe(plugins.concat("index.css"))
+		.pipe(plugins.minifyCss())
+		// .pipe(plugins.rename(function(path){
+		// 	path.basename = 'index';
+		// 	path.extname = '.min.css';
+		// }))
+		.pipe(plugins.rename({suffix: '.min'}))
+		.pipe(plugins.rev())		// 添加md5
+		.pipe(gulp.dest('dist/css'))
+		.pipe(plugins.rev.manifest())
+		.pipe(gulp.dest('dist/rev'))
+
+		
+});
+
+gulp.task('rev',['css'],function() {
+	return gulp.src(['dist/rev/rev-manifest.json','dist/*.html'])  //获取rev-manifest.json和要替换的html文件
+		.pipe(plugins.revCollector({
+			replaceReved: true		//根据rev-manifest.json的规则替换html里的路径，由于替换是根据rev-manifest.json规则来的，所以一定要先生成这个文件再进行替换
+		}))
+		.pipe(gulp.dest('dist'))
+		.pipe(plugins.notify('md5 success!!!!'))
+});
+
+gulp.task('injectFile', ['rev'],function () {
+	var target = gulp.src('./src/*.html');
+	var sources = gulp.src(['./dist/**/*.js','./dist/**/*.css'],{read: false});		//{read: false}不读取文件,加快程序
+	return target.pipe(plugins.inject(sources,{relative: true})) 		// 设置相对路径（相对于注入目标的路径）
+		.pipe(gulp.dest('./dist'))  //将src下的html文件放入dist
+		.pipe(plugins.notify("inject success"))
+		
+		
+});
+
+gulp.task('watch', ['injectFile'], function () {
+	return gulp.watch(['./src/less/*.less','./src/*.html'], ['injectFile'])
+		
+})
+
+// gulp.task('watch', ['injectFile'], function () {
+// 	return gulp.watch(['./src/less/*.less'], ['injectFile'])
+// })
+
+gulp.task('server', function() {
+	
+	browserSync.init({
+		files:'**',
+		server: {
+			baseDir: './'
+		}
+	});
+	browserSync.watch('./src/**.*').on('change',browserSync.reload);
+	browserSync.watch('./dist/**.*').on('change',browserSync.reload);
+
+
+	//gulp.watch("dist/*.html").on('change', reload);
+});
+
+gulp.task('default', function() {
+	gulp.run('watch','server');
+})
+````
+
