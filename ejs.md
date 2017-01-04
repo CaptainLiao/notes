@@ -27,7 +27,7 @@ gulp.task('includeFile', function () {
 
 #### 1.2 如何给动态添加的元素绑定事件
 
-解决方法：在`ajax`回调函数中，
+解决方法：在`ajax`回调函数中，重新获取目标元素，再添加事件
 
 `````javas
 $(ele).on("click",function(e){
@@ -36,6 +36,10 @@ $(ele).on("click",function(e){
   	e.stopPropagation();
 })
 `````
+
+> 一个奇怪的bug...
+>
+> 再给动态生成的元素添加事件的时候，页面有多个`<a>`标签，如果使用$(".addr_operBtn").find("a").eq(0).on("click", function(){})，事件只有第一个元素有用，但给`<a>`标签添加一个class，直接选中元素添加事件则都可以
 
 ## 二、语法篇
 
