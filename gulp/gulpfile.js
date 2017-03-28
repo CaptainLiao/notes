@@ -78,7 +78,7 @@ gulp.task('es6ToEs5', function () {
 gulp.task('rev',['css'],function() {
     return gulp.src(['dist/rev/rev-manifest.json','dist/*.html'])  //获取rev-manifest.json和要替换的html文件
         .pipe(plugins.revCollector({
-            replaceReved: true      //根据rev-manifest.json的规则替换html里的路径，由于替换是根据rev-manifest.json规则来的，所以一定要先生成这个文件再进行替换
+            replaceReved: true		//根据rev-manifest.json的规则替换html里的路径，由于替换是根据rev-manifest.json规则来的，所以一定要先生成这个文件再进行替换
         }))
         .pipe(gulp.dest('dist'))
         .pipe(plugins.notify('md5 success!!!!'))

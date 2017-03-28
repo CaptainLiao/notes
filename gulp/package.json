@@ -1,14 +1,14 @@
 {
-  "name": "3dhover",
+  "name": "my-work-stream",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "fay",
   "license": "ISC",
-"devDependencies": {
+  "devDependencies": {
     "babel-preset-es2015": "^6.24.0",
     "browser-sync": "^2.18.5",
     "del": "^2.2.2",
