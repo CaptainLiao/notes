@@ -23,7 +23,9 @@ const gulp = require('gulp'),
     sequence = require('gulp-sequence'),
     gulpCopy = require('gulp-file-copy'),
     proxy = require('http-proxy-middleware'),
-    fileinclude = require('gulp-file-include');
+    fileinclude = require('gulp-file-include'),
+    pngquant = require('imagemin-pngquant'),
+    mozjpeg = require('imagemin-mozjpeg');
 
 const DIST = 'dist',
     SRC = 'dist';
@@ -112,9 +114,14 @@ gulp.task('copy', function () {
 
     gulp.src(start2)
         .pipe(plugins.changed(DIST))
-        .pipe(gulpCopy('dist/images/', {
-            start: 'src/images/'
-        }));
+        .pipe(plugins.imagemin(
+            [pngquant(), mozjpeg()],
+            {verbose: true}
+            ))
+        .pipe(gulp.dest('dist/images'));
+        // .pipe(gulpCopy('dist/images/', {
+        //     start: 'src/images/'
+        // }));
 
 
 });
