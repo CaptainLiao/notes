@@ -187,6 +187,12 @@ gulp.task('server', function() {
     gulp.watch(['src/less/**/*'], ['watch-css']);
     gulp.watch(['src/js/**/*.js', 'src/lib/*.*'], ['watch-js']);
     gulp.watch(['dist/*.html']).on('change', browserSync.reload);
+    gulp.watch(['src/**'], function (event) {
+        if(event.type == 'deleted') {
+            let _path = event.path;
+            del(_path.replace(/src/, 'dist'))
+        }
+    });
     //browserSync.watch('./src/**/*.*').on('change',reload);
     //browserSync.watch('./dist/**/*').on('change',reload);
 });
