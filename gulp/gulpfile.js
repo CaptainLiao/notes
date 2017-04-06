@@ -14,7 +14,10 @@ const ISPROXY = false;
 const DEV_PRO = false;
 
 
-const gulp = require('gulp'),
+const
+    fs   = require('fs'),
+    path = require('path'),
+    gulp = require('gulp'),
     gulpLoadPlugins = require('gulp-load-plugins'),
     del = require('del'),
     browserSync = require('browser-sync').create(),
@@ -25,17 +28,30 @@ const gulp = require('gulp'),
     proxy = require('http-proxy-middleware'),
     fileinclude = require('gulp-file-include'),
     pngquant = require('imagemin-pngquant'),
-    mozjpeg = require('imagemin-mozjpeg');
+    mozjpeg = require('imagemin-mozjpeg'),
+    merge = require('merge-stream');
 
 const DIST = 'dist',
     SRC = 'dist';
+
+const getFolders = (dir)=> {
+    return fs.readdirSync(dir)
+        .filter((file)=> {
+            return fs.statSync(path.join(dir, file)).isDirectory();
+        })
+};
+const getError = function(err) {
+    console.log(err.toString());
+    this.emit('end');
+};
+
 
 gulp.task('clean', function () {
    return del(['dist/**/*'])
 });
 
 gulp.task('clean-css', function () {
-    return del(['dist/css/*.*'])
+    return del(['dist/css/**/*.*'])
 });
 
 gulp.task('clean-js', function () {
@@ -53,17 +69,20 @@ gulp.task('include', function () {
        .pipe(gulp.dest('dist'))
 });
 
-gulp.task('css', function () {
-    return gulp.src('src/less/**/*.less',{base: 'src/less'})
+
+gulp.task('css', ()=> {
+    let commonStyle = gulp.src('src/less/*.less',{base: 'src/less'})
         .pipe(plugins.changed(DIST, {extension: '.css'}))
+        //.pipe(plugins.watch('src/less/*.less'))
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.less())
+        .on('error', getError)
         .pipe(plugins.autoprefixer({
             browsers: ['last 4 version','Android >= 4.0'],
             cascade: true,
             remove: true
         }))
-        .pipe(plugins.concat('main.css'))
+        .pipe(plugins.concat('common.css'))
         .pipe(plugins.minifyCss())
         .pipe(plugins.rename({suffix: '.min'}))
         //.pipe(plugins.rev())    // 添加md5
@@ -71,8 +90,33 @@ gulp.task('css', function () {
         .pipe(plugins.debug({title: '编译css:'}))
         .pipe(gulp.dest('dist/css'))
         .pipe(browserSync.stream({match: '**/*.css'}));
-        // .pipe(gulp.rev.manifest())
-        // .pipe(gulp.dest('dist/rev'))
+    // .pipe(gulp.rev.manifest())
+    // .pipe(gulp.dest('dist/rev'))
+    let lessPath = 'src/less';
+    let folders = getFolders(lessPath);
+
+    let folderStyle = folders.map((folder)=> {
+        let newPath = path.join(lessPath, folder, '/*.less');
+        return gulp.src(newPath)
+            .pipe(plugins.changed(DIST, {extension: '.css'}))
+            //.pipe(plugins.watch(newPath))
+            .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.less())
+            .pipe(plugins.autoprefixer({
+                browsers: ['last 4 version','Android >= 4.0'],
+                cascade: true,
+                remove: true
+            }))
+            .pipe(plugins.concat(folder+'.css'))
+            .pipe(plugins.minifyCss())
+            .pipe(plugins.rename({suffix: '.min'}))
+            //.pipe(plugins.rev())    // 添加md5
+            .pipe(plugins.sourcemaps.write('.'))
+            .pipe(plugins.debug({title: '编译foldercss:'}))
+            .pipe(gulp.dest('dist/css/'+folder))
+            .pipe(browserSync.stream({match: '**/*.css'}));
+    });
+    return merge(commonStyle, folderStyle);
 });
 
 gulp.task('es6ToEs5', function () {
@@ -82,6 +126,7 @@ gulp.task('es6ToEs5', function () {
         .pipe(plugins.babel({
             presets: ['es2015']
         }))
+        .on('error', getError)
         //.pipe(plugins.concat('main.js'))
         .pipe(plugins.uglify())
         .pipe(plugins.rename({suffix: '.min'}))
@@ -95,7 +140,7 @@ gulp.task('es6ToEs5', function () {
 gulp.task('rev',['css'],function() {
     return gulp.src(['dist/rev/rev-manifest.json','dist/*.html'])  //获取rev-manifest.json和要替换的html文件
         .pipe(plugins.revCollector({
-            replaceReved: true      //根据rev-manifest.json的规则替换html里的路径，由于替换是根据rev-manifest.json规则来的，所以一定要先生成这个文件再进行替换
+            replaceReved: true		//根据rev-manifest.json的规则替换html里的路径，由于替换是根据rev-manifest.json规则来的，所以一定要先生成这个文件再进行替换
         }))
         .pipe(gulp.dest('dist'))
         .pipe(browserSync.stream({match: '**/*.css'}));
@@ -106,31 +151,28 @@ gulp.task('rev',['css'],function() {
 gulp.task('copy', function () {
     let start = 'src/lib/*.*',
         start2 = 'src/images/**/*.*';
-    gulp.src(start)
-       .pipe(plugins.changed(DIST))
-       .pipe(gulpCopy('dist/lib', {
-           start: 'src/lib'
-       }));
+    let copyLib = gulp.src(start)
+        .pipe(plugins.changed(DIST))
+        .pipe(gulpCopy('dist/lib', {
+            start: 'src/lib'
+        }));
 
-    gulp.src(start2)
+    let copyImages = gulp.src(start2)
         .pipe(plugins.changed(DIST))
         .pipe(plugins.imagemin(
             [pngquant(), mozjpeg()],
             {verbose: true}
-            ))
+        ))
         .pipe(gulp.dest('dist/images'));
-        // .pipe(gulpCopy('dist/images/', {
-        //     start: 'src/images/'
-        // }));
-
-
+    return merge(copyLib, copyImages)
 });
 
 gulp.task('injectFile', function () {
    let target = ['src/*.html','!src/_head.html'],
-       sources = gulp.src(['dist/lib/*.js', 'dist/js/*.js', 'dist/**/*.css'], {'read': false});
+       target2 = ['dist/lib/*.js', 'dist/js/*.js', 'dist/css/*.css'],
+       sources = gulp.src(target2, {'read': false});
    return gulp.src(target)
-       .pipe(plugins.changed(DIST, {extension: '.html'}))
+       .pipe(plugins.changed(DIST))
        .pipe(fileinclude({
            prefix: '@@',
            basepath: '@file'
@@ -187,19 +229,29 @@ gulp.task('server', function() {
     gulp.watch(['src/less/**/*'], ['watch-css']);
     gulp.watch(['src/js/**/*.js', 'src/lib/*.*'], ['watch-js']);
     gulp.watch(['dist/*.html']).on('change', browserSync.reload);
-    gulp.watch(['src/**'], function (event) {
-        if(event.type == 'deleted') {
-            let _path = event.path;
-            del(_path.replace(/src/, 'dist'))
-        }
-    });
+    gulp.watch(['src/**/**'])
+        .on('change', function (event) {
+            if(event.type == 'deleted') {
+                let _path = event.path,
+                    cssPath = _path.replace(/src\\less/, 'dist\\css');
+                console.log(cssPath);
+                if(path.extname(_path) === '.less') {
+                    del(path.dirname(cssPath)+'/*.*');
+                    sequence('rev', 'injectFile');
+                }else {
+                    del(_path.replace(/src/, 'dist'))
+                }
+
+            }
+        })
+        .on('error', function (err) {
+            console.log(err)
+        });
     //browserSync.watch('./src/**/*.*').on('change',reload);
     //browserSync.watch('./dist/**/*').on('change',reload);
 });
 
-gulp.task('dev', sequence('clean','copy', 'rev', 'es6ToEs5', 'injectFile', 'server'));
+gulp.task('dev', sequence('clean', ['rev', 'es6ToEs5','copy'], 'injectFile', 'server'));
 
 
-gulp.task('build-pro', function () {
-    sequence('clean','copy','rev', 'es6ToEs5', 'injectFile', 'del-maps')
-});
+gulp.task('build-pro', sequence('clean',['rev', 'es6ToEs5', 'copy'],'injectFile', 'del-maps'));
