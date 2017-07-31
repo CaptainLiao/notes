@@ -3,8 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>D3入门教程</title>
+  <link rel="stylesheet" type="text/css" href="css/demo.css">
 </head>
 <body>
   
+  <script type="text/javascript" src="d3js/d3.v3.js"></script>
+  <script type="text/javascript">
+    var dataset = [4, 10, , undefined, 15, null, 20, 25];
+    dataset = dataset.filter(item => Boolean(item) === true)
+    console.log(dataset)
+
+    d3.select('body')
+      .selectAll('div')
+      .data(dataset)
+      .enter()
+      .append('div')
+      .attr('class', 'box')
+      .style('height', d => d * 3 + 'px');
+
+    // svg
+    var svg = d3.select('body').append('svg');
+    svg.attr('width', 500)  
+      .attr('height', 100)  
+
+    var circles = svg.selectAll('circle')
+                     .data(dataset)
+                     .enter()
+                     .append('circle')
+                     .attr('cx', (d, i) => i * 50 + 25)
+                     .attr('cy', 50/2)
+                     .attr('r', d => d)
+                     .attr("fill", "yellow")
+                     .attr("stroke", "orange")
+                     .attr("stroke-width", function(d) {
+                         return d/2;
+                     });
+  </script>
 </body>
 </html>

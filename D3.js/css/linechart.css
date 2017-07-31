@@ -1,0 +1,12 @@
+.container {
+  width: 500px;
+  height: 250px;
+  background-color: #ddd;
+}
+
+path {
+
+  fill: none;
+  stroke: green;
+  stroke-width: 2px;
+}
