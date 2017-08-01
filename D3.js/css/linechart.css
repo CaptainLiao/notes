@@ -10,3 +10,8 @@ path {
   stroke: green;
   stroke-width: 2px;
 }
+
+.domain, .tick line {
+  stroke: gray;
+  stroke-width: 1;
+}

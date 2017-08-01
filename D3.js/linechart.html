@@ -38,7 +38,7 @@
 
     var scale_y = d3.scale.linear()
                     .domain([0, d3.max(data)])
-                    .range([0,g_height]);   
+                    .range([g_height, 0]);   
                                  
     var lineGenerator = d3.svg.line()
                               .x((d, i) => scale_x(i))
@@ -46,6 +46,21 @@
                               .interpolate('cardinal') ;
     g.append('path')
       .attr('d', lineGenerator(data));  
+
+    var x_axis = d3.svg.axis().scale(scale_x);
+    var y_axis = d3.svg.axis().scale(scale_y).orient('left');
+
+    g.append('g')
+      .call(x_axis)
+      .attr('transform', 'translate(0, '+ g_height + ')')  
+
+    g.append('g')
+      .call(y_axis)
+      .append('text')
+      .text('Price($)')
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'end')
+      .attr('dy', '1em')
 
   </script>
 </body>
