@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>垂直柱状图表</title>
+  <link rel="stylesheet" type="text/css" href="css/barChartHorizontal.css">
+</head>
+<body>
+  <div class="container"></div>
+
+  <script type="text/javascript" src="d3js/d3.v3.js"></script>
+  <script type="text/javascript">
+
+  /*
+   * 在水平柱状图表的基础上，制作垂直柱状图表
+   * 技术点：在于对 x 轴和 y 轴的缩放和转换上
+   * 对于网页来讲，坐标原点在左上角，向下、向右为正方向
+   * 但这次，我们要将它转换到左下角，向上、向右为正方向
+   * 1：将bar_height -> bar_width\
+   * 2: scale 的 range()参数变化
+   */
+    var data = [1,4,7,2,9,13,5,8,2,9];
+    var bar_width = 50;
+    var bar_padding = 10;
+
+    var height = 500;
+    var width = (bar_width + bar_padding) * data.length -1;
+    var svg = d3.select('.container')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .style('background', '#ccc')
+
+    var bars = svg.selectAll('g')
+      .data(data)
+      .enter()
+      .append('g')
+      .attr('transform', (d,i) => 'translate('+ i * (bar_width + bar_padding) +',0)');
+
+    // 定义缩放
+    var scale = d3.scale.linear()
+                  .domain([0, d3.max(data)])
+                  .range([height, 0])
+
+    // 定义柱状图              
+    bars.append('rect')
+      .attr({
+        'y': d => scale(d),
+        'width': bar_width,
+        'height': d => height - scale(d)
+      })
+      .style('fill', 'steelblue')  
+
+    // 给每个柱状图添加文字
+    bars.append('text')
+      .text(d => d)  
+      .attr({// 让文字显示在右侧中间处
+        'x': bar_width / 2,
+        'y': d => scale(d),
+        'dy': 15,
+        'text-anchor': 'middle'
+
+      })
+
+  </script>
+</body>
+</html>
