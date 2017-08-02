@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>水平柱状图表</title>
+  <link rel="stylesheet" type="text/css" href="css/barChartHorizontal.css">
+</head>
+<body>
+  <div class="container"></div>
+
+  <script type="text/javascript" src="d3js/d3.v3.js"></script>
+  <script type="text/javascript">
+    var data = [1,4,7,2,9,13,5,8,2,9];
+    var bar_height = 50;
+    var bar_padding = 10;
+
+    var width = 500;
+    var height = (bar_height + bar_padding) * data.length -1;
+    var svg = d3.select('.container')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .style('background', '#ccc')
+
+    var bars = svg.selectAll('g')
+      .data(data)
+      .enter()
+      .append('g')
+      .attr('transform', (d,i) => 'translate(0, '+ i * (bar_height + bar_padding) +')');
+
+    // 定义缩放
+    var scale = d3.scale.linear()
+                  .domain([0, d3.max(data)])
+                  .range([0, width])
+
+    // 定义柱状图              
+    bars.append('rect')
+      .attr({
+        'width': d => scale(d),
+        'height': bar_height
+      })
+      .style('fill', 'steelblue')  
+
+    // 给每个柱状图添加文字
+    bars.append('text')
+      .text(d => d)  
+      .attr({// 让文字显示在右侧中间处
+        'x': d => scale(d),
+        'y': bar_height/2,
+        'text-anchor': 'end'
+
+      })
+
+  </script>
+</body>
+</html>
