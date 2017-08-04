@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
-import Clock from './components/Clock.js'
+import {
+ Link,
+} from 'react-router-dom'
 
 /**
  * 找出哪一个是 state。每个数据只要考虑三个问题：
@@ -14,51 +15,20 @@ import Clock from './components/Clock.js'
 class Avatar extends Component {
   render() {
     return (
-      <img
-        src={this.props.user.avatarUrl}
-        alt={this.props.user.name}
-      />
+      // <img
+      //   src={this.props.user.avatarUrl}
+      //   alt={this.props.user.name}
+      // />
+      <p>sss </p>
     )
   }
 }
 
-class EssayForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 'Please write an essay about your favorite DOM element.'
-    };
+// let user = {
+//   avatarUrl: '111',
+//   name: '55556'
+// }
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-
-  handleSubmit(event) {
-    alert('An essay was submitted: ' + this.state.value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <textarea value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
-}
-
-let user = {
-  avatarUrl: '111',
-  name: '55556'
-}
 
 class App extends Component {
   render() {
@@ -70,12 +40,9 @@ class App extends Component {
         </div>
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
-
         </p>
         <p>liao da 5ye</p>
-        <Avatar user={user} />
-        <Clock name="大爷" />
-        <EssayForm />
+
       </div>
     );
   }
