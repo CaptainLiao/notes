@@ -2,38 +2,14 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class Clock extends Component {
+import Clock from './components/Clock.js'
 
-  constructor(props) {
-    super(props);
-    // 初始化state
-    // 只有在构造函数中才能对 state 直接赋值
-    // 在其他地方改变 state 必须使用 this.setState() 方法
-    this.state = { date: new Date() }
-  }
-
-  componentDidMount() {
-    this.timerId = setInterval(() => this.tick(), 1000);
-  }
-  componentWillUnmount() {
-    clearInterval(this.timerId);
-  }
-
-  tick() {
-    this.setState({
-      date: new Date()
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>hello, {this.props.name}</h1>
-        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
-      </div>
-    )
-  }
-};
+/**
+ * 找出哪一个是 state。每个数据只要考虑三个问题：
+它是通过 props 从父级传来的吗？如果是，他可能不是 state。
+它随着时间推移不变吗？如果是，它可能不是 state。
+你能够根据组件中任何其他的 state 或 props 把它计算出来吗？如果是，它不是 state。
+ */
 
 class Avatar extends Component {
   render() {
@@ -46,6 +22,39 @@ class Avatar extends Component {
   }
 }
 
+class EssayForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 'Please write an essay about your favorite DOM element.'
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('An essay was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <textarea value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+
 let user = {
   avatarUrl: '111',
   name: '55556'
@@ -54,7 +63,7 @@ let user = {
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div className="App" id="foo">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
@@ -66,6 +75,7 @@ class App extends Component {
         <p>liao da 5ye</p>
         <Avatar user={user} />
         <Clock name="大爷" />
+        <EssayForm />
       </div>
     );
   }
