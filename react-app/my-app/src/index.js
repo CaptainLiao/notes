@@ -12,7 +12,7 @@ import Clock from './components/Clock.js'
 import EssayForm from './components/EssayForm';
 ReactDOM.render((
   <BrowserRouter>
-    <Route path="/" componet={App}>
+    <Route path="/" component={App}>
 
     </Route>
   </BrowserRouter>
