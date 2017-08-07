@@ -1,9 +1,9 @@
 
 import App from '../App';
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, } from 'react-router-dom';
 
-import Clock from '../components/Clock.js'
+import Clock from '../components/AysncClock.js';
 import EssayForm from '../components/EssayForm';
 
 export default () => (

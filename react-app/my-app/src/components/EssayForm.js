@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 class EssayForm extends React.Component {
   constructor(props) {
