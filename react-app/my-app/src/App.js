@@ -46,7 +46,6 @@ class App extends Component {
           <li><Link to="/about">About</Link></li>
           <li><Link to="/inbox">Inbox</Link></li>
         </ul>
-
         {this.props.children}
       </div>
     );
