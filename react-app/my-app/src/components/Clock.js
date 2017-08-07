@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Clock.sass'
 
 /**
 * Mounting：已插入真实 DOM
@@ -62,7 +63,7 @@ class Clock extends Component {
     return (
       <div onClick={this.onPrevState}>
         {
-          !showHello() && <h1>hello, {this.props.name}</h1>
+          !showHello() && <h1>hello2, {this.props.name}</h1>
         }
         <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
       </div>
@@ -70,4 +71,5 @@ class Clock extends Component {
   }
 };
 
-export default Clock
+export default Clock;
+

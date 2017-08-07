@@ -1,23 +1,18 @@
 import Loadable from 'react-loadable';
 import React, { Component } from 'react';
 
-function MyLoadingComponent({ error }) {
-  if (error) {
-    return <div>Error!</div>;
-  } else {
-    return <div>Loading...</div>;
-  }
-}
+import Loading from './loading.js'
 
 const LoadableAnotherComponent = Loadable({
   loader: () => import('./Clock.js'),
-  loading: MyLoadingComponent
+  loading: Loading,
+  delay: 200 
 });
 
-class MyClock extends Component {
-  render() {
-    return <LoadableAnotherComponent/>;
-  }
-}
+// class MyClock extends Component {
+//   render() {
+//     return <LoadableAnotherComponent/>;
+//   }
+// }
 
-export default MyClock;
+export default LoadableAnotherComponent;
