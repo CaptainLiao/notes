@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Loading from '../components/loading.js';
 
+// code splitting
 function AsyncLoadable(component) {
   return Loadable({
     loader: () => component,
@@ -11,10 +12,6 @@ function AsyncLoadable(component) {
     delay: 200 
   })
 }
-
-// import Clock from '../components/AysncClock.js';
-// import EssayForm from '../components/EssayForm';
-
 
 const AsyncEssayForm = AsyncLoadable(import('../components/EssayForm'));
 
