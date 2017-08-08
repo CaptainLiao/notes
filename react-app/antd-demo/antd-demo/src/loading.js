@@ -2,9 +2,9 @@ import React from 'react';
 
 function LoadingComponent({ error }) {
   if (error) {
-    return <div>Error!</div>;
+    return <div className="error">Error!</div>;
   } else {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 }
 

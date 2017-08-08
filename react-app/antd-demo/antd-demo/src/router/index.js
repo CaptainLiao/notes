@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 //code splitting
 import Loadable from 'react-loadable';
 import Loading from '../loading.js';
+
 function AsyncLoadable(component) {
   return Loadable({
     loader: () => component,
