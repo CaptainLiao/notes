@@ -8,7 +8,7 @@ function AsyncLoadable(component) {
   return Loadable({
     loader: () => component,
     loading: Loading,
-    delay: 200 
+    delay: 300 
   })
 }
 
