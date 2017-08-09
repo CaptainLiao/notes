@@ -1,6 +1,6 @@
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+// import AppBar from 'material-ui/AppBar';
+// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 /**
  * A simple example of `AppBar` with an icon on the right.
@@ -14,16 +14,24 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // );
 
 class AppBarIcon extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick.bind(this);
+  }
+  handleClick() {
+   
+  }
   componentDidMount(e) {
     console.log(window.location)
     console.log(this.props)
+    this.handleClick();
 
   }
   render() {
     return (
-      <MuiThemeProvider>
-        <AppBar />
-      </MuiThemeProvider>
+      <div>
+        <p>ddd</p>
+      </div>
     )
   }
 }
