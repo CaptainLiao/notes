@@ -6,9 +6,9 @@ const Links = () => (
 
   <nav id="footer">
     <ul>
-        <li><NavLink exact to="/" activeClassName="active">Home</NavLink></li>
-        <li><NavLink to="/about" activeClassName="active">Goodpart</NavLink></li>
-        <li><NavLink to="/locations/6" activeClassName="active">About</NavLink></li>
+        <li><NavLink exact to="/" activeClassName="active">驾考题库</NavLink></li>
+        <li><NavLink to="/about" activeClassName="active">车型识别</NavLink></li>
+        <li><NavLink to="/locations/6" activeClassName="active">购车指北</NavLink></li>
       </ul>
   </nav>
 
