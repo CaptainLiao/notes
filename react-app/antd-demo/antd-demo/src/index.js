@@ -10,5 +10,9 @@ import routers from './router/index';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
+var m = () => {return 1}
+
+console.log(m)
+
 ReactDOM.render( routers(), document.getElementById('root'));
 registerServiceWorker();

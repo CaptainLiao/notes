@@ -1,10 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, NavLink } from 'react-router-dom';
+
 
 //code splitting
 import Loadable from 'react-loadable';
 import Loading from '../loading.js';
-
 function AsyncLoadable(component) {
   return Loadable({
     loader: () => component,
@@ -13,18 +13,32 @@ function AsyncLoadable(component) {
   })
 }
 
-// const AsyncEssayForm = AsyncLoadable(import('../components/EssayForm'));
-// const AsyncClock = AsyncLoadable(import('../components/Clock'));
+// page
+const AppBarIcon = AsyncLoadable(import('../components/AppBarIcon'));
+const MAvatar = AsyncLoadable(import('../components/MAvatar'));
 const AsyncApp = AsyncLoadable(import('../App'));
 
-export default () => (
+const Links = () => (
+  <nav>
+    <NavLink exact to="/" activeClassName="selected">Home</NavLink>
+    <NavLink to={{pathname: '/about'}} activeClassName="selected">About</NavLink>
+    <NavLink to="/locations/5" activeClassName="selected">locations</NavLink>
+
+  </nav>
+)
+
+const Haha = () => <div> aaa </div>;
+const routers = () => (
   <BrowserRouter>
-    <Switch>
+    <div>
+      <Links />
+
       <Route exact path="/" component={AsyncApp} />
-      
-    </Switch>
+      <Route  path="/locations/:id" component={AppBarIcon} />
+      <Route  path="/about" component={MAvatar} />
+    </div>
   </BrowserRouter>
 )
 
-/* <Route path="/about" exact component={AsyncClock} />
-      <Route path="/inbox" exact component={AsyncEssayForm} /> */
+export default routers;
+
