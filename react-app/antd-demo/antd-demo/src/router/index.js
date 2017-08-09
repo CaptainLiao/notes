@@ -9,7 +9,7 @@ function AsyncLoadable(component) {
   return Loadable({
     loader: () => component,
     loading: Loading,
-    delay: 300 
+    delay: 300
   })
 }
 
@@ -21,21 +21,29 @@ const AsyncApp = AsyncLoadable(import('../App'));
 const Links = () => (
   <nav>
     <NavLink exact to="/" activeClassName="selected">Home</NavLink>
-    <NavLink to={{pathname: '/about'}} activeClassName="selected">About</NavLink>
-    <NavLink to="/locations/5" activeClassName="selected">locations</NavLink>
-
+    <NavLink to={{ pathname: '/about' }} activeClassName="selected">About</NavLink>
+    <NavLink 
+      to={{
+        pathname: '/locations/5',
+        search: '?sort=name',
+        state: { price: 18 }
+      }} 
+      activeClassName="selected"
+    >
+    名胜古迹
+    </NavLink>
   </nav>
 )
 
-const Haha = () => <div> aaa </div>;
+// 路由映射到组件
 const routers = () => (
   <BrowserRouter>
     <div>
       <Links />
 
       <Route exact path="/" component={AsyncApp} />
-      <Route  path="/locations/:id" component={AppBarIcon} />
-      <Route  path="/about" component={MAvatar} />
+      <Route path="/locations/:id" component={AppBarIcon} />
+      <Route path="/about" component={MAvatar} />
     </div>
   </BrowserRouter>
 )
