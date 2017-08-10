@@ -177,7 +177,8 @@ module.exports = {
           cacheDirectory: true
         }
       },
-            // Parse less files and modify variables
+
+      // Parse less files and modify variables
       {
         test: /\.less$/,
         use: [

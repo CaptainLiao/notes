@@ -169,8 +169,10 @@ module.exports = {
         loader: require.resolve('babel-loader'),
         options: {
           plugins: [
+
             ['import', { libraryName: 'antd', style: 'css' }],
             ['import', [{ libraryName: 'antd', style: true }]],// import less
+
           ],
           // This is a feature of `babel-loader` for webpack (not Babel itself).
           // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -178,6 +180,7 @@ module.exports = {
           cacheDirectory: true
         }
       },
+
       // Parse less files and modify variables
       {
         test: /\.less$/,
@@ -304,5 +307,5 @@ module.exports = {
   performance: {
     hints: false,
   },
-  
+
 };
