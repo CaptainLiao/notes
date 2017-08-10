@@ -9,24 +9,24 @@ let api = 'http://jisujiakao.market.alicloudapi.com/driverexam/query';
 
 class LearnCar extends React.Component {
   componentDidMount() {
-    // axios({
-    //   method: 'get',
-    //   url: api,
-    //   params: {
-    //     pagenum: 1,
-    //     pagesize: 10,
-    //     sort: 'normal',
-    //     subject: 1,
-    //     type: 'C1'
-    //   },
-    //   headers:{"Authorization": "APPCODE 8702e06255074019b33bb0a15f75e786"}
-    // })
-    //   .then( (response) => {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+    axios({
+      method: 'get',
+      url: api,
+      params: {
+        pagenum: 1,
+        pagesize: 10,
+        sort: 'normal',
+        subject: 1,
+        type: 'C1'
+      },
+      headers:{"Authorization": "APPCODE 8702e06255074019b33bb0a15f75e786"}
+    })
+      .then( (response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
   render() {
     return (
