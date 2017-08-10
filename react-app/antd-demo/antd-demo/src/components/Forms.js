@@ -81,14 +81,11 @@ class VerticalLinearStepper extends React.Component {
           <Step>
             <StepLabel>选择驾照等级</StepLabel>
             <StepContent>
-        
-                {
-                  CBtns.map((btn, index) => (
-                    <RaisedButton label={btn} key={index} primary={true} style={style} onTouchTap={this.handleNext} />
-                  ))
-                }
-
-     
+              {
+                CBtns.map((btn, index) => (
+                  <RaisedButton label={btn} key={index} primary={true} style={style} onTouchTap={this.handleNext} />
+                ))
+              }
             </StepContent>
           </Step>
           <Step>
@@ -100,14 +97,14 @@ class VerticalLinearStepper extends React.Component {
                     <RaisedButton label={btn} key={index} primary={true} style={style} onTouchTap={this.handleNext} />
                   ))
                 }
-              {this.renderStepActions(2)}
+                {this.renderStepActions(2)}
               </div>
             </StepContent>
           </Step>
           <Step>
             <StepLabel>开始答题</StepLabel>
             <StepContent>
-               <RaisedButton label='Begin' primary={true} style={style} onTouchTap={this.handleNext} />
+              <RaisedButton label='Begin' primary={true} style={style} onTouchTap={this.handleNext} />
               {this.renderStepActions(2)}
             </StepContent>
           </Step>
