@@ -16,9 +16,15 @@ const AppBarIcon = AsyncLoadable(import('../components/AppBarIcon'));
 const MAvatar = AsyncLoadable(import('../components/MAvatar'));
 const AsyncApp = AsyncLoadable(import('../App'));
 const Footer = AsyncLoadable(import('../components/footer/footer'));
-const NoMatch = ({ location }) => (
+const LearnCar = AsyncLoadable(import('../views/learnCar/learnCar.js'));
+
+
+// 每个<Route>默认的props含有一下三个对象：
+// history,loacation,match
+const NoMatch = ({ history, location }) => (
   <div>
-    <h4>No component match for <code>{location.pathname + location.search}</code></h4>
+    <h3>404 NOT FOUND</h3>
+    <p>No page match for <code>{location.pathname + location.search}</code></p>
   </div>
 );
 
@@ -26,7 +32,7 @@ const routes = [
   {
     path: '/',
     isExact: true,
-    main: AsyncApp
+    main: LearnCar
   },
   {
     path: '/locations/:id',
