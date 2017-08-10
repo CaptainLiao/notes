@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 
 //code splitting
@@ -19,13 +19,37 @@ const MAvatar = AsyncLoadable(import('../components/MAvatar'));
 const AsyncApp = AsyncLoadable(import('../App'));
 const Footer = AsyncLoadable(import('../components/footer/footer'));
 
+const routes = [
+  {
+    pattern: '/',
+    isExact: true,
+    main: AsyncApp
+  },
+  {
+    pattern: '/locations/:id',
+    isExact: false,
+    main: AppBarIcon
+  },
+  {
+    pattern: '/about',
+    isExact: false,
+    main: MAvatar
+  }
+];
+
 // 路由映射到组件
 const routers = () => (
   <BrowserRouter>
     <div>
-      <Route exact path="/" component={AsyncApp} />
-      <Route path="/locations/:id" component={AppBarIcon} />
-      <Route path="/about" component={MAvatar} />
+      {
+        routes.map((route, index) => (
+          <Route
+            key={index}
+            path={route.pattern}
+            component={route.main}
+            exact={route.isExact} />
+        ))
+      }
 
       <Footer />
     </div>
