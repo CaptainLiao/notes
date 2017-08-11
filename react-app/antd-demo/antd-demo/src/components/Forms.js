@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Forms.less'
 import {
   Step,
@@ -9,9 +10,10 @@ import {
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
+const PropTypes = require('prop-types');
+
 const style = {
   margin: 6,
-  color: '#fff'
 };
 const CBtns = ['A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'D', 'E', 'F'];
 const ABtns = ['科目一', '科目二'];
@@ -67,8 +69,8 @@ class VerticalLinearStepper extends React.Component {
     const { finished, stepIndex } = this.state;
 
     return (
-      <div style={{ maxWidth: 380, maxHeight: 400, margin: 'auto' }}>
-        <h5>驾考题库宝典</h5>
+      <div>
+        <h5 style={{paddingLeft: 12, paddingTop: 12}}>驾考题库宝典</h5>
         <Stepper activeStep={stepIndex} orientation="vertical">
           <Step>
             <StepLabel>选择驾照等级</StepLabel>
@@ -107,7 +109,8 @@ class VerticalLinearStepper extends React.Component {
               href="#"
               onClick={(event) => {
                 event.preventDefault();
-                this.setState({ stepIndex: 0, finished: false });
+                console.log(this.context)
+                //this.context.router.history.push('./car/test')
               }}
             >
               Click here
@@ -119,4 +122,7 @@ class VerticalLinearStepper extends React.Component {
   }
 }
 
+VerticalLinearStepper.contextTypes = {
+  router: PropTypes.object
+}
 export default VerticalLinearStepper;

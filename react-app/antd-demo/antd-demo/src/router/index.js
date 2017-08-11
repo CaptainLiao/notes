@@ -1,22 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 //code splitting
-import Loadable from 'react-loadable';
-import Loading from '../loading.js';
-function AsyncLoadable(component) {
-  return Loadable({
-    loader: () => component,
-    loading: Loading,
-    delay: 300
-  })
-}
-
+import AsyncLoadable from '../components/AsyncLoadable';
 // page
-const AppBarIcon = AsyncLoadable(import('../components/AppBarIcon'));
+
 const MAvatar = AsyncLoadable(import('../components/MAvatar'));
 const AsyncApp = AsyncLoadable(import('../App'));
-const Footer = AsyncLoadable(import('../components/footer/footer'));
+const Footer = AsyncLoadable(import('../components/footer/footer.js'));
+
 const LearnCar = AsyncLoadable(import('../views/learnCar/learnCar.js'));
+const CarTest = AsyncLoadable(import('../views/learnCar/test.js'));
 
 
 // 每个<Route>默认的props含有一下三个对象：
@@ -37,12 +30,17 @@ const routes = [
   {
     path: '/locations/:id',
     isExact: false,
-    main: AppBarIcon
+    main: AsyncApp
   },
   {
     path: '/about',
     isExact: false,
     main: MAvatar
+  },
+  {
+    path: '/car/test',
+    isExact: false,
+    main: CarTest
   },
   {
     main: NoMatch
@@ -54,15 +52,15 @@ const routers = () => (
   <BrowserRouter>
     <div>
       <Switch>
-              {
-        routes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            component={route.main}
-            exact={route.isExact} />
-        ))
-      }
+        {
+          routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              component={route.main}
+              exact={route.isExact} />
+          ))
+        }
       </Switch>
 
       <Footer />

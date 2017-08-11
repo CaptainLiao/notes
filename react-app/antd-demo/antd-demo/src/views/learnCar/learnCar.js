@@ -4,29 +4,30 @@ import Forms from '../../components/Forms';
 import axios from 'axios';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-let images = ['PANE 1220', 'PANE 2', 'PANE 3'];
+
+let images = [' http://dwz.cn/6nr63E', 'http://dwz.cn/6nr59m', 'http://dwz.cn/6nr4JF'];
 let api = 'http://jisujiakao.market.alicloudapi.com/driverexam/query';
 
 class LearnCar extends React.Component {
   componentDidMount() {
-    axios({
-      method: 'get',
-      url: api,
-      params: {
-        pagenum: 1,
-        pagesize: 10,
-        sort: 'normal',
-        subject: 1,
-        type: 'C1'
-      },
-      headers:{"Authorization": "APPCODE 8702e06255074019b33bb0a15f75e786"}
-    })
-      .then( (response) => {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // axios({
+    //   method: 'get',
+    //   url: api,
+    //   params: {
+    //     pagenum: 1,
+    //     pagesize: 10,
+    //     sort: 'normal',
+    //     subject: 1,
+    //     type: 'C1'
+    //   },
+    //   headers:{"Authorization": "APPCODE 8702e06255074019b33bb0a15f75e786"}
+    // })
+    //   .then( (response) => {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   }
   render() {
     return (
@@ -35,15 +36,9 @@ class LearnCar extends React.Component {
         <MuiThemeProvider>
           <Forms />
         </MuiThemeProvider>
-        
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-  
+
+      <div className="empty"></div>
+
       </div>
     )
   }

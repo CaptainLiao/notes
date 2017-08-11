@@ -15,8 +15,9 @@ class SimpleCarousel extends React.Component {
         {
           this.props.images.map((image, index) => (
             <div
+              className="carousel-image-wrap"
               key={index}>
-              {image}
+              <img src={image} alt={index} />
             </div>
           ))
         }
