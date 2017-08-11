@@ -5,7 +5,7 @@ import AsyncLoadable from '../components/AsyncLoadable';
 // page
 
 const MAvatar = AsyncLoadable(import('../components/MAvatar'));
-const AsyncApp = AsyncLoadable(import('../App'));
+
 const Footer = AsyncLoadable(import('../components/footer/footer.js'));
 
 const LearnCar = AsyncLoadable(import('../views/learnCar/learnCar.js'));
@@ -30,7 +30,7 @@ const routes = [
   {
     path: '/locations/:id',
     isExact: false,
-    main: AsyncApp
+    main: () => <div>sss</div>
   },
   {
     path: '/about',

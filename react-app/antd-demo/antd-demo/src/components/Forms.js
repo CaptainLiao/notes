@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { chooseTestLevel } from '../actions'
 import './Forms.less'
 import {
   Step,
@@ -28,23 +30,36 @@ const ABtns = ['科目一', '科目二'];
 class VerticalLinearStepper extends React.Component {
 
   state = {
+    choosedTexts: [],
     finished: false,
     stepIndex: 0,
   };
 
-  handleNext = () => {
-    const { stepIndex } = this.state;
+  handleNext = (currentTarget) => {
+    const { stepIndex, choosedTexts } = this.state;
+    choosedTexts.push(currentTarget);
     this.setState({
       stepIndex: stepIndex + 1,
       finished: stepIndex >= 2,
+      choosedTexts
     });
   };
 
   handlePrev = () => {
-    const { stepIndex } = this.state;
+    const { stepIndex, choosedTexts } = this.state;
     if (stepIndex > 0) {
-      this.setState({ stepIndex: stepIndex - 1 });
+      choosedTexts.pop();
+      this.setState({ 
+        stepIndex: stepIndex - 1,
+        choosedTexts
+       });
     }
+  };
+
+  handleBegin = () => {
+    let {dispatch} = this.props
+    dispatch(chooseTestLevel(this.state.choosedTexts))
+    this.context.router.history.push('./car/test');
   };
 
   renderStepActions(step) {
@@ -67,7 +82,7 @@ class VerticalLinearStepper extends React.Component {
 
   render() {
     const { finished, stepIndex } = this.state;
-
+    console.log(this.props)
     return (
       <div>
         <h5 style={{paddingLeft: 12, paddingTop: 12}}>驾考题库宝典</h5>
@@ -77,7 +92,12 @@ class VerticalLinearStepper extends React.Component {
             <StepContent>
               {
                 CBtns.map((btn, index) => (
-                  <RaisedButton label={btn} key={index} primary={true} style={style} onTouchTap={this.handleNext} />
+                  <RaisedButton 
+                    label={btn} 
+                    key={index} 
+                    primary={true} 
+                    style={style} 
+                    onTouchTap={this.handleNext.bind(this, btn)} />
                 ))
               }
             </StepContent>
@@ -88,7 +108,12 @@ class VerticalLinearStepper extends React.Component {
               <div>
                 {
                   ABtns.map((btn, index) => (
-                    <RaisedButton label={btn} key={index} primary={true} style={style} onTouchTap={this.handleNext} />
+                    <RaisedButton 
+                      label={btn} 
+                      key={index} 
+                      primary={true} 
+                      style={style} 
+                      onTouchTap={this.handleNext.bind(this, btn)} />
                   ))
                 }
                 {this.renderStepActions(2)}
@@ -98,7 +123,11 @@ class VerticalLinearStepper extends React.Component {
           <Step>
             <StepLabel>开始答题</StepLabel>
             <StepContent>
-              <RaisedButton label='Begin' primary={true} style={style} onTouchTap={this.handleNext} />
+              <RaisedButton 
+                label='Begin' 
+                primary={true} 
+                style={style} 
+                onTouchTap={this.handleBegin} />
               {this.renderStepActions(2)}
             </StepContent>
           </Step>
@@ -125,4 +154,14 @@ class VerticalLinearStepper extends React.Component {
 VerticalLinearStepper.contextTypes = {
   router: PropTypes.object
 }
-export default VerticalLinearStepper;
+
+function mapStateToProps(state) {
+  console.log(state)
+  
+  return {
+    carParams: state.chooseTestLevels,
+    visibilityFilter: '5555'
+  }
+}
+
+export default connect(mapStateToProps)(VerticalLinearStepper);
