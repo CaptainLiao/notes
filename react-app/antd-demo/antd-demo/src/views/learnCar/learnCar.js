@@ -34,7 +34,6 @@ class LearnCar extends React.Component {
     
   }
   render() {
-   console.log(this.context.store)
     return (
       <div>
         <Carousel images={images} /> 

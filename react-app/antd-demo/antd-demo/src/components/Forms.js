@@ -58,8 +58,10 @@ class VerticalLinearStepper extends React.Component {
 
   handleBegin = () => {
     let {dispatch} = this.props
+    let { stepIndex, choosedTexts } = this.state;
     dispatch(chooseTestLevel(this.state.choosedTexts))
     this.context.router.history.push('./car/test');
+    console.log(this.state.choosedTexts)
   };
 
   renderStepActions(step) {

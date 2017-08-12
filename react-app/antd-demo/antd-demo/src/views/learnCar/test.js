@@ -12,8 +12,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
   }
   componentDidMount() {
     const { store} = this.context;
-    this.setState({
-      txt: store.getState().chooseTestLevels
+    let txt = store.getState().chooseTestLevels;
+    txt[0] && this.setState({
+      txt: txt[0] + txt[1]
     })
   }
   render() {
