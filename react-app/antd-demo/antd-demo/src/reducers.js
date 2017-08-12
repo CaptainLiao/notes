@@ -14,8 +14,13 @@ function chooseTestLevels(state=[], action) {
   }
 }
 
+const myApp = function() {
+  return [1,5,6]
+}
+
 const carTest = combineReducers({
-  chooseTestLevels
+  chooseTestLevels,
+  myApp
 })
 
 export default carTest

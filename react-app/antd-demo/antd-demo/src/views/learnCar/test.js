@@ -7,11 +7,20 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
  class Test extends React.Component {
+  state = {
+    txt: 'car test 1'
+  }
+  componentDidMount() {
+    const { store} = this.context;
+    this.setState({
+      txt: store.getState().chooseTestLevels
+    })
+  }
   render() {
-    console.log(this.context.store.getState())
+
     return(
       <div className="test">
-        car test
+        {this.state.txt}
       </div>
     )
   }
@@ -21,4 +30,12 @@ Test.contextTypes = {
   store: PropTypes.object
 }
 
-export default connect()(Test);
+function mapStateToProps(state) {
+  
+  return {
+    carParams: state.chooseTestLevels,
+    visibilityFilter: '5555'
+  }
+}
+
+export default connect(mapStateToProps)(Test);

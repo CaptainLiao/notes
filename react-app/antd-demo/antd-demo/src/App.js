@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Routers from './router/index'
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     carParams: state.carParams
   }
