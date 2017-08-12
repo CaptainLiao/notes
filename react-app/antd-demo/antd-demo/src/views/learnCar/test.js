@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Question from '../../components/question.js'
 // import './test.less'
 
 let api = 'http://jisujiakao.market.alicloudapi.com/driverexam/query';
@@ -44,6 +45,9 @@ class Test extends React.Component {
     return(
       <div className="test">
         {this.state.txt}
+        
+        <Question />
+
       </div>
     )
   }

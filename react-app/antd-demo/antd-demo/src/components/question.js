@@ -1,0 +1,51 @@
+import React from 'react'
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import FlatButton from 'material-ui/FlatButton';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+const styles = {
+  block: {
+    maxWidth: 250,
+  },
+  radioButton: {
+    marginBottom: 16,
+  },
+};
+
+function Question() {
+  return (
+    <div className="question">
+
+      <p>
+        <b>Question：</b>
+        驾驶机动车应当随身携带哪种证件？身携带哪种证件？
+      </p>
+
+      <MuiThemeProvider>
+        <RadioButtonGroup name="shipSpeed" defaultSelected="">
+          <RadioButton
+            value="not_light"
+            label="Selected by default"
+            style={styles.radioButton}
+          />
+          <RadioButton
+            value="light"
+            label="Simple"
+            style={styles.radioButton}
+          />
+          <RadioButton
+            value="light2"
+            label="Simple"
+            style={styles.radioButton}
+          />
+        </RadioButtonGroup>
+      </MuiThemeProvider>
+
+    </div>
+  )
+}
+
+export default Question
