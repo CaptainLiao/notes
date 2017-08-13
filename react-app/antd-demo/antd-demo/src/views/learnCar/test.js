@@ -22,6 +22,10 @@ class Test extends React.Component {
   state = {
     txt: 'car test 1'
   }
+  
+  handleConfirm = (e) => {
+    console.log(e)
+  }
 
   componentDidMount() {
     const { store} = this.context;
@@ -63,7 +67,10 @@ class Test extends React.Component {
         
         <div className="confirm-btn">
           <MuiThemeProvider>
-            <RaisedButton label="确认答案" primary={true} />
+            <RaisedButton 
+              label="确认答案" 
+              primary={true} 
+              onClick= {this.handleConfirm}/>
           </MuiThemeProvider>
         </div>
 
