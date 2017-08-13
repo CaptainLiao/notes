@@ -4,20 +4,25 @@ import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import FlatButton from 'material-ui/FlatButton';
 
+import ReactSwipe from 'react-swipe';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const styles = {
   block: {
     maxWidth: 250,
   },
+  floatLeft: {
+    float: 'left',
+    position: 'relative'
+  },
   radioButton: {
     marginBottom: 16,
   },
 };
 
-function Question() {
+function CarQuestion() {
   return (
-    <div className="question">
+    <div className="question" style={styles.floatLeft}>
 
       <p>
         <b>Question：</b>
@@ -46,6 +51,24 @@ function Question() {
 
     </div>
   )
+}
+
+
+
+class Question extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props = props;
+  }
+  render() {
+    return (
+      <ReactSwipe className="carousel" swipeOptions={{ continuous: true }}>
+        
+        <CarQuestion />
+        <CarQuestion />
+      </ReactSwipe>
+    );
+  }
 }
 
 export default Question

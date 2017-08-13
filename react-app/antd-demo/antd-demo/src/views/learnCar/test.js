@@ -3,10 +3,21 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
 import Question from '../../components/question.js'
-// import './test.less'
+
+import './test.less'
 
 let api = 'http://jisujiakao.market.alicloudapi.com/driverexam/query';
+
+function Explain() {
+  return (
+    <div>
+      答案解析
+    </div>
+  )
+}
+
 class Test extends React.Component {
   state = {
     txt: 'car test 1'
@@ -48,10 +59,19 @@ class Test extends React.Component {
         
         <Question />
 
+        <Explain />
+        
+        <div className="confirm-btn">
+          <MuiThemeProvider>
+            <RaisedButton label="确认答案" primary={true} />
+          </MuiThemeProvider>
+        </div>
+
       </div>
     )
   }
 }
+
 
 Test.contextTypes = {
   store: PropTypes.object
