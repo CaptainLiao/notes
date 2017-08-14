@@ -13,7 +13,11 @@ module.exports = {
   // 文件输出配置
   // 告诉webpack怎样存储输出以及存储在哪里
   output: {
-    filename: 'bundle.js',
+    filename: '[name]-bundle.js',
+
+    // chunkFilename参数指定的是除入口文件外的chunk的命名
+    // 这些chunk通常是由于webpack对代码的优化所形成的，比如因应实际运行的情况来异步加载
+    chunkFilename: '[id]-bundle.js',
 
     // path 告诉webpack将结果存储到哪里
     // 输出目录的配置，模板、样式、脚本、图片等资源路径位置都相对于path
@@ -33,6 +37,8 @@ module.exports = {
   },
 
   externals: {
+    // 通过cdn引入 react.min.js ,暴露出 'React' 全局对象
+    // 在组件中 import React from 'react',这里的 'react' 就指向CDN引入的 'React'对象
     react: 'React'
   },
 
@@ -69,7 +75,7 @@ module.exports = {
     // 改为production。最直观的就是没有所有的debug相关的东西，体积会减少很多
 
 
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js' ),
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-chunk.js' ),
     // 'vendor' 就是把依赖库(比如react react-router, redux)全部打包到 vendor.js中
     // 'vendor.js' 就是把自己写的相关js打包到bundle.js中
     // 一般依赖库放到前面，所以vendor放第一个
