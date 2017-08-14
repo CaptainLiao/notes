@@ -7,7 +7,7 @@ module.exports = {
   // 入口文件配置
   entry: {
     index: path.resolve(__dirname, 'src/index.js'),
-    vendor: ['react', 'react-dom']
+    vendor: ['react-dom']
   },
 
   // 文件输出配置
@@ -21,13 +21,19 @@ module.exports = {
 
     // publicPath 指在css、html等页面中，引用静态资源的根路径
     // 在生产环境中，它的值为服务器地址
-    pubulicPath: ''
+    pubulicPath: '',
+    
+    libraryTarget: 'umd'
   },
 
   // resolve 自动添加后缀，默认使用.js
   // 空字符串是为了resolve一些在import文件时不带文件扩展名的表达式
   resolve: {
     extensions: ['', '.js', '.jsx']
+  },
+
+  externals: {
+    react: 'React'
   },
 
   module: {
