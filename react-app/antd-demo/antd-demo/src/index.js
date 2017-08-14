@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.less';
 
 import registerServiceWorker from './registerServiceWorker';
-import routers from './router/index';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import carTest from './reducers'

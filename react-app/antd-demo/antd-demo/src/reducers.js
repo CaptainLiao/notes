@@ -2,9 +2,6 @@ import { combineReducers } from 'redux'
 import { CHOOSE_TEST_LEVEL } from './actions'
 
 function chooseTestLevels(state={}, action) {
-  console.log(
-    Object.assign({}, state, action.carParams)
-    )
   switch(action.type) {
     case CHOOSE_TEST_LEVEL:
       return Object.assign({}, ...state, action.carParams)

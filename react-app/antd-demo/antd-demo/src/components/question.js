@@ -1,8 +1,8 @@
 import React from 'react'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import ActionFavorite from 'material-ui/svg-icons/action/favorite';
-import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
-import FlatButton from 'material-ui/FlatButton';
+// import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+// import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+// import FlatButton from 'material-ui/FlatButton';
 
 import ReactSwipe from 'react-swipe';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

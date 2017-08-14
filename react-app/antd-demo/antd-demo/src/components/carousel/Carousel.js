@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import './carousel.less'
 
 import ReactSwipe from 'react-swipe';

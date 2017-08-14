@@ -34,7 +34,7 @@ class Test extends React.Component {
       txt: txt[0] + txt[1]
     })
 
-    let subject = 2;
+    let subject = 4;
     if(txt[1] && txt[1].indexOf('一') >= 0) subject = 1;
     txt[1] && axios({
       method: 'get',

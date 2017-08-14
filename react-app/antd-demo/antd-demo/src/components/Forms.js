@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { chooseTestLevel } from '../actions'
 import './Forms.less'
@@ -18,7 +17,7 @@ const style = {
   margin: 6,
 };
 const CBtns = ['A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'D', 'E', 'F'];
-const ABtns = ['科目一', '科目二'];
+const ABtns = ['科目一', '科目四'];
 /**
  * Vertical steppers are designed for narrow screen sizes. They are ideal for mobile.
  *
@@ -58,7 +57,7 @@ class VerticalLinearStepper extends React.Component {
 
   handleBegin = () => {
     let {dispatch} = this.props
-    let { stepIndex, choosedTexts } = this.state;
+
     dispatch(chooseTestLevel(this.state.choosedTexts))
     this.context.router.history.push('./car/test');
     console.log(this.state.choosedTexts)
