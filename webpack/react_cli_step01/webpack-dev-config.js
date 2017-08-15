@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // devtool 指明了sourcemap的生成方式，它有七个选项，具体请参考 https://segmentfault.com/a/1190000004280859
@@ -24,11 +25,11 @@ module.exports = {
 
     // path 告诉webpack将结果存储到哪里
     // 输出目录的配置，模板、样式、脚本、图片等资源路径位置都相对于path
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'src'),
 
     // publicPath 指在css、html等页面中，引用静态资源的根路径
     // 在生产环境中，它的值为服务器地址
-    pubulicPath: 'http://localhost:3000/'
+    pubulicPath: '/'
   },
 
   // resolve 自动添加后缀，默认使用.js
@@ -44,6 +45,31 @@ module.exports = {
         loaders: ['babel'],
         exclude: /node_modules/,
         include: __dirname
+      },
+
+      // css modules 组件样式私有化
+      // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
+      {
+        test: /\.scss$/,
+        loader: 'style!css?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss',
+        include: path.resolve(__dirname, 'src'),
+        exclude: path.resolve(__dirname, 'src/style')
+      },
+
+      // CSS 全局样式
+      {
+        test: /\.scss$/,
+        loader: 'style!css!postcss',
+        include: path.resolve(__dirname, 'src/style')
+      },
+
+      {
+        test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
+        loader: 'file'
+      },
+      {
+        test: /\.(gif|jpe?g|png|ico)$/,
+        loader: 'file'
       }
     ]
   },
@@ -53,6 +79,27 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
 
     // 允许错误不打断程序，仅开发模式时用
-    new webpack.NoErrorsPlugin()
-  ]
+    new webpack.NoErrorsPlugin(),
+
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'), // Tells React to build in either dev or prod modes. https://facebook.github.io/react/downloads.html (See bottom)
+      __DEV__: true
+    }),
+
+    new HtmlWebpackPlugin({     // Create HTML file that includes references to bundled CSS and JS.
+      template: 'src/template.html',
+      title: '15开发模式',
+      // favicon:'./src/favicon.ico',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true
+      },
+      hash:true,
+      // 这样每次客户端页面就会根据这个hash来判断页面是否有必要刷新
+      // 在项目后续过程中，经常需要做些改动更新什么的，一但有改动，客户端页面就会自动更新！
+      inject: 'body'
+    })
+
+  ],
 }
+

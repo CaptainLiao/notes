@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Article from './components/article/article';
 
 class Counter extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class Lists extends Component {
   render() {
     const {lists} = this.state;
     return (
-      <ul>
+      <ul className="lists">
         {
           lists.map((item, index) =>
             <li key={index}>我叫：{item.name}</li>
@@ -55,7 +56,9 @@ export default class App extends Component {
   render() {
     return (
       <div>
+        <Article />
         <h1>hello, word</h1>
+        
         <Lists />
         <Counter increment={100} myColor="red" />
       </div>

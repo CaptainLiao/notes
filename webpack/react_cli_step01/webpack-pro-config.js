@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
 
@@ -26,7 +27,7 @@ module.exports = {
     // publicPath 指在css、html等页面中，引用静态资源的根路径
     // 在生产环境中，它的值为服务器地址
     pubulicPath: '',
-    
+
     libraryTarget: 'umd'
   },
 
@@ -49,11 +50,55 @@ module.exports = {
         loaders: ['babel'],
         exclude: /node_modules/,
         include: __dirname
+      },
+
+      // css modules 组件样式私有化
+      // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
+      {
+        test: /\.scss$/,
+        loader: 'style!css?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss',
+        include: path.resolve(__dirname, 'src'),
+        exclude: path.resolve(__dirname, 'src/style')
+      },
+
+      // CSS 全局样式
+      {
+        test: /\.scss$/,
+        use: ExtractTextWebpackPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            },
+            'postcss-loader'
+          ]
+        }),
+        include: path.resolve(__dirname, 'src/style')
+      },
+
+      {
+        test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
+        loader: 'file'
+      },
+      {
+        test: /\.(gif|jpe?g|png|ico)$/,
+        loader: 'file',
+        options: {
+          name: '[path][name].[ext]?[hash]'
+        }
       }
     ]
   },
 
- plugins: [
+  plugins: [
+    new ExtractTextWebpackPlugin({
+        filename:'bundle.min.css',
+        disable: false,
+        allChunks: true
+    }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     // webapck 会给编译好的代码片段一个id用来区分
     // 而这个插件会让webpack在id分配上优化并保持一致性。
@@ -75,38 +120,38 @@ module.exports = {
     // 改为production。最直观的就是没有所有的debug相关的东西，体积会减少很多
 
 
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-chunk.js' ),
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-chunk.js'),
     // 'vendor' 就是把依赖库(比如react react-router, redux)全部打包到 vendor.js中
     // 'vendor.js' 就是把自己写的相关js打包到bundle.js中
     // 一般依赖库放到前面，所以vendor放第一个
 
     new HtmlWebpackPlugin({
       title: '产品模式',
-      filename:'index.html',
+      filename: 'index.html',
       // 文件名以及文件将要存放的位置
 
       //favicon:'./src/favicon.ico',
       // favicon路径
 
-      template:'./src/template.html',
+      template: './src/template.html',
       // html模板的路径
 
-      inject:'body',
+      inject: 'body',
       // js插入的位置，true/'head'  false/'body'
 
-      chunks: ['vendor', 'index' ],
+      chunks: ['vendor', 'index'],
       // 指定引入的chunk，根据entry的key配置，不配置就会引入所有页面的资源
 
-      hash:true,
+      hash: true,
       // 这样每次客户端页面就会根据这个hash来判断页面是否有必要刷新
       // 在项目后续过程中，经常需要做些改动更新什么的，一但有改动，客户端页面就会自动更新！
 
-      minify:{
+      minify: {
         // 压缩HTML文件
-        removeComments:true,
+        removeComments: true,
         // 移除HTML中的注释
 
-        collapseWhitespace:false
+        collapseWhitespace: false
         // 删除空白符与换行符
       }
     })
