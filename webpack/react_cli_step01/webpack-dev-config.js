@@ -11,9 +11,9 @@ module.exports = {
   // 入口文件配置
   entry: [
     // 启用 react-hot-server，写在入口文件之前
-    "react-hot-loader/patch",
-    "webpack-dev-server/client",
+    'webpack-dev-server/client',
     'webpack/hot/only-dev-server',
+    'react-hot-loader/patch',
 
     // 项目入口文件
     path.resolve(__dirname, 'src/index.js')
@@ -49,7 +49,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loaders: ['react-hot-loader/webpack','babel-loader'],
+        loaders: ['react-hot-loader/webpack', 'babel-loader'],
         exclude: /node_modules/,
       },
 

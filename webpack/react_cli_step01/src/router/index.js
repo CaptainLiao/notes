@@ -7,7 +7,8 @@ import DynamicLoad from '../components/dynamicLoad/dynamicLoad';
 
 // page
 
-const App = DynamicLoad(import('../app'));
+import App from '../app'
+
 const Article = DynamicLoad(import('../components/article/article'));
 const Lists = DynamicLoad(import('../components/lists/lists'));
 
@@ -48,4 +49,4 @@ const routers = () => (
   </BrowserRouter>
 )
 
-export default routers;
+export default routers();

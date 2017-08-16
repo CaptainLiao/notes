@@ -15,10 +15,6 @@ class Counter extends Component {
     });
   }
 
-  componentDidMount() {
-    alert(1)
-  }
-
   componentWillUnmount() {
     clearInterval(this.interval);
   }
@@ -47,7 +43,7 @@ export default class App extends Component {
         <br />
         <br />
         <br />
-        <Link to="/lists">Lists</Link>
+        <Link to="/lists">Listss</Link>
       </div>
     );
   }

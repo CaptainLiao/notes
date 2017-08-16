@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
 import style from './lists.scss'
 
-export default class Lists extends React.Component {
+export default class Lists extends PureComponent {
   state = {
     lists: [
       {name: 'minooo'},
