@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
 
@@ -26,7 +27,7 @@ module.exports = {
 
     // publicPath 指在css、html等页面中，引用静态资源的根路径
     // 在生产环境中，它的值为服务器地址
-    pubulicPath: '',
+    publicPath: '/',
 
     libraryTarget: 'umd'
   },
@@ -34,7 +35,7 @@ module.exports = {
   // resolve 自动添加后缀，默认使用.js
   // 空字符串是为了resolve一些在import文件时不带文件扩展名的表达式
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   },
 
   externals: {
@@ -47,7 +48,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['babel'],
+        loaders: ['babel-loader'],
         exclude: /node_modules/,
         include: __dirname
       },
@@ -56,7 +57,24 @@ module.exports = {
       // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
       {
         test: /\.scss$/,
-        loader: 'style!css?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss',
+        //loader: 'style-loader!css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss-loader',
+        use: ExtractTextWebpackPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                sourceMap: true,
+                importLoaders: 1,
+                localIdentName: '[name]_[local]_[hash:base64:3]',
+                minimize: true
+              }
+            },
+            'postcss-loader',
+            'sass-loader'
+          ]
+        }),
         include: path.resolve(__dirname, 'src'),
         exclude: path.resolve(__dirname, 'src/style')
       },
@@ -67,13 +85,9 @@ module.exports = {
         use: ExtractTextWebpackPlugin.extract({
           fallback: 'style-loader',
           use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true
-              }
-            },
-            'postcss-loader'
+            'css-loader',
+            'postcss-loader',
+            'sass-loader'
           ]
         }),
         include: path.resolve(__dirname, 'src/style')
@@ -81,11 +95,11 @@ module.exports = {
 
       {
         test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
-        loader: 'file'
+        loader: 'file-loader'
       },
       {
         test: /\.(gif|jpe?g|png|ico)$/,
-        loader: 'file',
+        loader: 'file-loader',
         options: {
           name: '[path][name].[ext]?[hash]'
         }
@@ -95,19 +109,25 @@ module.exports = {
 
   plugins: [
     new ExtractTextWebpackPlugin({
-        filename:'bundle.min.css',
-        disable: false,
-        allChunks: true
+      filename: 'bundle.min.css',
+      disable: false,
+      allChunks: true
     }),
+
     new webpack.optimize.OccurrenceOrderPlugin(),
     // webapck 会给编译好的代码片段一个id用来区分
     // 而这个插件会让webpack在id分配上优化并保持一致性。
     // 具体是的优化是：webpack就能够比对id的使用频率和分布来得出最短的id分配给使用频率高的模块
 
     new webpack.optimize.UglifyJsPlugin({
-      // 压缩代码
-      compressor: {
-        warnings: false
+      beautify: false,
+      comments: false,
+      sourceMap: false,
+      minimize: true,
+      compress: {
+        drop_debugger: true,
+        warnings: false,
+        drop_console: true
       }
     }),
 
@@ -120,7 +140,7 @@ module.exports = {
     // 改为production。最直观的就是没有所有的debug相关的东西，体积会减少很多
 
 
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor-chunk.js'),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-chunk.js' }),
     // 'vendor' 就是把依赖库(比如react react-router, redux)全部打包到 vendor.js中
     // 'vendor.js' 就是把自己写的相关js打包到bundle.js中
     // 一般依赖库放到前面，所以vendor放第一个
@@ -147,13 +167,17 @@ module.exports = {
       // 在项目后续过程中，经常需要做些改动更新什么的，一但有改动，客户端页面就会自动更新！
 
       minify: {
-        // 压缩HTML文件
         removeComments: true,
-        // 移除HTML中的注释
-
-        collapseWhitespace: false
-        // 删除空白符与换行符
-      }
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
     })
   ],
 

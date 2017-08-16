@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Article from './components/article/article';
+import Lists from './components/lists/lists';
+import { Link } from 'react-router-dom';
 
 class Counter extends Component {
   constructor(props) {
@@ -27,40 +29,22 @@ class Counter extends Component {
   }
 }
 
-class Lists extends Component {
-  state = {
-    lists: [
-      {name: 'minooo'},
-      {name: '刘德华'},
-      {name: '郭富城'},
-      {name: '黎明'},
-      {name: '黎明333'},
-    ]
-  };
 
-  render() {
-    const {lists} = this.state;
-    return (
-      <ul className="lists">
-        {
-          lists.map((item, index) =>
-            <li key={index}>我叫：{item.name}</li>
-          )
-        }
-      </ul>
-    )
-  }
-}
 
 export default class App extends Component {
   render() {
     return (
       <div>
-        <Article />
-        <h1>hello, word</h1>
+
+        <h1 className="lists">hello, word</h1>
         
-        <Lists />
+
         <Counter increment={100} myColor="red" />
+        <Link to="/article">Article</Link>
+        <br />
+        <br />
+        <br />
+        <Link to="/lists">Lists</Link>
       </div>
     );
   }

@@ -13,6 +13,7 @@ module.exports = {
     // 启用 react-hot-server，写在入口文件之前
     "react-hot-loader/patch",
     "webpack-hot-middleware/client?reload=true",
+    'webpack/hot/only-dev-server',
 
     // 项目入口文件
     path.resolve(__dirname, 'src/index.js')
@@ -29,29 +30,34 @@ module.exports = {
 
     // publicPath 指在css、html等页面中，引用静态资源的根路径
     // 在生产环境中，它的值为服务器地址
-    pubulicPath: '/'
+    publicPath: '/'
   },
 
   // resolve 自动添加后缀，默认使用.js
   // 空字符串是为了resolve一些在import文件时不带文件扩展名的表达式
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   },
 
   module: {
     loaders: [
       {
+        test: /\.(js|jsx)$/,
+        enforce: 'pre',
+        loader: ['eslint-loader'],
+        exclude: /node_modules/
+      },
+      {
         test: /\.js$/,
-        loaders: ['babel'],
+        loaders: ['react-hot-loader/webpack','babel-loader'],
         exclude: /node_modules/,
-        include: __dirname
       },
 
       // css modules 组件样式私有化
       // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
       {
         test: /\.scss$/,
-        loader: 'style!css?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss',
+        loader: 'style-loader!css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss-loader',
         include: path.resolve(__dirname, 'src'),
         exclude: path.resolve(__dirname, 'src/style')
       },
@@ -59,17 +65,17 @@ module.exports = {
       // CSS 全局样式
       {
         test: /\.scss$/,
-        loader: 'style!css!postcss',
+        loader: 'style-loader!css-loader?sourceMap!postcss-loader',
         include: path.resolve(__dirname, 'src/style')
       },
 
       {
         test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
-        loader: 'file'
+        loader: 'file-loader'
       },
       {
         test: /\.(gif|jpe?g|png|ico)$/,
-        loader: 'file'
+        loader: 'file-loader'
       }
     ]
   },
@@ -79,7 +85,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
 
     // 允许错误不打断程序，仅开发模式时用
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
 
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'), // Tells React to build in either dev or prod modes. https://facebook.github.io/react/downloads.html (See bottom)
@@ -94,7 +100,7 @@ module.exports = {
         removeComments: true,
         collapseWhitespace: true
       },
-      hash:true,
+      hash: true,
       // 这样每次客户端页面就会根据这个hash来判断页面是否有必要刷新
       // 在项目后续过程中，经常需要做些改动更新什么的，一但有改动，客户端页面就会自动更新！
       inject: 'body'
