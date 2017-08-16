@@ -16,6 +16,7 @@
     "babel-runtime": "^6.20.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
+    "react-loadable": "^4.0.4",
     "react-router-dom": "^4.1.2"
   },
   "devDependencies": {
@@ -23,6 +24,7 @@
     "babel-core": "^6.10.4",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^6.2.4",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-latest": "^6.16.0",
     "babel-preset-react": "^6.11.1",
@@ -52,8 +54,7 @@
     "style-loader": "^0.18.2",
     "uglify-js": "^2.8.23",
     "webpack": "^3.4.1",
-    "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.12.1",
+    "webpack-dev-server": "^2.7.1",
     "webpack-merge": "^4.1.0"
   }
 }

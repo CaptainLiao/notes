@@ -1,8 +1,16 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import App from '../App'
-import Article from '../components/article/article'
-import Lists from '../components/lists/lists'
+
+//code splitting
+import DynamicLoad from '../components/dynamicLoad/dynamicLoad';
+
+
+// page
+
+const App = DynamicLoad(import('../app'));
+const Article = DynamicLoad(import('../components/article/article'));
+const Lists = DynamicLoad(import('../components/lists/lists'));
+
 
 const routes = [
   {

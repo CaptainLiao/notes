@@ -1,25 +1,28 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+// 提取组件内和外部的公共样式
+const extractCommonCSS = new ExtractTextPlugin('assets/style/common.[contenthash:6].min.css');
+const extractCSS = new ExtractTextPlugin('assets/style/[name].[contenthash:6].min.css');
 
 module.exports = {
 
   // 入口文件配置
   entry: {
     index: path.resolve(__dirname, 'src/index.js'),
-    vendor: ['react-dom']
+    //vendor: ['react-router-dom']
   },
 
   // 文件输出配置
   // 告诉webpack怎样存储输出以及存储在哪里
   output: {
-    filename: '[name]-bundle.js',
+    filename: 'assets/js/[name].[chunkhash:6].min.js',
 
     // chunkFilename参数指定的是除入口文件外的chunk的命名
     // 这些chunk通常是由于webpack对代码的优化所形成的，比如因应实际运行的情况来异步加载
-    chunkFilename: '[id]-bundle.js',
+    chunkFilename: 'assets/js/[name].[chunkhash:6].chunk.js',
 
     // path 告诉webpack将结果存储到哪里
     // 输出目录的配置，模板、样式、脚本、图片等资源路径位置都相对于path
@@ -39,9 +42,16 @@ module.exports = {
   },
 
   externals: {
-    // 通过cdn引入 react.min.js ,暴露出 'React' 全局对象
-    // 在组件中 import React from 'react',这里的 'react' 就指向CDN引入的 'React'对象
-    react: 'React'
+    // 通过cdn引入 react.min.js ,exports.React 全局对象
+    // 通过cdn引入 react-router-dom.min.js ,exports.ReactRouterDOM 全局对象
+    // 在组件中 import React from 'react',这里的 'react' 就指向CDN引入的 'React'全局对象
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+    'react-router-dom': 'ReactRouterDOM',
+    // 'redux': 'Redux',
+    // 'react-redux': 'ReactRedux',
+    // 'react-router-redux': 'ReactRouterRedux',
+    // 'redux-thunk': 'ReduxThunk'
   },
 
   module: {
@@ -58,7 +68,7 @@ module.exports = {
       {
         test: /\.scss$/,
         //loader: 'style-loader!css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss-loader',
-        use: ExtractTextWebpackPlugin.extract({
+        use: extractCSS.extract({
           fallback: 'style-loader',
           use: [
             {
@@ -82,7 +92,7 @@ module.exports = {
       // CSS 全局样式
       {
         test: /\.scss$/,
-        use: ExtractTextWebpackPlugin.extract({
+        use: extractCommonCSS.extract({
           fallback: 'style-loader',
           use: [
             'css-loader',
@@ -108,11 +118,8 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextWebpackPlugin({
-      filename: 'bundle.min.css',
-      disable: false,
-      allChunks: true
-    }),
+    extractCommonCSS,
+    extractCSS,
 
     new webpack.optimize.OccurrenceOrderPlugin(),
     // webapck 会给编译好的代码片段一个id用来区分
@@ -140,10 +147,10 @@ module.exports = {
     // 改为production。最直观的就是没有所有的debug相关的东西，体积会减少很多
 
 
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor-chunk.js' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'assets/js/[name].[chunkhash:6].min.js' }),
+    // 打包公共代码
     // 'vendor' 就是把依赖库(比如react react-router, redux)全部打包到 vendor.js中
-    // 'vendor.js' 就是把自己写的相关js打包到bundle.js中
-    // 一般依赖库放到前面，所以vendor放第一个
+    // 一般依赖库放到前面，所以vendor放参数对象的第一个
 
     new HtmlWebpackPlugin({
       title: '产品模式',
@@ -159,10 +166,10 @@ module.exports = {
       inject: 'body',
       // js插入的位置，true/'head'  false/'body'
 
-      chunks: ['vendor', 'index'],
+      //chunks: ['vendor', 'index'],
       // 指定引入的chunk，根据entry的key配置，不配置就会引入所有页面的资源
 
-      hash: true,
+      //hash: true,
       // 这样每次客户端页面就会根据这个hash来判断页面是否有必要刷新
       // 在项目后续过程中，经常需要做些改动更新什么的，一但有改动，客户端页面就会自动更新！
 

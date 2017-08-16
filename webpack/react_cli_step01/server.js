@@ -1,33 +1,31 @@
-var path = require('path');
+
 var webpack = require('webpack');
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
+var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack-dev-config');
 
-var app = new (require('express'))();
-var port = 3000;
-// 监听的端口是3000，届时可以在在浏览器输入 localhost:3000 直接访问
 
-var compiler = webpack(config);
-app.use(webpackDevMiddleware(compiler, {
-  noInfo: true,
-  // 如果false，将会给你列出一大堆无聊的信息。
-  
-  publicPath: config.output.publicPath,
-  stats: {
-    colors: true
-  }
-}));
-app.use(webpackHotMiddleware(compiler));
-
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
-
-app.listen(port, function(error) {
-  if (error) {
-    console.error(error)
-  } else {
-    console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
-  }
+new WebpackDevServer(webpack(config), {
+    publicPath: config.output.publicPath,
+    hot: true,
+    historyApiFallback: true,
+    // It suppress error shown in console, so it has to be set to false.
+    quiet: false,
+    // It suppress everything except error, so it has to be set to false as well
+    // to see success build.
+    noInfo: false,
+    stats: {
+        // Config for minimal console.log mess.
+        assets: false,
+        colors: true,
+        version: false,
+        hash: false,
+        timings: false,
+        chunks: false,
+        chunkModules: false
+    }
+}).listen(3000, 'localhost', function (err) {
+    if (err) {
+        console.log(err);
+    }
+    console.log('Listening at localhost:3000');
 });

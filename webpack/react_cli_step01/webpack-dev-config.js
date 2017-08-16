@@ -12,7 +12,7 @@ module.exports = {
   entry: [
     // 启用 react-hot-server，写在入口文件之前
     "react-hot-loader/patch",
-    "webpack-hot-middleware/client?reload=true",
+    "webpack-dev-server/client",
     'webpack/hot/only-dev-server',
 
     // 项目入口文件
@@ -94,7 +94,7 @@ module.exports = {
 
     new HtmlWebpackPlugin({     // Create HTML file that includes references to bundled CSS and JS.
       template: 'src/template.html',
-      title: '15开发模式',
+      title: '开发模式',
       // favicon:'./src/favicon.ico',
       minify: {
         removeComments: true,

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Article from './components/article/article';
-import Lists from './components/lists/lists';
 import { Link } from 'react-router-dom';
+
 
 class Counter extends Component {
   constructor(props) {
@@ -14,6 +13,10 @@ class Counter extends Component {
     this.setState({
       counter: this.state.counter + this.props.increment
     });
+  }
+
+  componentDidMount() {
+    alert(1)
   }
 
   componentWillUnmount() {
