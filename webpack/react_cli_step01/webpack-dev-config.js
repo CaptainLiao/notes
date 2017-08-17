@@ -13,6 +13,7 @@ module.exports = {
     // you can add "react-hot-loader/patch" as the very first item to the "entry" array in its config. 
     // Alternatively, you can add require("react-hot-loader/patch") 
     // as the very first line in the application code, before any other imports.
+    // https://github.com/gaearon/react-hot-loader/tree/master/docs#migration-to-30
     'react-hot-loader/patch',
     'babel-polyfill',
     'webpack-dev-server/client?http://localhost:3000',

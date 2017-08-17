@@ -9,7 +9,7 @@ export default class Lists extends PureComponent {
       {name: '郭富城'},
       {name: '黎明'},
       {name: '黎明'},
-      {name: '黎明35'},
+      {name: '黎dd明'},
       {name: '黎明35'},
       {name: '黎明35'},
     ]
@@ -21,7 +21,7 @@ export default class Lists extends PureComponent {
       <ul className={style.lists}>
         {
           lists.map((item, index) =>
-            <li key={index}>我55叫：{item.name}</li>
+            <li key={index}>我叫：{item.name}</li>
           )
         }
       </ul>

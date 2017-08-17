@@ -14,10 +14,6 @@ import DynamicLoad from '../components/dynamicLoad/dynamicLoad';
   let Lists = DynamicLoad(import('../components/lists/lists'));
 
 
-
-
-
-
 const routes = [
   {
     path: '/',

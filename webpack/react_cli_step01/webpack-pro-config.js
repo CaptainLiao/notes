@@ -1,7 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 // 提取组件内和外部的公共样式
 const extractCommonCSS = new ExtractTextPlugin('assets/style/common.[contenthash:6].min.css');
@@ -12,7 +13,9 @@ module.exports = {
   // 入口文件配置
   entry: {
     index: path.resolve(__dirname, 'src/index.js'),
-    //vendor: ['react-router-dom']
+    
+    // 公共js
+    vendor: ['react-router-dom']
   },
 
   // 文件输出配置
@@ -113,14 +116,14 @@ module.exports = {
         options: {
           name: '[path][name].[ext]?[hash]'
         }
-      }
+      },
     ]
   },
 
   plugins: [
     extractCommonCSS,
     extractCSS,
-
+    new webpack.BannerPlugin('版权所有，翻版必究'),
     new webpack.optimize.OccurrenceOrderPlugin(),
     // webapck 会给编译好的代码片段一个id用来区分
     // 而这个插件会让webpack在id分配上优化并保持一致性。
@@ -146,11 +149,24 @@ module.exports = {
     // 很多库的内部，有process.NODE_ENV的判断语句，
     // 改为production。最直观的就是没有所有的debug相关的东西，体积会减少很多
 
-
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'assets/js/[name].[chunkhash:6].min.js' }),
-    // 打包公共代码
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'assets/js/[name].[chunkhash:6].min.js'
+    }),
+    // 打包公共代码，对应入口文件的 vendor 字段
     // 'vendor' 就是把依赖库(比如react react-router, redux)全部打包到 vendor.js中
     // 一般依赖库放到前面，所以vendor放参数对象的第一个
+
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'webpack-runtime',
+      filename: 'assets/js/webpack-runtime.[hash:6].js',
+    }),
+    // 抽取出webpack的runtime代码()，避免稍微修改一下入口文件就会改动vendor.js(公共代码)，导致原本有效的浏览器缓存失效
+
+    new ManifestPlugin({
+      fileName: 'asset-manifest.json',
+    }),
+
 
     new HtmlWebpackPlugin({
       title: '产品模式',
