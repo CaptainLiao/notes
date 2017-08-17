@@ -10,11 +10,14 @@ module.exports = {
 
   // 入口文件配置
   entry: [
-    // 启用 react-hot-server，写在入口文件之前
-    'webpack-dev-server/client',
-    'webpack/hot/only-dev-server',
+    // you can add "react-hot-loader/patch" as the very first item to the "entry" array in its config. 
+    // Alternatively, you can add require("react-hot-loader/patch") 
+    // as the very first line in the application code, before any other imports.
     'react-hot-loader/patch',
-
+    'babel-polyfill',
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server',
+    
     // 项目入口文件
     path.resolve(__dirname, 'src/index.js')
   ],
@@ -51,6 +54,7 @@ module.exports = {
         test: /\.js$/,
         loaders: ['react-hot-loader/webpack', 'babel-loader'],
         exclude: /node_modules/,
+        
       },
 
       // css modules 组件样式私有化

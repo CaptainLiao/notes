@@ -4,20 +4,25 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 //code splitting
 import DynamicLoad from '../components/dynamicLoad/dynamicLoad';
 
-
 // page
+  // import Home from '../containers/home' 
+  // import Article from '../components/article/article'
+  // import Lists from '../components/lists/lists'
 
-import App from '../app'
+  let Home = DynamicLoad(import('../containers/home'));
+  let Article = DynamicLoad(import('../components/article/article'));
+  let Lists = DynamicLoad(import('../components/lists/lists'));
 
-const Article = DynamicLoad(import('../components/article/article'));
-const Lists = DynamicLoad(import('../components/lists/lists'));
+
+
+
 
 
 const routes = [
   {
     path: '/',
     isExact: true,
-    main: App
+    main: Home
   },
   {
     path: '/lists',
@@ -49,4 +54,4 @@ const routers = () => (
   </BrowserRouter>
 )
 
-export default routers();
+export default routers;

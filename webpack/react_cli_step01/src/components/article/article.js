@@ -8,6 +8,7 @@ export default class Article extends Component {
       <div className={style.article}>
         <img src={png} alt="1.png" />
         我是一个粉刷匠，啦啦啦
+        我是一个粉刷匠，dd
       </div>
     )
   }
