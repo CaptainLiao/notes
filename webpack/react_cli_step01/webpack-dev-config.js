@@ -18,7 +18,7 @@ module.exports = {
     'babel-polyfill',
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
-    
+
     // 项目入口文件
     path.resolve(__dirname, 'src/index.js')
   ],
@@ -40,7 +40,20 @@ module.exports = {
   // resolve 自动添加后缀，默认使用.js
   // 空字符串是为了resolve一些在import文件时不带文件扩展名的表达式
   resolve: {
-    extensions: ['.js', '.jsx']
+    mainFiles: ['index.web', 'index'],// 这里哦
+    modules: ['app', 'node_modules', path.join(__dirname, '../node_modules')],
+    extensions: [
+      '.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx',
+      '.js',
+      '.jsx',
+      '.react.js',
+    ],
+    mainFields: [
+      'browser',
+      'jsnext:main',
+      'main',
+    ],
+
   },
 
   module: {
@@ -52,10 +65,16 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$$/,
         loaders: ['react-hot-loader/webpack', 'babel-loader'],
         exclude: /node_modules/,
-        
+
+      },
+
+      {
+        test: /\.svg$/,
+        loader: 'svg-sprite-loader',
+        include: require.resolve('antd-mobile').replace(/warn\.js$/, '')
       },
 
       // css modules 组件样式私有化
@@ -72,6 +91,11 @@ module.exports = {
         test: /\.scss$/,
         loader: 'style-loader!css-loader?sourceMap!postcss-loader',
         include: path.resolve(__dirname, 'src/style')
+      },
+
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
       },
 
       {

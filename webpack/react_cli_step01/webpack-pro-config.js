@@ -13,7 +13,7 @@ module.exports = {
   // 入口文件配置
   entry: {
     index: path.resolve(__dirname, 'src/index.js'),
-    
+
     // 公共js
     vendor: ['react-router-dom']
   },
@@ -41,7 +41,7 @@ module.exports = {
   // resolve 自动添加后缀，默认使用.js
   // 空字符串是为了resolve一些在import文件时不带文件扩展名的表达式
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.web.tsx', '.web.ts', '.web.js']
   },
 
   externals: {
@@ -60,7 +60,13 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
+        enforce: 'pre',
+        loader: ['eslint-loader'],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(js|jsx)$/,
         loaders: ['babel-loader'],
         exclude: /node_modules/,
         include: __dirname

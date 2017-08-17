@@ -1,30 +1,42 @@
 import React, {PureComponent} from 'react'
 import style from './lists.scss'
+import {Button} from 'antd-mobile'
 
-export default class Lists extends PureComponent {
-  state = {
-    lists: [
-      {name: 'minooo'},
-      {name: '刘德华'},
-      {name: '郭富城'},
-      {name: '黎明'},
-      {name: '黎明'},
-      {name: '黎dd明'},
-      {name: '黎明35'},
-      {name: '黎明35'},
-    ]
-  };
 
+import { List, Checkbox, Flex } from 'antd-mobile';
+
+const CheckboxItem = Checkbox.CheckboxItem;
+const AgreeItem = Checkbox.AgreeItem;
+
+export default class Test extends React.Component {
+  onChange = (val) => {
+    console.log(val);
+  }
   render() {
-    const {lists} = this.state;
-    return (
-      <ul className={style.lists}>
-        {
-          lists.map((item, index) =>
-            <li key={index}>我叫：{item.name}</li>
-          )
-        }
-      </ul>
-    )
+    const data = [
+      { value: 0, label: 'Ph.D.' },
+      { value: 1, label: 'Bachelor' },
+      { value: 2, label: 'college diploma' },
+    ];
+    return (<div>
+      <List renderHeader={() => 'CheckboxItem demo'}>
+        {data.map(i => (
+          <CheckboxItem key={i.value} onChange={() => this.onChange(i.value)}>
+            {i.label}
+          </CheckboxItem>
+        ))}
+        <CheckboxItem key="disabled" data-seed="logId" disabled defaultChecked multipleLine>
+          undergraduate<List.Item.Brief>Auxiliary text</List.Item.Brief>
+        </CheckboxItem>
+      </List>
+
+      <Flex>
+        <Flex.Item>
+          <AgreeItem data-seed="logId" onChange={e => console.log('checkbox', e)}>
+            Agree <a onClick={(e) => { e.preventDefault(); alert('agree it'); }}>agreement</a>
+          </AgreeItem>
+        </Flex.Item>
+      </Flex>
+    </div>);
   }
 }
