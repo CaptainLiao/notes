@@ -43,7 +43,27 @@ module.exports = {
         test: /\.(js|jsx)$$/,
         loaders: ['react-hot-loader/webpack', 'babel-loader'],
         exclude: /node_modules/,
+      },
+      
+      // css modules 组件样式私有化
+      // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
+      {
+        test: /\.scss$/,
+        loader: 'style-loader!css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss-loader',
+        include: path.resolve(__dirname, 'src'),
+        exclude: path.resolve(__dirname, 'src/style')
+      },
 
+      // CSS 全局样式
+      {
+        test: /\.scss$/,
+        loader: 'style-loader!css-loader?sourceMap!postcss-loader',
+        include: path.resolve(__dirname, 'src/style')
+      },
+
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader!postcss-loader',
       },
     ]
   },
