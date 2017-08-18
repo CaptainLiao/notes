@@ -2,7 +2,6 @@ import React, {PureComponent} from 'react'
 import style from './lists.scss'
 import {Button} from 'antd-mobile'
 
-
 import { List, Checkbox, Flex } from 'antd-mobile';
 
 const CheckboxItem = Checkbox.CheckboxItem;

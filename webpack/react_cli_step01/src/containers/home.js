@@ -1,29 +1,24 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router-dom';
+import TabBar from '../components/TabBar/TabBar'
+import { Steps, WingBlank, WhiteSpace } from 'antd-mobile';
+import style from './home.scss'
 
+const Step = Steps.Step;
 
-class Counter extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = { counter: 0 };
-    this.interval = setInterval(() => this.tick(), 1000);
-  }
-
-  tick() {
-    this.setState({
-      counter: this.state.counter + this.props.increment
-    });
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+class ProgressStep extends PureComponent {
 
   render() {
     return (
-      <h1 style={{ color: this.props.myColor }}>
-        Counter ({this.props.increment}): {this.state.counter}
-      </h1>
+      <WingBlank size="lg">
+        <div className={style['sub-title']}>Small size</div>
+        <WhiteSpace />
+        <Steps size="small" current={0}>
+          <Step title="选择驾考等级" description="This is description" />
+          <Step title="选择科目" description="This is description" />
+          <Step title="完成" description="This is description" />
+        </Steps>
+
+      </WingBlank>
     );
   }
 }
@@ -34,17 +29,8 @@ export default class App extends PureComponent {
   render() {
     return (
       <div>
-
-        <h1 className="lists">hello, world</h1>
-        
-
-        <Counter increment={100} myColor="red" />
-
-        <Link to="/article">Article</Link>
-        <br />
-        <br />
-        <br />
-        <Link to="/lists">Lists</Link>
+        <ProgressStep />
+        <TabBar />
       </div>
     );
   }

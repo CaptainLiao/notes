@@ -7,6 +7,10 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 // 提取组件内和外部的公共样式
 const extractCommonCSS = new ExtractTextPlugin('assets/style/common.[contenthash:6].min.css');
 const extractCSS = new ExtractTextPlugin('assets/style/[name].[contenthash:6].min.css');
+const svgDirs = [
+  require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
+  // path.resolve(__dirname, 'src/my-project-svg-foler'),  // 2. 自己私人的 svg 存放目录
+];
 
 module.exports = {
 
@@ -129,7 +133,7 @@ module.exports = {
       {
         test: /\.svg$/,
         loader: 'svg-sprite-loader',
-        include: require.resolve('antd-mobile').replace(/warn\.js$/, '')
+        include: svgDirs
       },
 
       {
@@ -139,11 +143,13 @@ module.exports = {
 
       {
         test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.(gif|jpe?g|png|ico)$/,
         loader: 'file-loader',
+        exclude: /node_modules/,
         options: {
           name: '[path][name].[ext]?[hash]'
         }
@@ -181,7 +187,7 @@ module.exports = {
     // 改为production。最直观的就是没有所有的debug相关的东西，体积会减少很多
 
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
+      name: ['vendor', 'index'],
       filename: 'assets/js/[name].[chunkhash:6].min.js'
     }),
     // 打包公共代码，对应入口文件的 vendor 字段

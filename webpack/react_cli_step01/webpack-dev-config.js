@@ -1,6 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const svgDirs = [
+  require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
+  // path.resolve(__dirname, 'src/my-project-svg-foler'),  // 2. 自己私人的 svg 存放目录
+];
 
 module.exports = {
   // devtool 指明了sourcemap的生成方式，它有七个选项，具体请参考 https://segmentfault.com/a/1190000004280859
@@ -74,7 +78,10 @@ module.exports = {
       {
         test: /\.svg$/,
         loader: 'svg-sprite-loader',
-        include: require.resolve('antd-mobile').replace(/warn\.js$/, '')
+        include: svgDirs,
+        options: {
+          runtimeCompat: true
+        }
       },
 
       // css modules 组件样式私有化
@@ -95,16 +102,18 @@ module.exports = {
 
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader!postcss-loader'
+        loader: 'style-loader!css-loader!postcss-loader',
       },
 
       {
         test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.(gif|jpe?g|png|ico)$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
+        exclude: /node_modules/,
       }
     ]
   },

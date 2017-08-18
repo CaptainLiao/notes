@@ -6,7 +6,7 @@ module.exports = {
     "react"
   ],
   "rules": {
-    "max-len": [1, 120, 2, { ignoreComments: true }],
+    "max-len": [1, 200, 2, { ignoreComments: true }],
     // "prop-types": [2],
     'no-console': ['warn'],
     //'linebreak-style': ['error', 'windows'],

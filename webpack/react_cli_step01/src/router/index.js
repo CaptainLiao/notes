@@ -5,13 +5,11 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import DynamicLoad from '../components/dynamicLoad/dynamicLoad';
 
 // page
-  // import Home from '../containers/home' 
-  // import Article from '../components/article/article'
-  // import Lists from '../components/lists/lists'
+let Home = DynamicLoad(import('../containers/home'));
+let Page2 = DynamicLoad(import('../containers/page2'));
+let Page3 = DynamicLoad(import('../containers/page3'));
 
-  let Home = DynamicLoad(import('../containers/home'));
-  let Article = DynamicLoad(import('../components/article/article'));
-  let Lists = DynamicLoad(import('../components/lists/lists'));
+
 
 
 const routes = [
@@ -23,12 +21,12 @@ const routes = [
   {
     path: '/lists',
     isExact: false,
-    main: Lists
+    main: Page2
   },
   {
     path: '/article',
     isExact: false,
-    main: Article
+    main: Page3
   }
 ];
 // 路由映射到组件
@@ -46,6 +44,7 @@ const routers = () => (
           ))
         }
       </Switch>
+
     </div>
   </BrowserRouter>
 )
