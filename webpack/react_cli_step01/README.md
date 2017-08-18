@@ -8,5 +8,14 @@
     *  此插件依赖 webpack-dev-server 
       `npm install --save-dev webpack-dev-server react-hot-loader`
     *  [配置 webpack-dev-server](https://segmentfault.com/a/1190000004660311)
-- 
+- 资源加载：css、js、img...
+- css modules
+- 自动生成 index.html
+- webpack-dev-serve 配置
+- react-hot-loader 配置
+- 生产环境构建
+- code splitting
+- dynamic loading
+- 优化缓存
+- 引入antd-mobile
       
