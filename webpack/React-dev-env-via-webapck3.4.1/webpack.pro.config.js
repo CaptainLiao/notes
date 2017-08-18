@@ -1,6 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+// 提取组件内和外部的公共样式
+const extractCommonCSS = new ExtractTextPlugin('assets/style/common.[contenthash:6].min.css');
+const extractCSS = new ExtractTextPlugin('assets/style/[name].[contenthash:6].min.css');
 
 module.exports = {
 
@@ -56,21 +61,45 @@ module.exports = {
       // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
       {
         test: /\.scss$/,
-        loader: 'style-loader!css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss-loader',
+        //loader: 'style-loader!css-loader?modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]!postcss-loader',
+        use: extractCSS.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                sourceMap: true,
+                importLoaders: 1,
+                localIdentName: '[name]_[local]_[hash:base64:3]',
+                minimize: true
+              }
+            },
+            'postcss-loader',
+            'sass-loader'
+          ]
+        }),
         include: path.resolve(__dirname, 'src'),
         exclude: path.resolve(__dirname, 'src/style')
       },
 
-      // CSS 全局样式
+      // scss 全局样式
       {
         test: /\.scss$/,
-        loader: 'style-loader!css-loader?sourceMap!postcss-loader',
+        use: extractCommonCSS.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            'postcss-loader',
+            'sass-loader'
+          ]
+        }),
         include: path.resolve(__dirname, 'src/style')
       },
 
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader!postcss-loader',
+        loader: 'style-loader!css-loader!postcss-loader'
       },
     ]
   },
