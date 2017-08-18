@@ -40,8 +40,21 @@ module.exports = {
 
   // resolve 自动添加后缀，默认使用.js
   // 空字符串是为了resolve一些在import文件时不带文件扩展名的表达式
+  // 解决引入 antd-mobile 时 Cant't resolve 'react-native' 报错
   resolve: {
-    extensions: ['.js', '.jsx', '.web.tsx', '.web.ts', '.web.js']
+    mainFiles: ['index.web', 'index'],// 这里哦
+    modules: ['app', 'node_modules', path.join(__dirname, '../node_modules')],
+    extensions: [
+      '.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx',
+      '.js',
+      '.jsx',
+      '.react.js',
+    ],
+    mainFields: [
+      'browser',
+      'jsnext:main',
+      'main',
+    ],
   },
 
   externals: {
@@ -98,7 +111,7 @@ module.exports = {
         exclude: path.resolve(__dirname, 'src/style')
       },
 
-      // CSS 全局样式
+      // scss 全局样式
       {
         test: /\.scss$/,
         use: extractCommonCSS.extract({
@@ -110,6 +123,18 @@ module.exports = {
           ]
         }),
         include: path.resolve(__dirname, 'src/style')
+      },
+
+      // antd-mobile 所需
+      {
+        test: /\.svg$/,
+        loader: 'svg-sprite-loader',
+        include: require.resolve('antd-mobile').replace(/warn\.js$/, '')
+      },
+
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader!postcss-loader'
       },
 
       {
