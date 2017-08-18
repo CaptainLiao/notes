@@ -1,6 +1,6 @@
 const pxtorem = require('postcss-pxtorem');
 const px2remOpts = {
-  rootValue: 10,
+  rootValue: 60,
   propWhiteList: [],
 };
 
