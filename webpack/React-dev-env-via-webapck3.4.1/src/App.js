@@ -4,7 +4,7 @@ export default class App  extends PureComponent {
   render() {
     return(
       <h1>
-        Hello World!,dddds
+        Hello World!,ddd
       </h1>  
     )
   }

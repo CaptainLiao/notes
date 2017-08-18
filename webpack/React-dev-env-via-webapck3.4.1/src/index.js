@@ -5,7 +5,6 @@ import { render } from 'react-dom'
 import App from './App'
 import { AppContainer } from 'react-hot-loader'
 
-
 const renderCom = Component => {
   render(
   <AppContainer>
