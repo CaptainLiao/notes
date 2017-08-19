@@ -5,7 +5,6 @@ import axios from 'axios';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Question from '../../components/question.js'
-
 import './test.less'
 
 let api = 'http://jisujiakao.market.alicloudapi.com/driverexam/query';
@@ -78,7 +77,6 @@ class Test extends React.Component {
     )
   }
 }
-
 
 Test.contextTypes = {
   store: PropTypes.object
