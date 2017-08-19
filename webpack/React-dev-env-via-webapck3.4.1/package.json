@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "start": "node server.js",
-    "build:webpack": "webpack -p --config webpack-pro-config.js --progress --colors",
+    "build:webpack": "webpack -p --config webpack.pro.config.js --progress --colors",
     "build": "npm run clean && npm run build:webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +30,7 @@
     "react-hot-loader": "^3.0.0-beta.6",
     "rimraf": "^2.6.1",
     "sass": "^1.0.0-beta.2",
+    "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.7.1"

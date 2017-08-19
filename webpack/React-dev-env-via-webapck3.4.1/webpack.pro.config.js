@@ -105,6 +105,9 @@ module.exports = {
   },
 
   plugins: [
+
+    extractCSS,
+    extractCommonCSS,
     new webpack.BannerPlugin('版权所有，翻版必究'),
     new webpack.optimize.OccurrenceOrderPlugin(),
     // webapck 会给编译好的代码片段一个id用来区分
