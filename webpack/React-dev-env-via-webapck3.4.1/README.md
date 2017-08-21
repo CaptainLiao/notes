@@ -29,6 +29,10 @@
 > React是用来构建用户界面的js库，属于view层。  
   它有两大特点：1，单向数据绑定；2，虚拟DOM  
   安装：`npm install --save react`
+  #### [React 中文文档](https://discountry.github.io/react/)
+  #### [react-router-dom 英文文档](https://reacttraining.com/react-router/web/example/basic)
+  #### [初探 React Router 4.0](http://blog.csdn.net/sinat_17775997/article/details/69218382)
+  #### [Redux 中文文档](http://cn.redux.js.org/index.html)
   
 ---
 
@@ -43,6 +47,7 @@
 > webpack不同版本的配置差异较大，本 demo 使用 3.4.1版本  
 安装：`npm install --save-dev webpack` 
 webpack -h 查看帮助 
+#### [webpack3.41 中文文档](https://doc.webpack-china.org/guides/)
 #### [webpack 构建解惑](https://segmentfault.com/a/1190000005089993#articleHeader3)
 
 ---
@@ -126,15 +131,5 @@ npm install --save-dev babel-preset-stage-0
 
 ---
 
-## 参考资料
-如果你对 webpack 本身还不太熟悉，以下文档可能对你有用：
-#### [webpack3.41 中文文档](https://doc.webpack-china.org/guides/)
-#### [webpack 构建解惑](https://segmentfault.com/a/1190000005089993#articleHeader3)
-
-React相关：
-#### [React 中文文档](https://discountry.github.io/react/)
-#### [react-router-dom 英文文档](https://reacttraining.com/react-router/web/example/basic)
-#### [初探 React Router 4.0](http://blog.csdn.net/sinat_17775997/article/details/69218382)
-#### [Redux 中文文档](http://cn.redux.js.org/index.html)
 
 
