@@ -52,6 +52,12 @@ module.exports = {
     loaders: [
       {
         test: /\.(js|jsx)$/,
+        enforce: 'pre',
+        loader: ['eslint-loader'],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(js|jsx)$/,
         loaders: ['babel-loader'],
         exclude: /node_modules/,
         include: __dirname
@@ -101,6 +107,18 @@ module.exports = {
         test: /\.css$/,
         loader: 'style-loader!css-loader!postcss-loader'
       },
+
+      {
+        test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
+        loader: 'file-loader',
+        exclude: /node_modules/,
+      },
+
+      {
+        test: /\.(gif|jpe?g|png|ico)$/,
+        loader: 'file-loader',
+        exclude: /node_modules/,
+      }
     ]
   },
 
@@ -146,7 +164,9 @@ module.exports = {
       name: 'webpack-runtime',
       filename: 'assets/js/webpack-runtime.[hash:6].js',
     }),
-    // 抽取出webpack的runtime代码()，避免稍微修改一下入口文件就会改动vendor.js(公共代码)，导致原本有效的浏览器缓存失效
+    // webpack 的 runtime 是一段帮助打包文件在浏览器运行的辅助代码，每次修改文件它都会变化。
+    // 在使用 CommonsChunkPlugin 的情况下，webpack 会将 runtime 打包在最后一个 CommonsChunkPlugin 生成的 chunk 中。
+    // 所以这里抽取出webpack的runtime代码，避免稍微修改一下入口文件就会改动vendor.js(公共代码)，导致原本有效的浏览器缓存失效。
 
     new HtmlWebpackPlugin({
       title: '产品模式',
@@ -166,6 +186,7 @@ module.exports = {
       // 指定引入的chunk，根据entry的key配置，不配置就会引入所有页面的资源
 
       //hash: true,
+      // 自动给引入的 JS/CSS 文件尾部加上hash，如index.min.js?5e2dff44
       // 这样每次客户端页面就会根据这个hash来判断页面是否有必要刷新
       // 在项目后续过程中，经常需要做些改动更新什么的，一但有改动，客户端页面就会自动更新！
 

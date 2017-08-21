@@ -40,6 +40,12 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.(js|jsx)$/,
+        enforce: 'pre',
+        loader: ['eslint-loader'],
+        exclude: /node_modules/
+      },
+      {
         test: /\.(js|jsx)$$/,
         loaders: ['react-hot-loader/webpack', 'babel-loader'],
         exclude: /node_modules/,
@@ -65,6 +71,16 @@ module.exports = {
         test: /\.css$/,
         loader: 'style-loader!css-loader!postcss-loader',
       },
+      {
+        test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
+        loader: 'file-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(gif|jpe?g|png|ico)$/,
+        loader: 'file-loader',
+        exclude: /node_modules/,
+      }
     ]
   },
   plugins: [
