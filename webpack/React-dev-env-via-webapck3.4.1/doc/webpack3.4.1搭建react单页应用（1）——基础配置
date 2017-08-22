@@ -1,0 +1,37 @@
+
+## 项目结构和基础配置
+**声明：**
+* 文档记录我在使用webpack构建react单页应用的过程，旨在抛砖引玉，行文之处如有不当，敬请勘误。
+* 强烈建议不熟悉webpack的用户先过一遍[webpack3.4.1中文指南](https://doc.webpack-china.org/guides/)。
+
+### 基本安装
+先将文件down下来：[地址](https://github.com/CaptainLiao/notes/tree/master/webpack/React-dev-env-via-webapck3.4.1)
+## 安装
+`npm install`
+
+## 开发模式
+`npm start`
+
+## 生产模式
+`npm run build`
+
+## 构建功能
+当你认真研究了一遍[webpack3.4.1中文指南](https://doc.webpack-china.org/guides/)，那么实现以下的几个功能对你来说就易如反掌了。
+* 加载css
+* 加载图片
+* 加载字体 
+* 保存刷新页面
+* 代码分离
+* 缓存
+
+但是，对于一个项目来讲，还有很多功能未能满足：
+如何编译react？
+处理scss、css前缀？
+模块热加载？
+减少
+
+
+
+
+
+

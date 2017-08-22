@@ -14,7 +14,8 @@ module.exports = {
     quotes: ['warn', 'single'],
     semi: 0,
     'no-unused-vars': ['warn'],
-    'no-console': ['warn']
+    'no-console': ['warn'],
+    'no-useless-escape': ['warn']
   }
 }
 
