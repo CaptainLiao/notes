@@ -1,19 +1,24 @@
 # webpack3.4.1搭建react单页应用
 本 DEMO 使用 react@15.6.1+webpack@3.4.1+es2015，都是当前最新版本，可以完整运行。
+**注意**：在使用之前，强烈建议过一遍[webpack3.4.1 中文指南](https://doc.webpack-china.org/guides/)
+
+在[webpack3.4.1 中文指南](https://doc.webpack-china.org/guides/)，已经有了
 两种模式：
 - 开发模式
-  * 模块热替换
-  * css module
+  * 模块热替换[react-hot-loader](https://github.com/gaearon/react-hot-loader/tree/master/docs#starter-kits)
+  * [css module](http://www.ruanyifeng.com/blog/2016/06/css_modules.html)
   * scss 编译
-  * code splitting
+  * [code splitting](https://doc.webpack-china.org/guides/code-splitting/)
+  * 模块异步加载[react-loadable](https://www.npmjs.com/package/react-loadable)
 
 - 生产模式
-  * css module
+  * [css module](http://www.ruanyifeng.com/blog/2016/06/css_modules.html)
   * scss 编译
-  * 提取 CSS
-  * code splitting
+  * 提取 CSS[extract-text-webpack-plugin](https://www.npmjs.com/package/extract-text-webpack-plugin)
+  * [code splitting](https://doc.webpack-china.org/guides/code-splitting/)
+  * 模块异步加载[react-loadable](https://www.npmjs.com/package/react-loadable)
   * 资源打包压缩
-  * 缓存优化
+  * [缓存优化](https://doc.webpack-china.org/guides/caching/)
 
 ## 安装
 `npm install`
