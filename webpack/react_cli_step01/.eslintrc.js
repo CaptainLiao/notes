@@ -2,6 +2,10 @@
 module.exports = {
   parser: "babel-eslint",
   "extends": "react-app",
+  parserOptions: {
+    ecmaVersion: 8,
+    sourceType: 'module'
+  },
   "plugins": [
     "react"
   ],
