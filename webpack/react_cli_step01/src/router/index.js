@@ -5,6 +5,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import DynamicLoad from '../components/dynamicLoad/dynamicLoad';
 
 // page
+let m = '';
+console.log(1);
 let Home = DynamicLoad(import('../containers/home'));
 let Page2 = DynamicLoad(import('../containers/page2'));
 let Page3 = DynamicLoad(import('../containers/page3'));
