@@ -1,37 +1,22 @@
-var spawn = require('child_process').spawn;
-var pUtil = require('path');
-
-module.exports = function serveLoader(gulp, $, opts) {
-  var browserSync = opts.browserSync;
+module.exports = function(gulp, $, opts) {
+  var browserSync = require('browser-sync').create();
   var reload = browserSync.reload;
-  // Watch Files For Changes & Reload
-  gulp.task('serve', function() {
 
-    $.nodemon({
-      watch: [
+  
+  gulp.task('serve', ['nodemon'], function () {
+    var files = [
         'app/**/*.*',
-        'client/src/**/*.*'
-      ],
-      script: 'app/bin/www',
-      ext: 'js html tpl',
-      ignore: ['settings.js', 'node_modules', 'client'],
-      stdout: false,
-      env: {
-        ENV: 'dev',
-        DEBUG: 'express-app-boot:executor'
-      }
-    }).on('restart', function() {
-      console.log('nodemon restarted');
-    })
-    browserSync({
-      port: 4000,
-      proxy: "localhost:3000",
-      reloadDelay: 200, // Wait for the express server ready.
-      notify: false,
-      startPath: '/'
+        'client/**/*.*'
+    ];
+  
+    //gulp.run(["node"]);
+    browserSync.init({
+        proxy: 'http://localhost:3009',
+        browser: 'chrome',
+        notify: false,
+        port: 4000
     });
-    gulp.watch(['app/**/*.*'], reload);
-    gulp.watch(['client/src/**/*.*'], ['vue:watch', reload]);
+  
+    gulp.watch(files).on('change', reload);
   });
-
-};
+}
