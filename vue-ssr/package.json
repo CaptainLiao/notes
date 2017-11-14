@@ -1,0 +1,44 @@
+{
+  "name": "vue-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "vue": "^2.5.3",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "braces": "^2.3.0",
+    "browser-sync": "^2.18.13",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^3.1.1",
+    "gulp-load-dir": "^0.1.7",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-size": "^2.1.0",
+    "gulp-vfs": "^0.1.1",
+    "gulp-vueify": "^0.0.3",
+    "gulp-vueify2": "^0.0.3",
+    "is-equal-shallow": "^0.1.3",
+    "is-primitive": "^2.0.0",
+    "minimatch": "3.0.2",
+    "nodemon": "^1.12.1",
+    "opn": "^5.1.0",
+    "regex-cache": "^0.4.4",
+    "rqdir": "^1.0.4",
+    "run-sequence": "^2.2.0",
+    "vinyl-fs": "^2.4.4",
+    "vueify-insert-css": "^1.0.0"
+  }
+}
