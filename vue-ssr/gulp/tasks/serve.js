@@ -1,4 +1,4 @@
-module.exports = function(gulp, $, opts) {
+module.exports = function(gulp, $) {
   var browserSync = require('browser-sync').create();
   var reload = browserSync.reload;
 

@@ -1,9 +1,10 @@
-const del = require('del');
-const runSequence = require('run-sequence');
-const $vueify = require('gulp-vueify2');
+
 
 module.exports = function vueify(gulp, $) {
-
+  const del = require('del');
+  const runSequence = require('run-sequence');
+  const $vueify = require('gulp-vueify2');
+  
   gulp.task('vueify', function() {
     return gulp.src(['client/src/**/*.vue'])
       //.pipe($.changed('client/dist', { extension: '.js' }))

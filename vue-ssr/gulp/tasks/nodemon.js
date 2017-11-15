@@ -1,8 +1,7 @@
 module.exports = function (gulp ,$) {
-  var nodemon = require('gulp-nodemon');
-  
+
   gulp.task("nodemon", function() {
-      nodemon({
+      $.nodemon({
           script: 'app/bin/www',
           watch: ['app'],
           igonre: ['node_modules'],
