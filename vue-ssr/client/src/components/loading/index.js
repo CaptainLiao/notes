@@ -1,7 +1,8 @@
-const Vue = require('vue');
-const loadingVue = require('./loading');
-const { getStyle } = require('../../utils/dom');
-const merge = require('../../utils/merge');
+
+import Vue from 'vue'
+import loadingVue from './loading'
+import { getStyle } from '../../utils/dom'
+import merge from '../../utils/merge'
 
 const LoadingConstructor = Vue.extend(loadingVue);
 
@@ -103,4 +104,4 @@ const Loading = (options = {}) => {
   return instance;
 };
 
-module.exports = Loading;
+export default Loading;

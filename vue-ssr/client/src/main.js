@@ -1,11 +1,12 @@
-const Vue = require('vue');
-const VueRouter = require('vue-router');
-const store = require('./store');
-const routes = require('./routes');
 
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from './store'
+import routes from './routes'
+import App from './app.vue'
 
 Vue.use(VueRouter);
-console.log(Vue)
+
 const router = new VueRouter({
   routes
 });
@@ -14,5 +15,7 @@ Vue.config.devtools = true;
 
 new Vue({
   router,
-  store
+  store,
+  template: '<App/>',
+  components: { App }
 }).$mount('#app');

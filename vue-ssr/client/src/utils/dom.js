@@ -164,7 +164,7 @@ function setStyle(element, styleName, value) {
   }
 }
 
-module.exports = {
+export {
   off,
   on,
   hasClass,

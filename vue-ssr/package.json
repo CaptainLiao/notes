@@ -25,6 +25,7 @@
     "browser-sync": "^2.18.13",
     "css-loader": "^0.28.7",
     "del": "^3.0.0",
+    "file-loader": "^1.1.5",
     "gulp": "^3.9.1",
     "gulp-changed": "^3.1.1",
     "gulp-inject": "^4.3.0",

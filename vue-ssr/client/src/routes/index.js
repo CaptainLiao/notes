@@ -1,14 +1,18 @@
-const app = require('../app');
-const pageNotFound = require('../pages/pageNotFound');
+import app from '../app'
+import pageNotFound from '../pages/pageNotFound'
+import home from '../pages/home/index'
 
-module.exports = [{
-  path: '/',
-  component: app,
-  children: [{
+export default [
+  {
+    path: '/',
+    component: home
+  }, 
+  {
     path: '/home',
-    component: () => require('../pages/home/index')
-  }]
-}, {
-  path: '*',
-  component: pageNotFound
-}];
+    component: home
+  }, 
+  {
+    path: '/page',
+    component: pageNotFound
+  }
+];

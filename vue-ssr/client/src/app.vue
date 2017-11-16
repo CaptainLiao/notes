@@ -1,23 +1,20 @@
 <template>
-  <div id="content">
-    <h1> Hello App 2222ddd4!</h1>
-
+  <div id="app">
+    <h1> Hello App 2222ec0.0ddd4!</h1>
+    <router-link to="/home">Go to home</router-link>
+    <router-link to="/page">Go to page</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-console.log(11)
 export default {
-  mounted() {
-    console.log(11)
-  }
+  
 }
 
 
 </script>
 
 <style lang="scss" scoped>
-h1 {
-  color: blueviolet;
-}
+
 </style>
