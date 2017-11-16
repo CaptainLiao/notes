@@ -3,7 +3,7 @@ module.exports = function(gulp, $) {
   var reload = browserSync.reload;
 
   
-  gulp.task('serve', ['nodemon'], function () {
+  gulp.task('serve', ['inject', 'nodemon'], function () {
     var files = [
         'app/**/*.*',
         'client/**/*.*'
@@ -14,9 +14,12 @@ module.exports = function(gulp, $) {
         proxy: 'http://localhost:3009',
         browser: 'chrome',
         notify: false,
-        port: 4000
+        port: 4000,
+        reloadDelay: 200,
+        baseDir: './'
     });
   
-    gulp.watch(files).on('change', reload);
+    //gulp.watch(files).on('change', reload);
+    gulp.watch(['client/src/**/*.*'], ['inject', reload]);
   });
 }

@@ -3,7 +3,9 @@ const VueRouter = require('vue-router');
 const store = require('./store');
 const routes = require('./routes');
 
+
 Vue.use(VueRouter);
+console.log(Vue)
 const router = new VueRouter({
   routes
 });

@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 
 router.get('/', function(req, res){
-  res.send('<body>2252355</body>')
+  res.sendFile('./index.html')
 
 })
 

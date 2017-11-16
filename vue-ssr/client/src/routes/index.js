@@ -6,7 +6,7 @@ module.exports = [{
   component: app,
   children: [{
     path: '/home',
-    component: () => window.requireAsync('vue/pages/home/index')
+    component: () => require('../pages/home/index')
   }]
 }, {
   path: '*',
