@@ -13,6 +13,6 @@ export default [
   }, 
   {
     path: '/page',
-    component: pageNotFound
+    component: () => import('../pages/pageNotFound')
   }
 ];

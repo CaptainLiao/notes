@@ -19,7 +19,7 @@ export default {
 
   mounted() {
     loadingInstance = loading({
-      text: '正在加载中。。。',
+      text: '正在加载中。2。。',
       fullscreen: true
     });
 
@@ -30,7 +30,7 @@ export default {
 
   data() {
     return {
-      title: '首页'
+      title: '首2页'
     }
   }
 }
