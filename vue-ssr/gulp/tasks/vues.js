@@ -1,9 +1,17 @@
 module.exports = function (gulp, $) {
   let webpack = require('webpack-stream')
   let vinylName = require('vinyl-named')
+  let webpack2 = require('webpack')
   let del = require('del')
   let path = require('path')
   let webpackConfig = require(path.join(process.cwd(), 'webpack', 'webpack.conf.js'))
+
+  webpackConfig.externals = {
+    'vue': 'Vue',
+    'vue-router': 'VueRouter',
+    'vuex': 'Vuex'
+  }
+
 
   gulp.task('clean', function (cb) {
     return del('app/build/**')

@@ -30,7 +30,7 @@ export default {
 
   data() {
     return {
-      title: '首2页'
+      title: '首223页'
     }
   }
 }

@@ -4,6 +4,7 @@ module.exports = function(gulp, $) {
 
   
   gulp.task('serve', ['inject', 'nodemon'], function () {
+    console.log(111)
     var files = [
         'app/**/*.*',
         'client/**/*.*'
