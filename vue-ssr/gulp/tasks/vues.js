@@ -1,6 +1,5 @@
 module.exports = function (gulp, $) {
   let webpack = require('webpack-stream')
-  let vinylName = require('vinyl-named')
   let webpack2 = require('webpack')
   let del = require('del')
   let path = require('path')
