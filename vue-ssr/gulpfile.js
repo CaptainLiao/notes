@@ -16,6 +16,7 @@ function loadTasks(taskDir) {
   })
 
   let gulpTasks = getTasks(defaultOpts.taskDir)
+
   Object
     .keys(gulpTasks)
     .forEach(taskName => {
@@ -36,6 +37,7 @@ function getTasks(dir) {
       return result
     }, {});
   
+  return taskModules  
   return _setObjGetter(taskModules, (taskPath) => {
     try {
       return require(taskPath)
