@@ -65,3 +65,4 @@ function _setObjGetter(obj, fn) {
       return result
     }, {})
 }
+
