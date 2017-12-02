@@ -20,6 +20,12 @@ class BST {
 				this->value = value;
 				this->left = this->right = NULL; 
 			}
+			Node(Node* node) {
+				this->key = node->key;
+				this->value = node->value;
+				this->left = node->left;
+				this->right = node->right;
+			}
 		}; 
 		
 		Node *root; // 根节点，指向Node的指针
@@ -78,6 +84,34 @@ class BST {
 				if( node->right )
 					q.push( node->right ); 
 			}
+		}
+		
+		// 寻找最小值
+		Key minimum() {
+			// 首先保证二叉搜索树不为空
+			assert( acount != 0 ); 
+			// return _minimum(root) // 方法一
+			Node* node = root;
+			while( node->left != NULL ) {
+				node = node->left;
+			}
+			return node->key;
+		}
+		Key maxmum() {
+			assert( count != 0);
+			
+			Node* maxNode = _maxmum(root);
+			return maxNode->key;
+		}
+		// 从二叉树中删除最小值所在节点
+		void removeMin() {
+			if( root )
+				root = _removeMin( root );
+		} 
+		
+		// 从二叉树中删除键值为key的节点
+		void remove(Key key) {
+			root = _remove(root, key);
 		} 
 	
 	private:
@@ -142,6 +176,83 @@ class BST {
 			}
 				
 		}
+		
+		// 以node为节点查找左子树 
+		Node* _minimum(Node* node) {
+			if( node->left == NULL )
+				return node;
+			return _minimum( node->left );
+		}
+		
+		Node* _maxmum(Node* node) {
+			if( node->right == NULL )
+				return node;
+			return _maxmum(node->right);
+		}
+		// 删除以node为根的二分搜索树中最小的节点
+		// 返回删除节点后新的二分搜索树的根 
+		Node* _removeMin(Node* node) {
+			if( minNode->left == NULL ){
+				
+				Node* rightNode = node->right;
+				delete node;
+				count--;
+				return rightNode;
+			}
+			
+			// 在当前节点的左子树中删除最小节点
+			// 并将删除节点后新的二分搜索树的根赋值给node->left 
+			node->left = _removeMin( node->left );
+			return node;
+				 
+		}
+		
+		// 删除掉以node为根的二分搜索树中键值为key的节点
+		// 返回删除节点后新的二分搜索树的根
+		Node* _remove( Node* node, Key key) {
+			
+			if( node == NULL )
+				return NULL;
+			
+			if( key < node->key ){
+				node-left = _remove( node->left, key);
+				return node;
+			}else if( key > node->key ){
+				node->right = _remove( node->right, key );
+				return node;
+			} else {	// key == node->key
+				
+				if( node->left == NULL ) {
+					Node* rightNode = node->right;
+					delete node;
+					count--;
+					return rightNode;
+				}
+				if( node->right == NULL ) {
+					Node* leftNode = node->left;
+					delete node;
+					count--;
+					return leftNode;
+				}
+				
+				// node->left != NULL &&n node->right != NULL
+				Node *successor = new Node(minimum( node->right )); 
+				count++;
+				
+				successor->right = removeMin( node->right );
+				successor->left = node->left;
+				
+				delete node;
+				count--;
+				
+				return successor;
+				
+			}
+			
+			
+			
+				
+		} 
 };
 
 int main () {
