@@ -29,7 +29,30 @@ int binarySearch(T arr[], int n, T targe ) {
 	return -1; 
 }
 
+// 自底向上的归并排序 
+void mergeSortBottomUp(T arr[], int n) {
+	
+	// 第一轮：对要merge的数组个数进行遍历 
+	for( int size = 1; size <= n; size += size ) {
+		for( int i = 0; i + size < n; i += size + size) {
+			// 对 arr[i...i+size-1]和arr[i+size...i+2*size-1]进行归并
+			__merge( arr, i, i + size - 1, min( i + 2*size - 1, n - 1 ) ); 
+		}
+	} 
+}
+
 int main () {
 	
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
