@@ -13,13 +13,13 @@ class SparseGraph {
 private:
 	int n, m;
 	bool derected;
-	vector<vector<int>> g;
+	vector<vector<int> > g;
 	
 public:
-	SparseGraph( int n, bool directed ) {
+	SparseGraph( int n, bool derected ) {
 		this->n = n;
 		this->m = 0;
-		this->derected = directed;
+		this->derected = derected;
 		for( int i = 0; i < n; i++ ) 
 			g.push_back( vector<int>() ); 
 	}	
@@ -40,7 +40,7 @@ public:
 		
 		g[v].push_back( w );
 		// 处理自环边和有向边 
-		if( v != w && !directed ) 
+		if( v != w && !derected ) 
 			g[w].push_back( v );
 		
 		m++;
@@ -56,7 +56,57 @@ public:
 		return false;
 	} 
 	
+	// 搞一个迭代器
+	class adjIterator {
+	private:
+		SparseGraph &G;
+		int v;
+		int index;
+	
+	public:
+		adjIterator( SparseGraph &graph, int v ): G(graph) {
+			this->v = v;
+			this->index = 0; 
+		}
+		
+		int begin() {
+			index = 0;
+			
+			if( index < G.g[v].size() )
+				return G.g[v][index];
+			return -1;
+		}
+		
+		int next() {
+			index++;
+			if( index < G.g[v].size() )
+				return G.g[v][index];
+			return -1;
+		}
+		
+		bool end() {
+			return index >= G.g[v].size();
+		}
+	
+	}; 
 }; 
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

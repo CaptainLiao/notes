@@ -13,7 +13,7 @@ class DenseGraph {
 private:
 	int n, m;
 	bool directed;	// 方向
-	vector<vector<bool>> g;	// 矩阵 
+	vector<vector<bool> > g;	// 矩阵 
 	
 public:
 	// n 表示顶点树， directed 表示是否是有向图 
@@ -58,8 +58,47 @@ public:
 		
 		return g[v][w]; 
 	}
-
+	
+	class adjIterator{
+	private:
+		DenseGraph &G;
+		int v;
+		int index;
+	
+	public:
+		adjIterator(DenseGraph &graph, int v ): G(graph) {
+			this->v = v;
+			this->index = -1;
+		}
+		
+		int begin() {
+			index = 1;
+			return next();
+		}
+		int next() {
+			for( index += 1; index < G.V(); index++ )
+				return index;
+			return -1;
+		}
+		bool end() {
+			return index >= G.V();
+		}
+	};
 }; 
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
