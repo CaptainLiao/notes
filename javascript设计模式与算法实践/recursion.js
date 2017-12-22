@@ -37,7 +37,29 @@ function createMagic(n) {
   return arr.join('')
 }
 
-for(var i = 1; i<20; i++) {
-  console.log(i+': ' +createMagic(i));
+function magicCoin(n) {
+
+  if (n < 1) return;
+  if (n % 2 === 0) {
+    return magicCoin((n - 2) / 2) + '2';
+  } else {
+    return magicCoin((n - 1) / 2) + '1';
+  }
 }
 
+for (var i = 1; i < 20; i++) {
+  console.log(i + ': ' + createMagic(i));
+}
+
+
+function hannuo(n, a, b, c) {
+  if (n === 1) {
+    console.log(`${a} ---> ${c}`)
+    return
+  }
+  hannuo(n - 1, a, c, b);
+  hannuo(1, a, b, c);
+  hannuo(n - 1, b, a, c);
+}
+
+//hannuo(3, 'A', 'B', 'C');
