@@ -1,5 +1,10 @@
-// 获取绝对时间
-// 即无论你在哪个时区，都和在京8区的时间一致
+/**
+ * 获取绝对时间
+ * 即无论你在哪个时区，得到的时间和京8区的时间一致
+ * 
+ * @param {Date} time 
+ * @returns {years,month, day, hours, minutes, seconds}
+ */
 function getAbsTime(time) {
   try {
     let currentZoneTime = new Date(time);
@@ -16,22 +21,32 @@ function getAbsTime(time) {
       offsetZone -= 8; 
       currentZoneTime.setHours(currentZoneHours - offsetZone);
     }
-
-    let years = currentZoneTime.getFullYear()
-    let month = currentZoneTime.getMonth() + 1
-    let day = currentZoneTime.getDate()
-    let hours =  currentZoneTime.getHours()
-    let minutes =  currentZoneTime.getMinutes()
-    let seconds = currentZoneTime.getSeconds()
-    return {
-      years,
-      month: currentZoneTime.getMonth() + 1,
-      day: month < 10 ? '0' + month : month,
-      hours: hours < 10 ? '0' + hours : hours,
-      minutes: minutes < 10 ? '0' + minutes : minutes,
-      seconds: seconds < 10 ? '0' + seconds : seconds
-    }
+    return transfromDate(currentZoneTime)
   } catch(e) {
     throw e
+  }
+}
+
+/**
+ * 日期显示两位数，一位则加0补齐
+ * 
+ * @param {Date} time 
+ * @returns {years,month, day, hours, minutes, seconds}
+ */
+function transfromDate(time) {
+  time = new Date(time)
+  let years = time.getFullYear()
+  let month = time.getMonth() + 1
+  let day = time.getDate()
+  let hours =  time.getHours()
+  let minutes =  time.getMinutes()
+  let seconds = time.getSeconds()
+  return {
+    years,
+    month: month < 10 ? '0' + month : month,
+    day: day < 10 ? '0' + day : day,
+    hours: hours < 10 ? '0' + hours : hours,
+    minutes: minutes < 10 ? '0' + minutes : minutes,
+    seconds: seconds < 10 ? '0' + seconds : seconds
   }
 }
