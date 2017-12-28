@@ -11,16 +11,13 @@ function getAbsTime(time) {
     let currentZoneHours = currentZoneTime.getHours();
     let offsetZone = -currentZoneTime.getTimezoneOffset() / 60;
 
-    if(offsetZone < 0) {
-      // 少于0的是西区 西区应该用时区绝对值加京八区 重新设置时间
-      // 西区时间比东区时间早 所以加时区间隔
-      offsetZone = Math.abs(offsetZone) + 8;
-      currentZoneTime.setHours(currentZoneHours + offsetZone)
-    } else {
-      // 大于0的是东区  东区时间直接跟京八区相减
-      offsetZone -= 8; 
-      currentZoneTime.setHours(currentZoneHours - offsetZone);
-    }
+  // 下面两行的逻辑有些繁复，注释以免自己懵逼
+    // 因 offsetZone 带有正负
+    // 再 offsetZone > 0 表示西时区（西区晚），则相对于京8区实际晚了 |offsetZone| + 8 个小时
+    // 又 offsetZone < 0 表示东时区（东区早），则相对于京8区实际早了 -|offsetZone| + 8 个小时
+    offsetZone += 8;
+    currentZoneTime.setHours(currentZoneHours + offsetZone);
+    return transfromDate(currentZoneTime)
     return transfromDate(currentZoneTime)
   } catch(e) {
     throw e
