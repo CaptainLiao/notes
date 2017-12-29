@@ -336,7 +336,7 @@ function groupingByKey(arr, key) {
         return res
       },
       []
-    )
+    );
 };
 ```
 ### 9. 用eval()将字符串解析为数组
