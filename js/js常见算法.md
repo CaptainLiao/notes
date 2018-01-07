@@ -307,32 +307,37 @@ function randomStr(n) {
 ### 8. 合并含有相同对象元素的数组
 
 ```
-var arr = [{a:1,b:2}, {a:1,c:4}, {a:5,d:8}, {a:5,f:22}];
+/**
+ * 根据某个 key 对数组进行分组
+ * 
+ * @param {Array} arr 
+ * @param {String} key 
+ * @returns arrary
+ * 
+ * >var arr = [{a:1,b:2}, {a:1,c:4}, {a:5,d:8}, {a:5,f:22}];
+ * >groupingByKey(arr, 'a')
+ * <[ [{a:1,b:2},{a:1,c:4}], [{a:5,d:8},{a:5,f:22}] ];
+ */
+function groupingByKey(arr, key) {
+  var obj = {};
+  arr.forEach(function (item, index, arr) {
+    var m = arr[index][key];
+    if (!obj[m]) {
+      obj[m] = [item];
+    } else {
+      [].push.call(obj[m], item);
+    }
+  });
 
-/* var arr2= [
- *          [{a:1,b:2},{a:1,c:4}],
- *          [{a:5,d:8},{a:5,f:22}]
- *     ];
-*/
-
-var splitArr = function (arr) {
-    var obj = {},
-        result = [];
-    arr.forEach(function (item, index, arr) {
-        var m = arr[index].a;
-        if(!obj[m]) {
-            obj[m] = [item];
-            //[].push.call(obj[m],item);
-        }else {
-            [].push.call(obj[m],item);
-
-        }
-
-    });
-    //[].push.call(obj.m, "fff");
-    console.log(obj)
+  return Object.keys(obj)
+    .reduce(
+      (res, k) => {
+        res.push(obj[k])
+        return res
+      },
+      []
+    );
 };
-splitArr(arr)
 ```
 ### 9. 用eval()将字符串解析为数组
 
