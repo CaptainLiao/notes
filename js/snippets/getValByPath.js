@@ -1,7 +1,12 @@
 var assert = require('assert');
 var type = require('./type');
+if(!String.prototype.trim) {
+  String.prototype.trim = s => s.replace(/^\s*|\s*/g, '')
+};
 function _getValByPath(kpath, o) {
-  assert(typeof kpath === 'string', 'kpath should be a string!');
+  if (typeof kpath !== 'string') 
+    throw kpath + ' should be a string!'
+
   kpath = kpath.trim();
   if (kpath.length === 0 || Object(o) !== o) return o;
   var paths = kpath.split('.'),
