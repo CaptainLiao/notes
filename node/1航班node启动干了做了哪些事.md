@@ -7,7 +7,7 @@
 
 ## 项目启动
 
-国际惯例，`node`启动服务命令一般都放在`bin`文件中。依次进入`app/bin/www`，有代码简化如下：
+我们的`node`启动服务命令放在`bin`文件中。强势进入`app/bin/www`，有代码简化如下：
 ````
 var app = require('../app');
 
@@ -20,7 +20,7 @@ app.start(function(app){
 
 });
 ````
-emm，看到这里，我猜测`app`代表整个项目，`start`方法表示启动这个项目。为了验证这个想法，得继续看看`../app.js`做了什么事。
+emm，看到这里，可以大胆猜测`app`代表整个项目，`start`方法表示启动这个项目。为了验证这个想法，得继续看看`../app.js`做了什么事。
 
 ### 找到 app.start()
 `vscode`自带的代码跳转功能很好用，一下就找到了位于项目根目录的`app.js`文件，内容虽多，但我们目的也很明确——找到`app.start`方法。
@@ -36,9 +36,9 @@ boot(app, 'boot')
 
 module.exports = app
 ````
-仔细认真的检查，依然没有找到`app.start()`，很方。
+仔细认真的检查，依然没有找到`app.start()`，很方~~
 
-但我发现，其中唯一与变量`app`相关的是`boot`，到这里只能大胆猜测执行`boot(app, 'boot')`后，会在`app`上挂载`start`方法。
+但我发现，其中唯一与变量`app`相关的是`boot`，到这里只能又又大胆猜测执行`boot(app, 'boot')`后，会在`app`上挂载`start`方法。
 
 
 ### app.start() 原来在这里
@@ -52,6 +52,7 @@ module.exports = function bootFactory(appRootDir) {
   return function boot(app, bootDir) {
     var appCfg = loader.loadAppCfg(app, appRootDir);
     var bootCfg = loader.loadBootCfg(app, appRootDir, bootDir);
+
     var preprocess = executor(app, bootCfg.before);
 
     app.beforeStart = function app$beforeStart(cb) {
@@ -60,6 +61,7 @@ module.exports = function bootFactory(appRootDir) {
       });
       return app;
     };
+
     app.start = function app$start(cb) {
       return preprocess
         .then(() => executor(app, bootCfg.after))
@@ -81,7 +83,7 @@ module.exports = function bootFactory(appRootDir) {
 5. app 挂载 start 方法
 
 ### 阶段总结：
-到这里，关于航班项目的启动过程已经有了一个初步的了解，可用如下伪代码表示这个过程：
+到这里，关于航班项目的启动过程已经有了一个初步的了解，总结为 4 大步：
 ````
 step01：启动 express 应用，取名 app
 step02: 读取应用根目录下的 boot.xxx.yml 配置文件，执行其中 before 参数下的内容，接着给 app 挂载 beforeStart、start方法
@@ -94,16 +96,14 @@ step04: 待 step03 完成后，执行 app.start(cb)，启动服务
 ## m-loader.js 始末
 这次，我们将深入 step02，看看在服务启动之前，应用做了哪些准备工作。
 
-让我们回到`express-app-boot`包，从`var bootCfg = loader.loadBootCfg(app, appRootDir, bootDir)`开始。
+让我们回到`express-app-boot`包（此刻你需要在 node_module 文件夹中找到它），从`var bootCfg = loader.loadBootCfg(app, appRootDir, bootDir)`开始。
 
-`bootCfg`对应`boot.yml`配置文件，`bootCfg.before`是一个数组，我们截取其中的一个`bootCfg.before[0]`记为`task`：
-
+变量`bootCfg`指向`boot.yml`配置文件中的对象，结合文件内容我们看到`bootCfg.before`是一个数组，我们截取其中的一个`bootCfg.before[0]`记为`task`如下所示：
 ````
 var task = {
     path: 'load-module',
     name: 'add load module route',
     params: {
-      debug: false,
       routePath: '/m',
       loaderPath: '/m-loader.js', // 这里我们见到了`m-loader.js`请记住它
       pathSettings: {
@@ -127,7 +127,9 @@ var task = {
 }
 
 ````
-紧接着，执行`var preprocess = executor(app, bootCfg.before)`，即执行`require('app/boot/load-module/index.js')(app, task)`,
+**请和上述对象中的 loaderPath 对下眼神**:
+
+紧接着，执行`var preprocess = executor(app, bootCfg.before)`，相当于执行`require('app/boot/load-module/index.js')(app, task)`,
 
 load-module/index.js:
 ````
@@ -148,9 +150,12 @@ module.exports = function(app, params){
   moduleServ(app, params);
 };
 ````
-`load-module/index.js`给参数添加了一个 transformers 属性，便交给`moduleServ`执行。得，我们先去`express-module-serv`包：
+`load-module/index.js`给参数添加了一个 transformers 属性，便交给`moduleServ`执行。
+
+得，我们还得去找`express-module-serv`包：
 ````
 var scriptsMiddleware = require('./lib/scriptsMiddleware');
+
 module.exports = function(app, options) {
   options = options || {};
   var routePath = options.routePath || '/m',
@@ -160,14 +165,18 @@ module.exports = function(app, options) {
   app.use(loaderPath, scriptsMiddleware(loaderPath, routePath, options));
 };
 ````
-还记得`options.loaderPath`的值吗？它就是`/m-loader.js`。所以，当浏览器请求加载`m-loader.js`时，会执行`scriptsMiddleware()`中间件:
+还记得上面的`loaderPath`的值吗？它对应的路径就是`/m-loader.js`。
+
+所以，当浏览器请求加载`m-loader.js`时，会执行`scriptsMiddleware()`中间件，其中的`promiseScript`就是`m-loader.js`本人了。
+
+./lib/scriptsMiddleware.js
 ````
 var promiseScript = fs.readFileSync(pUtil.resolve(__dirname, '../client/promise.js'));
 var loaderScript = fs.readFileSync(pUtil.resolve(__dirname, '../client/loader.js'));
+
 var scriptsContent = promiseScript + ';\n' + loaderScript;
 
 module.exports = function(loaderPath, routePath, options){
-
   return function _scriptsMiddleware(req, res, next){
     res.status(200).end('(function(w){' + scriptsContent + '})(window);');
   };
