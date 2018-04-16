@@ -1,0 +1,14 @@
+{
+  "name": "light-editer",
+  "version": "0.0.1",
+  "description": "原声、轻量的富文本编辑器",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "github @captainLiao",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
