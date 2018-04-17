@@ -1,12 +1,12 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack-dev-config');
+var config = require('./webpack.dev');
 
 
 new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
-    hot: true,
     historyApiFallback: true,
+    overlay: true,
     // It suppress error shown in console, so it has to be set to false.
     quiet: false,
     // It suppress everything except error, so it has to be set to false as well

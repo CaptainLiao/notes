@@ -5,10 +5,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
-
+  mode: 'development',
   // 入口文件配置
   entry: [
-    'babel-polyfill',
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
 
@@ -36,10 +35,9 @@ module.exports = {
     mainFiles: ['index.web', 'index'],
     modules: ['app', 'node_modules', path.join(__dirname, '../node_modules')],
     extensions: [
-      '.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.ts', '.tsx',
+      '.ts', '.tsx',
       '.js',
-      '.jsx',
-      '.react.js',
+      '.jsx'
     ],
     mainFields: [
       'browser',
@@ -50,7 +48,7 @@ module.exports = {
   },
 
   module: {
-    loaders: [
+    rules: [
       // css modules 组件样式私有化
       // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
       {
@@ -86,6 +84,7 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.NamedModulesPlugin(),
     // 启用热替换，仅开发模式使用
     new webpack.HotModuleReplacementPlugin(),
 
@@ -98,7 +97,7 @@ module.exports = {
     }),
 
     new HtmlWebpackPlugin({     // Create HTML file that includes references to bundled CSS and JS.
-      template: 'src/template.html',
+      template: 'src/index.html',
       title: '开发模式',
       // favicon:'./src/favicon.ico',
       minify: {
