@@ -4,11 +4,25 @@
   "description": "原声、轻量的富文本编辑器",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js --open",
+    "build:webpack": "webpack -p --config webpack.prod.js --colors --progress",
+    "clean": "rimraf dist",
+    "build": "npm run clean && npm run build:webpack"
   },
   "author": "github @captainLiao",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.0.1",
+    "less-loader": "^4.1.0",
+    "postcss-loader": "^2.1.4",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.20.3",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14",
+    "webpack-manifest-plugin": "^2.0.0"
   }
 }
