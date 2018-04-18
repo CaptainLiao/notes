@@ -12,7 +12,7 @@ module.exports = {
     'webpack/hot/only-dev-server',
 
     // 项目入口文件
-    path.resolve(__dirname, 'src/index.js')
+    path.resolve(__dirname, 'src/index.ts')
   ],
 
   // 文件输出配置
@@ -49,6 +49,18 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              happyPackMode: true
+            }
+          }
+        ],
+        include: path.resolve(__dirname, 'src')
+      },
       // css modules 组件样式私有化
       // 详见：http://www.ruanyifeng.com/blog/2016/06/css_modules.html
       {
