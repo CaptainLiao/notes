@@ -1,42 +1,37 @@
-// import './style/index.less'
-// import add from './lib/add'
+import './style/index.less'
+import './lib/toolbarTip'
 
-function getStringWithComma(s:string, gap:number):string {
-  s = s.toString()
-  if(typeof s !== 'string') throw new Error('xxxx')
-  
-  return s.split('')
-    .reverse()
-    .reduce((res, item, index) => {
-      if( index !== 0 && index % gap === 0) {
-        res += ','
-      }
-      res += item
-      return res
-    }, '')
-    .split('')
-    .reverse()
-    .join('')
-    
-}
+let azKeycode = new Array(26).fill().map((item:number, index:number) => 65 + index)
 
-function getStringWithComma2(s:string, gap:number):string {
-  s = s.toString()
-  if(typeof s !== 'string') throw new Error('xxxx')
+let keyMap = [
+  {B: 66},
+  {I: 73},
+  {U: 85},
+  {S: 83},
+  {Y: 89},
+  {Z: 90},
+  {Tab: 9},
+  {Ctrl: 8},
+  {'Ctrl+B': 74},
+  {'Ctrl+I': 81},
+  {'Ctrl+U': 93},
+  {'Ctrl+Z': 98},
+  {'Ctrl+Y': 97},
+  {'Shift+Ctrl+I': 97},
+  {'Shift+Ctrl+U': 109},
+  {'Shift+Ctrl+Y': 113},
+  {Shift: 16},
+]
+
+console.log(keyMap)
+
+document.addEventListener('keyup', (e) => {
+  console.log(e.keyCode)
+  let keyCode = e.keyCode
   
-  let arr = s.split('')
-  let res = []
-  for(var i = arr.length - 1; i >= 0; i--) {
-    if( i !== arr.length -1 && i % gap === 0 ) {
-      res.unshift(',')
-    }
-    res.unshift(arr[i])
+  switch(keyCode) {
+    case 8:
+      console.log('退格键')
+      break;
   }
-  return res.join('')
-}
-
-
-export default {
-  getStringWithComma2,
-  getStringWithComma
-}
+})

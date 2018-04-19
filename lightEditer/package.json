@@ -4,7 +4,7 @@
   "description": "原声、轻量的富文本编辑器",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require espower-typescript/guess test/*.ts",
+    "test": "mocha --require espower-typescript/guess test/**/*.ts",
     "start": "node server.js --open",
     "build:webpack": "webpack -p --config webpack.prod.js --colors --progress",
     "clean": "rimraf dist",
@@ -30,7 +30,6 @@
     "rucksack-css": "^1.0.2",
     "style-loader": "^0.20.3",
     "ts-loader": "^4.2.0",
-    "ts-node": "^6.0.0",
     "typescript": "^2.8.1",
     "typings": "^2.1.1",
     "webpack": "^4.5.0",
