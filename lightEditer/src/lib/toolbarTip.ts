@@ -78,11 +78,12 @@ let classes:any = {
 }
 
 let toolbars = document.getElementsByClassName('button-none')
-let toolbarTip = document.getElementsByClassName('toolbar-tip')[0]
+let toolbarTip = <HTMLElement>document.getElementsByClassName('toolbar-tip')[0]
 let keys = Object.keys(classes)
 
-;[].forEach.call(toolbars, (bar:any, i:number) => {
-  let setToolbarTip = debounce(function({target}) {
+;[].forEach.call(toolbars, (bar:HTMLElement, i:number) => {
+  let setToolbarTip = debounce(function(e:any) {
+    let {target} = e
     let k = keys[i]
     let c = classes[k]
 
@@ -94,10 +95,13 @@ let keys = Object.keys(classes)
 
   bar.addEventListener('mouseenter', setToolbarTip)
   bar.addEventListener('mouseleave', () => toolbarTip.classList.add('hidden'))
-  bar.addEventListener('click', (e) => {
-    e.stopPropagation();
+  bar.addEventListener('click', function() {
     
-    console.log(e)
-  }, true)
+    let key = [].slice.call(this.classList)
+      .map((res:string) => keys.indexOf(res) === -1 ? 0 : res)
+      .filter(Boolean)[0]
+
+    console.log(key)
+  })
 
 })

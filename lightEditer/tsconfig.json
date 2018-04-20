@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noImplicitAny": true,
+    "strictNullChecks": true,
     "module": "commonjs",
     "allowJs": true,
     "sourceMap": true,

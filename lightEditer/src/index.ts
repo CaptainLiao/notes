@@ -1,7 +1,7 @@
 import './style/index.less'
 import './lib/toolbarTip'
 
-let azKeycode = new Array(26).fill().map((item:number, index:number) => 65 + index)
+let azKeycode = ( <any>new Array(26) ).fill().map((item:number, index:number) => 65 + index)
 
 let keyMap = [
   {B: 66},
