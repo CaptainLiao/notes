@@ -5,6 +5,7 @@
  */
 
 import debounce from './utils/debounce'
+let getByClass = document.getElementsByClassName.bind(document)
 
 let classes:any = {
   undo: {
@@ -77,8 +78,8 @@ let classes:any = {
   },
 }
 
-let toolbars = document.getElementsByClassName('button-none')
-let toolbarTip = <HTMLElement>document.getElementsByClassName('toolbar-tip')[0]
+let toolbars = getByClass('button-none')
+let toolbarTip = <HTMLElement>getByClass('toolbar-tip')[0]
 let keys = Object.keys(classes)
 
 ;[].forEach.call(toolbars, (bar:HTMLElement, i:number) => {
@@ -95,7 +96,7 @@ let keys = Object.keys(classes)
 
   bar.addEventListener('mouseenter', setToolbarTip)
   bar.addEventListener('mouseleave', () => toolbarTip.classList.add('hidden'))
-  bar.addEventListener('click', function() {
+  bar.addEventListener('click', function(e) {
     
     let key = [].slice.call(this.classList)
       .map((res:string) => keys.indexOf(res) === -1 ? 0 : res)
@@ -104,4 +105,8 @@ let keys = Object.keys(classes)
     console.log(key)
   })
 
+})
+
+document.addEventListener('keydown', function(e) {
+  console.log(e.keyCode)
 })
