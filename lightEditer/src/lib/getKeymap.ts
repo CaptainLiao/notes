@@ -18,7 +18,7 @@ azKeycode.concat([ {Tab: 9} ])
     let k = Object.keys(item)[0]
     otherKeyCode.forEach(o => {
       let o_k = Object.keys(o)[0]
-      keymap.push({[o_k+ '+' +k]: item[k] + o[o_k]})
+      keymap.push({[o_k+ '+' +k]: item[k] +'+'+ o[o_k]})
     })
   })
 

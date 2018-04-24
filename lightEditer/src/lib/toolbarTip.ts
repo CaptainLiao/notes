@@ -82,6 +82,13 @@ let toolbars = getByClass('button-none')
 let toolbarTip = <HTMLElement>getByClass('toolbar-tip')[0]
 let keys = Object.keys(classes)
 
+toolbars[0].addEventListener('hah', function() {
+  console.log('hahahha')
+})
+let event = document.createEvent('HTMLEvents')
+event.initEvent( 'hah', true, true );
+toolbars[0].dispatchEvent(event); 
+
 ;[].forEach.call(toolbars, (bar:HTMLElement, i:number) => {
   let setToolbarTip = debounce(function(e:any) {
     let {target} = e
@@ -93,16 +100,16 @@ let keys = Object.keys(classes)
     toolbarTip.classList.remove('hidden')
   })
 
-
-  bar.addEventListener('mouseenter', setToolbarTip)
+  bar.addEventListener('mouseenter', setToolbarTip) 
   bar.addEventListener('mouseleave', () => toolbarTip.classList.add('hidden'))
   bar.addEventListener('click', function(e) {
     
     let key = [].slice.call(this.classList)
       .map((res:string) => keys.indexOf(res) === -1 ? 0 : res)
       .filter(Boolean)[0]
+    
 
-    console.log(key)
+    console.log(classes[key].k)
   })
 
 })

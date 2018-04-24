@@ -4,6 +4,8 @@ import keymap from './lib/getKeymap'
 
 console.log(keymap)
 
+
+
 document.addEventListener('keyup', (e) => {
   console.log(e.keyCode)
   let keyCode = e.keyCode
