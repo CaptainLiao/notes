@@ -82,13 +82,6 @@ let toolbars = getByClass('button-none')
 let toolbarTip = <HTMLElement>getByClass('toolbar-tip')[0]
 let keys = Object.keys(classes)
 
-toolbars[0].addEventListener('hah', function() {
-  console.log('hahahha')
-})
-let event = document.createEvent('HTMLEvents')
-event.initEvent( 'hah', true, true );
-toolbars[0].dispatchEvent(event); 
-
 ;[].forEach.call(toolbars, (bar:HTMLElement, i:number) => {
   let setToolbarTip = debounce(function(e:any) {
     let {target} = e

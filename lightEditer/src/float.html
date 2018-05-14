@@ -13,16 +13,18 @@
     }
 
     .img {
-      display: inline-block;
-      width: 40px;
+      border:1px solid transparent;
       height: 40px;
       background: red;
+      margin-bottom: 200px;
     }
     .img img {
       width: 100%;
     }
     .text {
-      display: inline-block;
+      border:1px solid transparent;
+      margin-top: 100px;
+      height: 40px;
       background: grey;
       line-height: 30px;
     }
@@ -31,7 +33,9 @@
 <body>
   <div class="wrap">
     <div class="img">我</div>
-    <div class="text">你吃了吗你吃了吗</div>
+    <div>
+      <div class="text"></div>
+    </div>
   </div>
 </body>
 </html>
