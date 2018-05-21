@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>loading</title>
+  <style lang="less">
+    .loading {
+      position: relative;
+
+      width: 20px;
+      height: 20px;
+    }
+    .loading:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .loading-line {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: top;
+
+      width: 2px;
+      height: 11px;
+      background: rgba(0,0,0,.1);
+      border-radius: 30%;
+    }
+
+    .line0 {
+      transform: translateX(-50%) rotate(0deg);
+      animation: rotate 1s linear .07s infinite;
+    }
+
+    .line1 {
+      transform: translateX(-50%) rotate(24deg);
+      animation: rotate 1s linear .14s infinite;
+    }
+    .line2 {
+      transform: translateX(-50%) rotate(48deg);
+      animation: rotate 1s linear .21s infinite;
+    }
+    .line3 {
+      transform: translateX(-50%) rotate(72deg);
+      animation: rotate 1s linear 0.28s infinite;
+    }
+    .line4 {
+      transform: translateX(-50%) rotate(96deg);
+      animation: rotate 1s linear .35s infinite;
+    }
+    .line5 {
+      transform: translateX(-50%) rotate(120deg);
+      animation: rotate 1s linear .42s infinite;
+    }
+    .line6 {
+      transform: translateX(-50%) rotate(144deg);
+      animation: rotate 1s linear .49s infinite;
+    }
+    .line7 {
+      transform: translateX(-50%) rotate(168deg);
+      animation: rotate 1s linear .56s infinite;
+    }
+    .line8 {
+      transform: translateX(-50%) rotate(192deg);
+      animation: rotate 1s linear .63s infinite;
+    }
+    .line9 {
+      transform: translateX(-50%) rotate(216deg);
+      animation: rotate 1s linear .7s infinite;
+    }
+    .line10 {
+      transform: translateX(-50%) rotate(240deg);
+      animation: rotate 1s linear 0.76s infinite;
+    }
+    .line11 {
+      transform: translateX(-50%) rotate(264deg);
+      animation: rotate 1s linear 0.82s infinite;
+    }
+    .line12 {
+      transform: translateX(-50%) rotate(288deg);
+      animation: rotate 1s linear 0.88s infinite;
+    }
+    .line13 {
+      transform: translateX(-50%) rotate(312deg);
+      animation: rotate 1s linear .94s infinite;
+    }
+    .line14 {
+      transform: translateX(-50%) rotate(336deg);
+      animation: rotate 1s linear 1s infinite;
+    }
+    @keyframes rotate {
+      0% {background: rgba(0,0,0,.4)}
+      40% {background: rgba(0,0,0,.1)}
+      100% {background: rgba(0,0,0,.1)}
+    }
+
+
+  </style>
+</head>
+<body>
+  <p>1111</p>
+  <div class="loading">
+    <div class="loading-line line0"></div>
+    <div class="loading-line line1"></div>
+    <div class="loading-line line2"></div>
+    <div class="loading-line line3"></div>
+    <div class="loading-line line4"></div>
+    <div class="loading-line line5"></div>
+    <div class="loading-line line6"></div>
+    <div class="loading-line line7"></div>
+    <div class="loading-line line8"></div>
+    <div class="loading-line line9"></div>
+    <div class="loading-line line10"></div>
+    <div class="loading-line line11"></div>
+    <div class="loading-line line12"></div>
+    <div class="loading-line line13"></div>
+    <div class="loading-line line14"></div>
+  </div>
+  <p>222</p>
+</body>
+</html>
