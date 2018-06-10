@@ -92,14 +92,84 @@ class BST {
 			__postOrder(node.right)
 			console.log(node.key)
 		}
+
+		__postOrder(this.root)
+	}
+	// 层序遍历
+	levelOrder(fn = v => console.log(v)) {
+		let queue = []
+		queue.push(this.root)
+
+		while(queue.length > 0) {
+			let head_node = queue.shift()
+			fn(head_node.key)
+
+			if(head_node.left) queue.push(head_node.left)
+			if(head_node.right) queue.push(head_node.right)
+		}
+	}
+
+	maxKey() {
+		if( this.root == null ) throw new Error('root is null!')
+
+		let __findMaxKey = node => {
+			if(node.right === null) return node
+			return __findMaxKey(node.right)
+		}
+
+		return __findMaxKey(this.root)
+	}
+
+	__destory(node) {
+		if(node === null) return
+		this.__destory(node.left)
+		this.__destory(node.right)
+
+		node = null
+		this.count--
+	}
+
+	// 删除最大key
+	removeMaxKey() {
+		let __removeMaxKey = node => {
+			if(node.right === null) {
+				let leftNode = node.left
+				node = null
+				this.count--
+				return leftNode
+			}
+			node.right = __removeMaxKey(node.right)
+			return node
+		}
+
+		this.root = __removeMaxKey(this.root)
+	}
+
+	// 删除最小key
+	removeMinKey() {
+		let __removeMinKey = node => {
+			if( node.left === null ) {
+				let rightNode = node.right
+				node = null
+				this.count--
+				return rightNode
+			}
+			node.left = __removeMinKey(node.left)
+			return node
+		}
+
+		this.root = this.removeMinKey(this.root)
 	}
 }
 
 let bst = new BST()
-for(var i = 0; i < 10; i++) {
+for(var i = 0; i < 4; i++) {
 	bst.insert(~~(Math.random() * 100), ~~(Math.random() * 100) )
 }
 bst.insert(33, 10 )
+bst.midOrder()
+console.log('----------')
+bst.removeMaxKey()
 bst.midOrder()
 
 
