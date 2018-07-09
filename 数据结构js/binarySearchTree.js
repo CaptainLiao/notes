@@ -1,10 +1,11 @@
 
 // 私有类
 class __Node {
-	constructor(key, value) {
+	constructor(key, value, left = null, right = null) {
 		this.key = key
 		this.value = value
-		this.left = this.right = null
+		this.left = left
+		this.right = right
 	}
 }
 
@@ -46,19 +47,16 @@ class BST {
 	// *	返回 node 节点. 一个封装良好的类中,不应对外暴露私有对象.显然,我们在设计 BST 类时,不希望外界接触到 node 类
 	// *	返回 value(常用),注意在 c++ 等强类型语言中,要处理 value 为空的情形
 	find(key) {
-		let __find = (node, key) => {
-			if( node === null ) return null
-		
-			if(node.key === key){
-				return node.value
-			} else if( key < node.key ) {
-				return __find(node.left, key)
-			} else {
-				return __find(node.right, key)
-			}
+		return this.__find(this.root, key).value
+	}
+	__find(node, key) {
+		if(key === node.key) {
+			return node
+		} else if( key < node.key ) {
+			return this.__find(node.left, key)
+		} else {
+			return this.find(node.right, key)
 		}
-
-		return __find(this.root, key)
 	}
 
 	preOrder() {
@@ -111,13 +109,20 @@ class BST {
 
 	maxKey() {
 		if( this.root == null ) throw new Error('root is null!')
+		return this.__maxKey(this.root).key
+	}
+	__maxKey(node) {
+		if(node.right === null) return node
+		return this.__maxKey(node.right)
+	}
 
-		let __findMaxKey = node => {
-			if(node.right === null) return node
-			return __findMaxKey(node.right)
-		}
-
-		return __findMaxKey(this.root)
+	minKey() {
+		if( this.root == null ) throw new Error('root is null!')
+		return this.__minKey(this.root).key
+	}
+	__minKey(node) {
+		if(node.left === null) return node
+		return this.__minKey(node.left)
 	}
 
 	__destory(node) {
@@ -131,34 +136,84 @@ class BST {
 
 	// 删除最大key
 	removeMaxKey() {
-		let __removeMaxKey = node => {
-			if(node.right === null) {
-				let leftNode = node.left
-				node = null
-				this.count--
-				return leftNode
-			}
-			node.right = __removeMaxKey(node.right)
-			return node
+		this.root = this.__removeMaxKey(this.root)
+	}
+	__removeMaxKey(node) {
+		if(node.right === null) {
+			let nodeLeft = node.left
+			node = null
+			this.count--
+			return nodeLeft
 		}
-
-		this.root = __removeMaxKey(this.root)
+		node.right = this.__removeMaxKey(node.right)
+		return node
 	}
 
 	// 删除最小key
 	removeMinKey() {
-		let __removeMinKey = node => {
-			if( node.left === null ) {
-				let rightNode = node.right
+		this.root = this.__removeMinKey(this.root)
+	}
+	__removeMinKey(node) {
+		if( node.left == null ) {
+			let rightNode = node.right
+			node = null
+			this.count--
+			return rightNode
+
+		}
+		node.left = this.removeMinKey(node.left)
+		return node
+	}
+
+	remove(key) {
+		// 删除以 node 为根的二分搜索树中键值为 key 的节点
+		// 返回删除节点后新的二分搜索树的根
+		let __remove = (node, key) => {
+			if( node === null ) return
+
+			if(key < node.key) {
+				node.left = this.__remove(node.left)
+				return node
+			} else if( key > node.key ) {
+				node.right = this.__remove(node.right)
+				return node
+			} else {
+				// key === node.key
+				if( node.left === null ) {
+					let rightNode = node.right
+					node = null
+					this.count--
+					return rightNode
+				}
+				if( node.right === null ) {
+					let leftNode = node.left
+					node = null
+					this.count--
+					return leftNode
+				}
+
+				let {
+					key,
+					value,
+					left,
+					right
+				} = this.__minKey(node.right)
+				let successor = new __Node(key, value, left, right)
+				this.count++
+
+				successor.left = node.left
+				successor.right =  this.__removeMinKey(node.right)
+
 				node = null
 				this.count--
-				return rightNode
+
+				return successor
+
 			}
-			node.left = __removeMinKey(node.left)
-			return node
 		}
 
-		this.root = this.removeMinKey(this.root)
+
+		this.root = __remove(this.root, key)
 	}
 }
 
