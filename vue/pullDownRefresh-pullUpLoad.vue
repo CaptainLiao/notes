@@ -4,7 +4,7 @@
         @touchmove="touchMove" 
         @touchend="touchEnd"
         :style="{'margin-top': downMarginTop+'px'}">
-    <div class="down-refresh" :style="{'line-height': height+'px'}">
+    <div class="down-refresh" v-if="pullDownStatus" :style="{'line-height': height+'px'}">
       <slot name="down-refresh-status">
         <span class="down-waiting" v-show="pullDownStatus === 'waiting'">下拉刷新</span>
         <span class="down-refreshing" v-show="pullDownStatus === 'pending'">松开刷新数据</span>
@@ -12,7 +12,7 @@
       </slot>
     </div>
     <slot></slot>
-    <div class="up-load" v-show="showUpLoad">
+    <div class="up-load" v-show="pullUpStatus">
       <span v-show="pullUpStatus === 'waiting'">上啦加载更多</span>
       <span v-show="pullUpStatus === 'loading'">加载中……</span>
     </div>
@@ -31,9 +31,7 @@ let _last_y
 export default {
   data() {
     return {
-      showUpLoad: false,
       height: -MARGIN_TOP,
-
       downMarginTop: MARGIN_TOP,
     }
   },
