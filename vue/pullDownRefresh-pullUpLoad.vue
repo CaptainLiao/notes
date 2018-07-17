@@ -24,8 +24,8 @@
 </template>
 
 <script>
-const SPEED_MUTIPLE = 0.98
-const SPEED = 1
+
+const SPEED = 0.8
 const MARGIN_TOP = -84
 
 let _speed = SPEED
@@ -71,9 +71,9 @@ export default {
       let offsetY = pageY - _last_y
       _last_y = pageY
       
-      return offsetY >= 0 
-        ? this.$_down_move(e, offsetY) 
-        : this.$_up_move(e, offsetY)
+      return offsetY >= 0 // 每次移动的距离不超过10
+        ? this.$_down_move(e, Math.min(offsetY, 10)) 
+        : this.$_up_move(e, Math.min(offsetY, -10))
     },
     touchEnd(e) {
       let { pageY } = e.changedTouches[0]
@@ -86,14 +86,15 @@ export default {
 
     $_down_move(e, offsetY) {
       if(!this.pullDownStatus) return
+
       this.pullDownStatus = 'pending'
       // 滚动条在顶部时触发
       if( document.querySelector('.a-layout-body').scrollTop === 0 ) {
         if(this.downMarginTop <= 0) {
           this.downMarginTop += offsetY
         } else {
-          _speed *= SPEED_MUTIPLE
-          this.downMarginTop += offsetY * _speed
+          _speed -= 0.03
+          this.downMarginTop += offsetY * Math.max(_speed, 0.2)
           this.pullDownStatus = 'pending'
         }
         //禁用ios webview 回弹效果
@@ -125,6 +126,10 @@ export default {
     $_start_pull_up_load() {
       // TODO:上拉加载...
       this.$emit('start-pull-up-load')
+    },
+    $_update_style(marginTop, hasTransition) {
+      let transition = hasTransition ? 'all .3s ease-in' : ''
+      this.updateStyle = `margin-top:${marginTop}px;transition:${transition}`
     },
   }
 }
