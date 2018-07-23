@@ -1,34 +1,16 @@
-let assert = require('assert');
-
-function trim(s) {
-  return s.replace(/^\s*|\s*$/g, '')
-}
-
-assert.equal(trim(' sd  '), 'sd')
-assert.equal(trim(' s d  '), 's d')
-
-function getIn(target, keyPath, notFoundValue = undefined) {
-  for (let key in keyPath) {
-    if (target && target.hasOwnProperty(keyPath[key])) {
-      target = target[keyPath[key]];
-    } else {
-      return notFoundValue;
+function insertSort(arr) {
+  var i;
+  var j;
+  var temp;
+  for( i = 1; i < arr.length; ++i ) {
+    temp = arr[i];
+    for( j = i - 1; j >= 0 && arr[j] > temp; --j ) {
+      arr[j + 1] = arr[j]
     }
+    arr[j + 1] = temp;
   }
-  return target;
+  return arr;
 }
 
-function get(target, keyPathStr, notFoundValue = undefined) {
-  return getIn(target, keyPathStr.split('.'), notFoundValue);
-}
-
-let getTest = {
-  a: {
-    b: [{
-      c: 111
-    },{
-      d: 222
-    }]
-  }
-}
-assert.equal(get(getTest, 'a.b[0].c'), 111)
+var a = [5,2, 4,11,3]
+console.log(insertSort(a))

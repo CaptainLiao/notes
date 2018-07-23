@@ -1,4 +1,6 @@
-<!-- 手势组件 -->
+<!-- 左滑删除 
+  TODO：上下滑动
+-->
 <template>
   <div class="slide"
         @touchstart="touchstart"
@@ -7,34 +9,38 @@
         @touchcancel="touchcancel"
         :style="{'transform': transform, 'transition': transition}"
         >
-    <slot></slot>
+    <slot>
+      <div class="wrapper">
+        <div class="box">测试测测测试测测测试测测测试测测测试测测测试测测测试测测测试测测</div>
+        <div class="empty"></div>
+        <div class="del"><div class="text">删除</div></div>
+      </div>
+    </slot>
   </div>
 </template>
 
 <script>
 const MIN_OFFSET_X = 40 
 const MAX_OFFSET_X = 80
-const TRANSITION = `all .7s cubic-bezier(.15,.85,.35,1)`
-const SPEED_X = 0.2
+const TRANSITION = `all .8s cubic-bezier(.15,.85,.35,1)`
+const SPEED_X = 0.6
 
-let __startX
-let __startY
+// 记录上一次move，手指的位置
 let __lastX
 let __lastY
-let __direction
+
+let __direction // 滑动方向
+let __has_lr_direction// 已经左/右滑出去了吗
 
 export default {
   data () {
     return {
       transition: '',
+      offsetY: 0
     };
   },
   props: {
     offsetX: {
-      type: Number,
-      default: 0
-    },
-    offsetY: {
       type: Number,
       default: 0
     },
@@ -47,14 +53,12 @@ export default {
   methods: {
     touchstart(e) {
       let { pageX, pageY } = e.changedTouches[0]
-
       __lastX = pageX 
-      __startX = pageX
       __lastY = pageY
-      __startY = pageY
       __direction = ''
-      
-      this.$emit('touchstart')
+      __has_lr_direction = Math.abs(this.offsetX) === MAX_OFFSET_X
+
+      this.$emit('touchstart') // 开始滑动之前，重置所有位移
     },
     touchmove(e) {
       let { pageX, pageY } = e.changedTouches[0]
@@ -63,16 +67,21 @@ export default {
       let distance = 0
       __lastX = pageX
       __lastY = pageY
-      this.transition = ''
 
-      if( Math.abs(offsetX) <= Math.abs(offsetY) ) { // 上下滑动
-        if( __direction === 'left' || __direction === 'right' )
-          return;
+      this.transition = '' // move中不需要transition
+
+      if( Math.abs(offsetX) <= Math.abs(offsetY) ) {
+        //上下滑时禁止左右滑
+        if( __direction === 'left' || __direction === 'right' ) 
+          return e.preventDefault()
+
         __direction = offsetY < 0 ? 'up' : 'down'
         distance = offsetY
-      } else { // 左右滑动
+      } else {
+        // 左右滑时禁止上下滑
         if( __direction === 'up' || __direction === 'down' )
-          return;
+          return e.preventDefault()
+
         __direction = offsetX < 0 ? 'left' : 'right'
         distance = offsetX
       }
@@ -87,16 +96,6 @@ export default {
       return executor(e, distance) 
     },
     touchend(e) {
-      let { pageX, pageY } = e.changedTouches[0]
-      let offsetX = pageX - __startX
-      let offsetY = pageY - __startY
-      let distance
-
-      if(__direction === 'up' || __direction === 'down')
-        distance = offsetY
-      if(__direction === 'left' || __direction === 'right')
-        distance = offsetX
-      
       let executor = {
         up: this.$_up_end,
         down: this.$_down_end,
@@ -104,33 +103,35 @@ export default {
         right: this.$_right_end,
       }[__direction] || this.$_reset
 
-      return executor(e, distance)
+      return executor(e) 
     },
     touchcancel() {
       this.$_reset()
     },
 
     $_left_move(e, distance) {
-      let speed = Math.abs(this.offsetX) < MAX_OFFSET_X
+      // 已经左/右滑出去了就重置
+      if( __has_lr_direction ) {
+        this.$_reset()
+        return e.preventDefault()
+      };
+
+      let speed = Math.abs(this.offsetX) < MAX_OFFSET_X * 2/3
         ? 1
         : SPEED_X
-  
+
       this.offsetX += distance * speed
       e.preventDefault()
     },
     $_right_move(e, distance) {
-      let abs_offset = Math.abs(this.offsetX)
-      if(abs_offset === MAX_OFFSET_X) {
-        this.$_reset()
-      } else {
-        this.offsetX += Math.min(abs_offset, distance)
-      }
-      
+      // 避免滑出容器
+      this.offsetX += Math.min(Math.abs(this.offsetX), distance)
       e.preventDefault()
     },
 
-    $_left_end(e, distance) {
-      if(Math.abs(distance) > MIN_OFFSET_X ) {
+    $_left_end(e) {
+      // 左滑结束，滑动块回到合适位置
+      if(Math.abs(this.offsetX) > MIN_OFFSET_X ) {
         this.offsetX = -MAX_OFFSET_X
       } else {
         this.offsetX = 0
@@ -139,9 +140,11 @@ export default {
       this.transition = TRANSITION
       e.preventDefault()
     },
-    $_right_end(e, distance) {
+    $_right_end(e) {
+      this.$_reset()
       e.preventDefault()
     },
+
     $_reset() {
       this.transition = TRANSITION
       this.offsetX = 0
@@ -152,8 +155,29 @@ export default {
 </script>
 <style lang='scss' scoped>
 $rem: 1 / 18.75 * 1rem;
-.slide {
-  width: 100%;
-  overflow: hidden;
+.wrapper {
+  margin: 10px 0;
+  display: table;
+  width: 200%;
+}
+.box {
+  display: table-cell;
+  width: 100vw;
+  padding: 20px 0;
+  background-color: #ccc;
+}
+.empty {
+  display: table-cell;
+  width: 10px;
+}
+.del {
+  display: table-cell;
+  color: #fff;
+  background:red;
+  vertical-align: middle;
+  .text {
+    width: 70px;
+    text-align: center;
+  }
 }
 </style>
