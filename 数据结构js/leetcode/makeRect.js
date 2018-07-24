@@ -24,3 +24,12 @@ test.forEach(item => {
   console.log(`给定值为：${item} => ${getRect(item)}`)
 })
 
+
+TreeNode* invertTree(TreeNode* root) {
+  if( root == NULL ) return root;
+
+  TreeNode* temp = root->left;
+  root->left = invertTree(root->right);
+  root->right = invertTree(temp);
+  return root;
+}
