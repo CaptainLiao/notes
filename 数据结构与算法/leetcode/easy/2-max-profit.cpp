@@ -23,6 +23,16 @@ class Solution {
     }
 }
 
+int main() {
+  cout << "111" << endl;
+  Solution s = new Solution();
+  vector<int> m = {1,23,8,5,9};
+  s.maxProfit(m);
+  
+  return 0;
+
+}
+
 
 
 
