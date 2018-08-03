@@ -15,4 +15,16 @@
 如果nums2的元素存储在磁盘上，内存是有限的，你不能一次加载所有的元素到内存中，你该怎么办？
 */
 
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> res;
+
+        for( int i = 0; i < nums1.size(); ++i ) {
+          for()
+        }
+    }
+
+}
+
 

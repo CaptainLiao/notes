@@ -19,12 +19,5 @@ function twoSum( arr, target ) {
 var a = [2,7,11,15]
 console.log(twoSum(a, 9))
 
-## 执行上下文
 
-ExecutionContextStack = []
-
-activeExecutionContext = {
-  VariableObject: {},
-  this: thisValue
-}
 
