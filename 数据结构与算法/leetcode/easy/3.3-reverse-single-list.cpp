@@ -25,7 +25,29 @@ ListNode* reverseList(ListNode* head) {
   return root;
 }
 
-// 方法二
+/**
+方法二：递归
+假设递归前链表结构为 1->2->3->4->5，每次递归都将函数入栈，当递归到底后后逐个弹出并执行。
+
+第一次执行函数，
+head 为：5->NULL
+res结构为：5->NULL
+
+第二次执行函数前：
+head 为：4->5->NULL
+res 为：5->NULL
+完成后：
+head 为：4->NULL
+res 为：5->4->NULL
+
+第三次执行函数前：
+head 为：3->4->NULL
+res 为：5->4->NULL
+完成后：
+head 为：3->NULL
+res 为：5->4->3->NULL
+...
+*/
 ListNode* reverseList2(ListNode* head) {
   if (head == NULL || head->next == NULL) return head;
 
