@@ -15,13 +15,13 @@ public:
 
     TreeNode* temp;
     
-    while( !p.empty() ) {
-      int s = p.size();
+    while( !q.empty() ) {
+      int count = q.size();
       vector<int> a;
       
-      for( int i = 0; i < s; ++i ) {
-        temp = s.front();
-        s.pop();
+      for( int i = 0; i < count; ++i ) {
+        temp = q.front();
+        q.pop();
         a.push_back(temp->val);
 
         if(temp->left) q.push(temp->left);
