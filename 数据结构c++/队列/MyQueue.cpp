@@ -1,23 +1,23 @@
 #include "MyQueue.h"
 #include <iostream> 
 using namespace std;
-/* 初始化队列  */ 
+/* ?????????  */ 
 MyQueue::MyQueue(int queueCapacity)
 {
-	m_iQueueCapacity = queueCapacity; // 队列容量
-	m_pQueue = new int[m_iQueueCapacity]; // 指针指向申请的内存空间 
+	m_iQueueCapacity = queueCapacity; // ????????
+	m_pQueue = new int[m_iQueueCapacity]; // ???????????????? 
 	ClearQueue();
 } 
-/* 销毁队列 */ 
+/* ??????? */ 
 MyQueue::~MyQueue()
 {
-	delete []m_pQueue; // 对应new
+	delete []m_pQueue; // ???new
 	m_pQueue = NULL; 
 } 
-/* 清空队列 */
+/* ?????? */
 void MyQueue::ClearQueue()
 {
-	m_iHead = m_iTail = 0;  // 队头和队尾为0
+	m_iHead = m_iTail = 0;  // ??????β?0
 	m_iQueueLen = 0;
 }
 
@@ -37,7 +37,7 @@ int MyQueue::QueueLength() const
 	return m_iQueueLen;
 }
 
-/* 入队 */
+/* ??? */
 bool MyQueue::EnQueue(int element)
 {
 	if(QueueFull()) return false;
@@ -49,7 +49,7 @@ bool MyQueue::EnQueue(int element)
 	return true;
 } 
  
-/* 出队 */
+/* ???? */
 bool MyQueue::DeQueue(int &element)
 {
 	if(QueueEmpty()) return false;
@@ -61,7 +61,7 @@ bool MyQueue::DeQueue(int &element)
 	return true;
 }
 
-/* 遍历队列 */
+/* ???????? */
 void MyQueue::QueueTraverse()
 {
 	for(int i = m_iHead; i < m_iHead+m_iQueueLen; ++i)
