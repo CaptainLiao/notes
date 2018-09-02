@@ -13,28 +13,40 @@
 ]
 */
 
+/**
+	对原数组进行排序后开始遍历。
+	当遇到大于 0 的数时即可结束，因为对于有序数组，当前值大于 0，那么永远不可能出现 0 和。
+	对于遍历到当前数a，用 0 减去它得到一个target，再在a后面找到两个数的和等于target，具体过程为如下。
+	我们用指针l、r分别指向a之后的数组的头、尾，如果它们指向的值的和：
+	  1、等于 target，则将这三个数存入结果中；
+	  2、小于 target，则左边的指针加 1，使得结果变大；
+	  3、大于 target，则右边的指针r减 1，使结果变小；
+*/
 vector<vector<int>> threeSum(vector<int>& nums) {
-	// n^2时间复杂度 n^2空间复杂度
 	int len = nums.size();
-	map<int, vector<int>> tMap;
-
-	for (int i = 0; i < len; ++i) {
-		for (int j = i + 1; j < len; ++j) {
-			int t = 0 - nums[i] - nums[j];
-			vector<int> vec(nums[i], nums[j]);
-			tMap[t] = vec;
-		}	
-	}
-
+	sort(nums.begin(), nums.end());
+	
 	vector<vector<int>> res;
-	for (int k = 0; k < len; ++k) {
-		if (tMap.find(nums[k])) {
-			vector<int> v;
-			v = tMap[k];
-			v.push_back(nums[k]);
-			res.push_back(v);
+	for (int i = 0; i < len; ++i) {
+		if (nums[i] > 0) break;
+
+		int l = i + 1;
+		int r = len - 1;
+		int target = 0 - nums[i];
+
+		while (l < r) {
+			if (nums[l] + nums[r] == target) {
+				res.push_back({nums[i], nums[l], nums[r]});
+				++i;
+				--j;
+			} else if(nums[l] + nums[r] < target) {
+				++i;
+			} else {
+				--j;
+			}
 		}
 	}
+
 	return res;
 }
 
