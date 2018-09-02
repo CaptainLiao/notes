@@ -1,5 +1,5 @@
 int roma(string s) {
-	map<char, int> roma = {
+	map<char, int> romaToImap = {
 		{'I': 1},
 		{'V': 5},
 		{'X': 10},
@@ -13,14 +13,17 @@ int roma(string s) {
 	int preValue = s[0];
 	int curValue = preValue;
 	int i = 1; 
+	char cur;
 
 	res += curValue;
 
 	while ('\0' != s[i]) {
-		curValue = roma[s[i++]];
+		cur = s[i++];
+		curValue = romaToImap[cur];
+
 		if (preValue < curValue) {
 			res += curValue;
-			res -= preValue;
+			res -= preValue*2;
 		} else {
 			res += curValue;
 		}
