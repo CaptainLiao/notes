@@ -30,6 +30,9 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 	for (int i = 0; i < len; ++i) {
 		if (nums[i] > 0) break;
 
+		// 跳过重复项
+		if (i > 0 && nums[i] == nums[i+1]) continue;
+
 		int l = i + 1;
 		int r = len - 1;
 		int target = 0 - nums[i];
@@ -37,6 +40,8 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 		while (l < r) {
 			if (nums[l] + nums[r] == target) {
 				res.push_back({nums[i], nums[l], nums[r]});
+				while (l < r && nums[l] == nums[l+1]) ++l;
+				while (l < r && nums[r] == nums[r-1]) --r;
 				++i;
 				--j;
 			} else if(nums[l] + nums[r] < target) {
