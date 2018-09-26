@@ -40,8 +40,10 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 		while (l < r) {
 			if (nums[l] + nums[r] == target) {
 				res.push_back({nums[i], nums[l], nums[r]});
+				// 跳过重复项
 				while (l < r && nums[l] == nums[l+1]) ++l;
 				while (l < r && nums[r] == nums[r-1]) --r;
+				
 				++i;
 				--j;
 			} else if(nums[l] + nums[r] < target) {
