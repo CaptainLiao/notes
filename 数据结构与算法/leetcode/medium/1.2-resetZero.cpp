@@ -1,23 +1,27 @@
-vector<vector<int>> resetZero(vector<vector<int>> matrix, int m, int n) {
-	vector<int> arr;
+var setZeros = function(matrix) {
+  var rows = matrix.length;
+  var cols = matrix[0].length;
+  var t = [];
+  var m = Array(cols).fill(0);
+  var hasZero;
 
+  for (var i = 0; i < rows; ++i) {
+    hasZero = false;
+    for (var j = 0; j < cols; ++j) {
+      if (matrix[i][j] === 0 && t[j] === void 0) {
+        t[j] = j;
+	hasZero = true;
+      }
+      if (t[j] !== void 0) {
+        if (matrix[i][j] === 0) hasZero = true;
+	matrix[i][j] = 0;
+      }
+    }
+    hasZero && matrix[i] = m;
+  }
 
-
-	for (int i = 0; i < m; ++i) {
-		for (int j = 0; j < n; ++j) {
-			if (matrix[i][j] != 0 || arr[j] != 0) continue;
-			if (matrix[i][j] == 0) {
-				arr.push_back(j);
-				int k = 0;
-				int p = 0;
-				while (k < m) matrix[k++][j] = 0;
-				while (p < n) matrix[i][p++] = 0;
-				break;
-			}
-		}
-	}
-
-	return matrix;
-
-}
-
+  for (var i = 0; i < rows; ++i) {
+    for (var j = 0; j < cols; ++j) {
+      if (t[j] !== void 0) matrix[i][j] = 0;
+    }
+  }
