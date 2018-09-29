@@ -1,0 +1,43 @@
+$px: 1rem/20;
+.swiper {
+  width: 100%;
+  overflow: hidden;
+}
+.swiper-wrap {
+  width: 100000000000%;
+  &:after,
+  &:before {
+  content: ""; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;  
+  }
+}
+.swiper-wrap div {
+  float: left;
+}
+.swiper-item {
+  width: 100vw;
+}
+.swiper-dots {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 8*$px;
+  text-align: center;
+
+  .dot {
+    width: 6*$px;
+    height: 6*$px;
+    border-radius: 100px;
+    background:rgba(227,182,17,1);
+    margin-right: 6*$px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  .active {
+    background:#fff;
+  }
+}
