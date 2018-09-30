@@ -5,6 +5,8 @@ import './swiper.scss'
 const rAF = window.requestAnimationFram || function(f) {
   setTimeout(f, 16);
 };
+const F = 0.95
+let _speed = 1
 
 export default Vue.component('swiper', {
   props: {
@@ -61,7 +63,6 @@ export default Vue.component('swiper', {
     slots.forEach(item => item.$el.style.width = `${cWidth}px`)
 
     this.itemWidth = cWidth;
-    
   },
 
   components: {CSlide},
@@ -70,15 +71,20 @@ export default Vue.component('swiper', {
     onTouchStart() {
       this.pause = true;
     },
+
     onLeftSlide(e, distance) {
       this.stopPropagation(e)
+      if (-this.currentPos === this.itemNums - 1) {//最后一张
+        distance = Math.max(-20, distance) * _speed
+        _speed *= F
+      }
       this.move(distance)
     },
     onLeftSlideEnd(e, distance, speed) {
       this.stopPropagation(e)
 
       if (-this.currentPos !== this.itemNums - 1) {
-        if (Math.abs(distance) > this.itemWidth/2 || ~~(speed*100)){
+        if (-distance > this.itemWidth/2 || ~~(speed*100)){
           this.currentPos--
         }
       }
@@ -87,13 +93,18 @@ export default Vue.component('swiper', {
 
     onRightSlide(e, distance) {
       this.stopPropagation(e)
+
+      if (this.currentPos === 0) {
+        distance = Math.min(20, distance) * _speed
+        _speed *= F
+      }
       this.move(distance)
     },
     onRightSlideEnd(e, distance, speed) {
       this.stopPropagation(e)
 
       if (this.currentPos !== 0) {
-        if (Math.abs(distance) > this.itemWidth/2 || ~~(speed*100)){
+        if (distance > this.itemWidth/2 || ~~(speed*100)){
           this.currentPos++
         }
       }
@@ -116,6 +127,7 @@ export default Vue.component('swiper', {
 
     transOffsetX() {
       this.pause = false
+      _speed = 1
 
       let duration = Math.ceil(this.duration / 16)
       let v = 2*(this.itemWidth*this.currentPos - this.offsetX)/duration
