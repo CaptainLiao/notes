@@ -1,0 +1,9 @@
+var groupAnagrams = function(strs) {
+  var o = strs.reduce((res, item) => {
+    if (!res[t]) res[t] = []
+    res[t].push(t)
+    return res
+  }, {})
+  return Object.values(o)
+}
+
