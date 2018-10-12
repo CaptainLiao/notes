@@ -17,20 +17,33 @@
 输出: false
 */
 
-bool increasingTriplet(int *nums, int numsSize) {
-  int i = 1;
-  int count = 1;
-  int *p[3];
-  p[0] = nums[0];
+/**
+题目求一个递增三元子序列，假设我们已经找到两个数（m1,m2）是递增的，那么再找到最后一个数就解题了
 
-  for (; i < numsSize; ++i) {
-    if (nums[i] > p[count-1]) {
-      p[count] = nums[i];
-      count++;
-      if (count == 3) return true;
-    } else {
-      if (count == 1 || nums[i] > p[count-2]) p[count-1] = nums[i];
-    }
+那么，如何使 m1,m2递增呢？
+1、初始化m1,m2为最大值
+2、遍历数组，假设当前遍历到的数值为 a
+  2.1 如果 a <=m1,则将a赋值给m1;
+  2.2 否则，如果当 a <=m2,则将a赋值给m2;
+这样，就能保证 m1 < m2
+
+如何找到最后一个数呢？
+显然，当a不满足2.1和2.2的条件时，它就是最后那一个数。
+*/
+
+bool increasingTriplet(int *nums, int numsSize) {
+  int m1 = ((unsigned)-1) >> 1;
+  int m2 = m1;
+  int i;
+
+  for (i = 0; i < numsSize; ++i) {
+    if (nums[i] <= m1)
+      m1 = nums[i];
+    else if (nums[i] <= m2)
+      m2 = nums[i];
+    else
+      return true;
   }
+  
   return false;
 }
