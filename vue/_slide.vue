@@ -74,16 +74,14 @@ export default {
       __lastY = pageY
 
       if (Math.abs(offsetX) <= Math.abs(offsetY)) { // 上下滑动
-        if (__direction === 'left' || __direction === 'right') 
-          return this.$_stopPropagation(e);
-
-        __direction = offsetY < 0 ? 'up' : 'down'
+        if (__direction !== 'left' && __direction !== 'right') {
+          __direction = offsetY < 0 ? 'up' : 'down'
+        } 
         distance = offsetY
       } else { // 左右滑动
-        if (__direction === 'up' || __direction === 'down') 
-          return this.$_stopPropagation(e);
-
-        __direction = offsetX < 0 ? 'left' : 'right'
+        if (__direction !== 'up' && __direction !== 'down') {
+          __direction = offsetX < 0 ? 'left' : 'right'
+        }
         distance = offsetX
       }
 
@@ -121,12 +119,6 @@ export default {
     touchcancel(e) {
       this.$emit('touch-cancel', e)
     },
-
-    $_stopPropagation(e) {
-      e.preventDefault()
-      e.stopPropagation()
-      return false;
-    }
   }
 }
 
