@@ -23,18 +23,12 @@ function addTwoNumber(l1, l2) {
     let v1 = l1 && l1.val || 0
     let v2 = l2 && l2.val || 0
     let t = v1 + v2 + n
+    n = ~~(n/10);
     
     k.next = new ListNode()
     k = k.next;
+    k.val = t%10;
 
-    if (t > 9) {
-      k.val = t - 10;
-      n = 1;
-    } else {
-      k.val = t;
-      n = 0;
-    }
-    
     l1 = l1 && l1.next;
     l2 = l2 && l2.next;
   }
