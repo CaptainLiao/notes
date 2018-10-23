@@ -22,7 +22,7 @@ void inorder(struct TreeNode *root, int *res, int *i) {
 
   inorder(root->left, res, i);
   // why？为什么不能使用 *res = root->val; ++res; 对res进行赋值
-  res[i++] = root->val;
+  res[(*i)++] = root->val;
   inorder(root->right, res, i);
 }
 
