@@ -21,7 +21,6 @@ void inorder(struct TreeNode *root, int *res, int *i) {
   if (!root) return;
 
   inorder(root->left, res, i);
-  // why？为什么不能使用 *res = root->val; ++res; 对res进行赋值
   res[(*i)++] = root->val;
   inorder(root->right, res, i);
 }
@@ -36,3 +35,22 @@ int *inorderTraversal(struct TreeNode *root, int *returnSize) {
   inorder(root, res, &i);
   return res;
 }
+
+void inorder2(struct TreeNode *root, int **res) {
+  if (!root) return;
+
+  inorder(root->left, res);
+  **res = root->val;
+  (*res)++;
+  inorder(root->right, res);
+}
+
+int *inorderTraversal(struct TreeNode *root, int *returnSize) {
+  *returnSize = getTreeSize(root);
+  int *res = (int *)malloc(*returnSize * sizeof(int));
+  int *result = res;
+
+  inorder(root, res);
+  return result;
+}
+
