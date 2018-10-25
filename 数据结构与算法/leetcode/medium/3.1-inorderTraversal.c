@@ -40,7 +40,7 @@ void inorder2(struct TreeNode *root, int **res) {
   if (!root) return;
 
   inorder(root->left, res);
-  **res = root->val;
+  *(*res) = root->val;
   (*res)++;
   inorder(root->right, res);
 }
@@ -50,7 +50,7 @@ int *inorderTraversal(struct TreeNode *root, int *returnSize) {
   int *res = (int *)malloc(*returnSize * sizeof(int));
   int *result = res;
 
-  inorder(root, res);
+  inorder2(root, res);
   return result;
 }
 
