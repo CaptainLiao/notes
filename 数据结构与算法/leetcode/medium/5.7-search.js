@@ -8,6 +8,8 @@
  * @return {number}
  */
 var search = function(nums, target) {
+    if (!nums || !nums.length) return -1
+
     var maxIndex = findMax(nums, 0, nums.length-1)
     
     if (target >= nums[0]) return getTargetIndex(nums, target, 0, maxIndex)
