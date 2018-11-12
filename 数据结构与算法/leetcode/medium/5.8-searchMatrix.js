@@ -1,23 +1,34 @@
-var searchMatrix = function(matrix, target) {
-    return search(matrix, 0, 0, matrix.length-1, matrix[0].length-1, target)
-};
+/**
+ * 搜索二维矩阵 II
+编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target。该矩阵具有以下特性：
 
-function search(matrix, is, js, ie, je, target) {
-    if (is >= 0 && js >= 0 && ie < matrix.length && je < matrix[0].length) {
-        var im = parseInt((is + ie)/2)
-        var jm = parseInt((js + je)/2)
+每行的元素从左到右升序排列。
+每列的元素从上到下升序排列。
+ */
 
-        var mid = matrix[im][jm]
-        if (target === mid) return true
+ /**
+ * 【分析】
+ * 算法的时间复杂度为O(m+n)
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
 
-        if (target < mid)
-            return search(matrix, is, js, im, jm, target)
-
-        if (target > mid) {
-            search(matrix, is, jm+1, im, je, target)
-            search(matrix, im+1, js, ie, je, target)
+var matrixSearch = function(matrix, target) {
+    if (!matrix || !matrix.length) return false
+    
+    var rows = matrix.length - 1
+    var i = 0
+    var j = matrix[0].length - 1
+    while (i <= rows && j >= 0) {
+        if (target < matrix[i][j]) {
+            --j
+        } else if (target > matrix[i][j]) {
+            ++i
+        } else {
+            return true
         }
     }
-    
 
+    return false
 }
