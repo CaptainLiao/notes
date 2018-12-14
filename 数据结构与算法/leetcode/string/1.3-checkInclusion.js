@@ -15,7 +15,7 @@
  */
 
 function checkInclusion(s1, s2) {
-  // 只有 24 个英文字母
+  // 用数组存储每个字符出现的次数
   var arr1 = Array[24].fill(0)
   var arr2 = Array[24].fill(0)
   var INDEX = 'a'.charCodeAt(0)
@@ -27,13 +27,10 @@ function checkInclusion(s1, s2) {
 
   var l1 = s1.length
   var l2 = s2.length
-
   
   for (var i = 0; i < l2; ++i) {
-    if (i >= l1) {
-      // 修剪
-      --arr2[s2[i-l1].charCodeAt() - INDEX]
-    }
+    // 修剪
+    if (i >= l1) --arr2[s2[i-l1].charCodeAt() - INDEX]
     
     // 存储 s2 中每个字符出现的次数
     ++arr2[s2[i].charCodeAt() - INDEX]
