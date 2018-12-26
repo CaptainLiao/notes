@@ -17,7 +17,7 @@ export default function genImageWithQrcode(opts = IConfig) {
 
 class DrawWithQrcode extends DrawUtils {
   constructor(opts) {
-    super({canvasW: 750, canvasH: 1334})
+    super({canvasW: 375, canvasH: 667})
     this.config = opts
   }
 
@@ -33,8 +33,8 @@ class DrawWithQrcode extends DrawUtils {
       getWxqrcode(),
       this.drawBackgroundImage({
         imgSrc: this.config.backgroundImage,
-        width: 750,
-        height: 1334,
+        width: 375,
+        height: 667,
       }),
     ])
       .then(res => {

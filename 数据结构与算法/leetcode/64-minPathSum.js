@@ -24,7 +24,24 @@
 //   fn(m,n) = Math.min(fn(m, n-1), fn(m-1, n)) + grid[m][n]
 //   又已知，fn(0, i) = grid[0][0] + ... + grid[0][i], fn(i, 0) = grid[0][0] + ... + grid[i][0]
 
-// 第二步：根据上面的递推公式，计算每个位置的最优解
+// 第二步：根据上面的递推公式，计算每个位置的最优解，注意处理边界
 var minPathSum = function(grid) {
-    
+    var m = grid.length - 1
+    var n = grid[0].length - 1
+
+    if (m < 0) return 0
+
+    for (var i = 0; i <= m; ++i) {
+      for (var j = 0; j <= n; ++j) {
+        var topV = i === 0 ? 0 : grid[i-1][j]
+        var leftV = j === 0 ? 0 : grid[i][j-1]
+        var preV = i === 0 || j === 0
+          ? topV + leftV
+          : Math.min(topV, leftV)
+        
+        grid[i][j] = preV + grid[i][j]
+      }
+    }
+
+    return grid[m][n]
 };

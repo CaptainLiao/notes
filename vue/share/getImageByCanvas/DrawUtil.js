@@ -11,17 +11,13 @@
  */
 export default class DrawUtils {
   constructor({canvasW, canvasH}) {
-    let canvas = document.createElement('canvas')
-    let w = document.documentElement.clientWidth + "px"
-    let h = '100%'
-    canvas.width = canvasW;
-    canvas.height = canvasH;
-    canvas.style.width = `width: ${w}`
-    canvas.style.height = `height: ${h}`
+    const CANVAS = document.createElement('canvas')
+    // 设置画布本身的大小
+    CANVAS.width = canvasW
+    CANVAS.height = canvasH
 
-    this.canvas = canvas
-    this.ctx = canvas.getContext('2d');
-    this.scale = 2
+    this.ctx = setupCanvas(CANVAS)
+    this.canvas = CANVAS
   }
 
   getImageBase64() {
@@ -41,8 +37,8 @@ export default class DrawUtils {
 
   drawBackgroundImage({
     imgSrc,
-    width = 750,
-    height = 1334
+    width = 375,
+    height = 667
   }) {
     return new Promise((resolve, reject) => {
       let ctx = this.ctx
@@ -65,21 +61,18 @@ export default class DrawUtils {
   } = {}) {
     return new Promise((resolve, reject) => {
       let ctx = this.ctx
-      let scale = this.scale
-      x = x * scale
-      y = y * scale
-
       let img = new Image();
       img.src = getImage(imgSrc)
       img.onload = () => {
         ctx.beginPath()
         ctx.fillStyle = '#fff'
-        ctx.arc(x+width, y+width, width + 10, 0, Math.PI*2)
+        let r = width/2
+        ctx.arc(x+r, y+r, r + 5, 0, Math.PI*2)
         ctx.clip()
         ctx.fill()
 
         // drawImage 后面不能再画其他
-        ctx.drawImage(img, x, y, width*scale, height*scale)
+        ctx.drawImage(img, x, y, width, height)
 
         return resolve()
       }
@@ -95,10 +88,10 @@ export default class DrawUtils {
     text,
   }) {
     let ctx = this.ctx
-    ctx.font = `${fontSize*this.scale}px medium PingFangSC serif`
+    ctx.font = `${fontSize}px medium PingFangSC serif`
     ctx.beginPath()
     ctx.fillStyle = color
-    ctx.fillText(text, x*this.scale, y*this.scale)
+    ctx.fillText(text, x, y)
   }
 
   drawTextWithBorder({
@@ -112,22 +105,19 @@ export default class DrawUtils {
     broderRadius = 10
   }) {
     let ctx = this.ctx
-    let scale = this.scale
+    let extraWidth = 40
+    ctx.font = `${fontSize}px PingFangSC serif`
+    let rectW = ctx.measureText(text).width + extraWidth
+    let rectH = lineHeght
 
-    ctx.font = `${fontSize*scale}px PingFangSC serif`
-    let mText = ctx.measureText(text)
-    let rectW = mText.width + 40*scale
-    let rectH = lineHeght*scale
-    let startX = x*scale
-    let startY = y*scale
-
-    fillRoundRect(ctx,startX,startY,rectW,rectH, broderRadius, backgroundColor);
+    fillRoundRect(ctx, x, y, rectW, rectH, broderRadius, backgroundColor);
 
     // 填充文字
     ctx.beginPath()
     ctx.fillStyle = color
-    // 文字距离左边 36，垂直居中
-    ctx.fillText(text, startX+36, startY + 58)
+    // 水平垂直居中
+    ctx.textBaseline = 'bottom'
+    ctx.fillText(text, x + extraWidth/2, y + lineHeght/2)
   }
 }
 
@@ -187,4 +177,20 @@ function drawRoundRectPath(cxt,width,height,radius){
 	//右边线
 	cxt.lineTo(width,height-radius);
 	cxt.closePath();
+}
+
+function setupCanvas(canvas) {
+  const UI_WIDTH = 375
+  const DOC_WIDTH = document.documentElement.clientWidth
+  const DPR = window.devicePixelRatio
+  let scale = (DPR * DOC_WIDTH/UI_WIDTH).toFixed(2)
+  
+  // 设置画布本身的大小
+  canvas.width *= scale
+  canvas.height *= scale
+
+  let ctx = canvas.getContext('2d')
+  ctx.scale(scale, scale)
+
+  return ctx
 }
