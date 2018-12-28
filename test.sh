@@ -5,6 +5,11 @@ RED_COLOR='\e[31m'
 BLUE_COLOR='\e[34m'
 END_COLOR='\e[0m'
 
+REMOTE=$(git remote -v | grep push | awk '{print $2}')
+echo $REMOTE
+
+exit
+
 read -p "please input the project name>> " projectName
 #project=$(curl --header "PRIVATE-TOKEN: ×××××××××××××××××" "http://gitlab.qtang.net/api/v3/projects/hangban%2F$projectName" -s | cut -d ',' -f1 | cut -d ':' -f2) 
 project=${projectName:-102}
