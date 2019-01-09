@@ -2,10 +2,11 @@
 
 # usage
 # bash mr.sh 等同于 bash mr.sh test，将当前分支 merge 到远程 test 分支
+# bash mr.sh release, 将当前分支 merge 到远程 release 分支
 set -e
 
 TARGET_BRANCH=$1
-if [[ !$TARGET_BRANCH ]]; then 
+if [ -z $TARGET_BRANCH ]; then
   TARGET_BRANCH=test
 fi
 
@@ -94,12 +95,13 @@ if [[ $merge_request_id == *[0-9] ]]; then
   curl -X PUT --header "PRIVATE-TOKEN: ${PRIVATE_TOKEN}" \
     "$API_URL/projects/$projectId/merge_requests/$merge_request_id/merge"
   exit
+else 
+echo -e "
+${RED_COLOR}Create merge request Fail:${END_COLOR}
+  $merge_request_res"
 fi
 
 echo -e "
-${RED_COLOR}Create merge request Fail:${END_COLOR}
-  $merge_request_res
-
 ${BLUE_COLOR}Click on the link below for more details:${END_COLOR}
   $PROJECT_URL/merge_requests
 "
