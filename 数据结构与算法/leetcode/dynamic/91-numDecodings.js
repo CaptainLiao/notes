@@ -18,10 +18,10 @@
 
 var numDecodings = function(s) {
   var slen = s.length
-  if (slen === 0) return 0
+  if (slen === 0 || (slen === 1 && s[0] === '0')) return 0
 
   var res = Array(s.length + 1).fill(0)
-  res[0] =
+  res[0] = 1
   res[1] = s[1] === '0' ? 0 : 1
 
   for (var i = 2; i <= slen; ++i) {
@@ -36,7 +36,7 @@ var numDecodings = function(s) {
 
 var numDecodings = function(s) {
   var slen = s.length
-  if (slen === 0) return 0
+  if (slen === 0 || (slen === 1 && s[0] === '0')) return 0
 
   var res = Array(slen + 1).fill(0)
   res[slen] = 1
@@ -50,4 +50,22 @@ var numDecodings = function(s) {
     }
   }
   return res[0]
+}
+
+
+var numDecodings = function(s) {
+  var slen = s.length
+  if (slen === 0 || (slen === 1 && s[0] === '0')) return 0
+
+  var res = Array(s.length + 1).fill(0)
+  res[0] = 1
+
+  for (var i = 0; i < slen; ++i) {
+    res[i+1] = s[i] === '0' ? 0 : res[i]
+    if (i > 0 && (s[i-1] == '1' || (s[i-1] == '2' && s[i] <= '6'))) {
+        res[i+1] += res[i-1]
+    }
+  }
+  console.log(res)
+  return res[slen]
 }
