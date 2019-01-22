@@ -19,17 +19,22 @@
  * @return {number}
  */
 var rob = function(nums) {
-  var len = nums.length
-  if (len === 0) return 0
-  
-  var max = nums[0]
-  var includeFirst = max > nums[1]
-  for (var i = 2; i < len; ++i) {
-      max = Math.max(max, nums[i-2])
-      nums[i] += max
-  }
-  console.log(nums)
-  var res = Math.max(...nums)
-
-  return res
+    var len = nums.length
+    if (len === 0) return 0
+    if (len === 1) return nums[0]
+    if (len === 2) return Math.max(nums[0], nums[1])
+    
+    return Math.max(helper(nums, 0, len-2), helper(nums, 1, len-1))
 };
+
+function helper(nums, start, end) {
+    var preMax = nums[start]
+    var curMax = Math.max(preMax, nums[start + 1])
+    
+    for (var i = start + 2; i <= end; ++i) {
+        var temp = curMax
+        curMax = Math.max(nums[i] + preMax, curMax)
+        preMax = temp
+    }
+    return curMax
+}
