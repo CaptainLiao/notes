@@ -19,17 +19,43 @@ l3: 1x5, 2x5,3x5,4x5,5x5,6x5,8x5,9x5,10x5,12x5,
  * @return {number}
  */
 var nthUglyNumber = function(n) {
-  if (n <= 1) return n
-  
-  var l1 = 1
-  var l2 = 1
-  var l3 = 1
-  
+  var i = j = k = 0
   var count = 1
   var res = [1]
-  while (count <= n) {
-      res[count] = Math.min(l1*2, l2*3, l3*5)
+
+  while (count < n) {
+    var temp = [res[i]*2, res[j]*3, res[k]*5]
+    var min = Math.min(...temp)
+
+    res[count++] = min
+
+    if (temp[0] === min) ++i
+    if (temp[1] === min) ++j
+    if (temp[2] === min) ++k
   }
   
-  return res
+  return res[--count]
+};
+
+var nthUglyNumber = function(n) {
+  var i = j = k = 0
+  var count = 1
+  var res = [1]
+  
+  while (count < n) {
+    var temp = [res[i]*2, res[j]*3, res[k]*5]
+    var min = Math.min(...temp)
+    
+    if (min === temp[0]) {
+        ++i
+    } else if (min === temp[1]) {
+        ++j
+    } else {
+        ++k
+    }
+   
+    if (min != res[count-1]) res[count++] = min
+  }
+
+  return res[--count]
 };
