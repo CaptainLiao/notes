@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <style>
+
+  </style>
+</head>
+<body>
+
+
+<script>
+var a = [{m:1},2, 'sx']
+var b = [].concat(a)
+
+const typeSizes = {
+  "undefined": () => 0,
+  "boolean": () => 4,
+  "number": () => 8,
+  "string": item => 2 * item.length,
+  "object": item => !item ? 0 : Object
+    .keys(item)
+    .reduce((total, key) => sizeOf(key) + sizeOf(item[key]) + total, 0)
+};
+
+const sizeOf = value => typeSizes[typeof value](value);
+
+console.log(sizeOf(a));
+
+console.log(sizeOf(b));
+
+
+
+
+</script>
+</body>
+</html>
