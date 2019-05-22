@@ -1,0 +1,21 @@
+.holes-right {
+    width: 4*$rem;
+    background-position: 0 2*$rem;
+    background-size: 8*$rem 10*$rem;
+    &.red {
+      background-image: radial-gradient(
+        circle,
+        transparent 0,
+        transparent 3*$rem,
+        $red 3*$rem
+      );
+    }
+    &.orange {
+      background-image: radial-gradient(
+        circle,
+        transparent 0,
+        transparent 3*$rem,
+        $orange 3*$rem
+      );
+    }
+  }
