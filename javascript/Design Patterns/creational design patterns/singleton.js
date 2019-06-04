@@ -1,10 +1,23 @@
 
-class SingletonExample {
+class Singleton_1 {
 
 }
 
-export default new SingletonExample()
+const singleton_1 = new Singleton_1()
 
-// or
+export const getSingleton = () => singleton_1
 
-export default Object.create(null)
+// 2
+const singleton_2 = Object.create(null)
+export const getSingleton = () => singleton_2
+
+// lazy initialization
+class Singleton_3 {
+
+}
+const singleton_3 = null
+export const getSingleton = () => {
+  if (!singleton_3) singleton_3 = new Singleton_3()
+
+  return singleton_3
+}
