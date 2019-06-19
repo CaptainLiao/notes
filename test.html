@@ -1,39 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Page Title</title>
-  <style>
+<!-- this demo requires a browser that natively supports ES2015 -->
 
-  </style>
-</head>
-<body>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="../dist/vue-rx.js"></script>
 
+<div id="app">
+  <div>{{ count }}</div>
+
+  <!-- callback declared on observableMethods -->
+  <button v-on:click="muchMore(500)">Add 500</button>
+
+  <button v-on:click="minus(minusDelta1)"> Minus on Click </button>
+
+  <pre>{{ $data }}</pre>
+
+</div>
 
 <script>
-var a = [{m:1},2, 'sx']
-var b = [].concat(a)
+const { from, merge, interval, Subject, timer } = rxjs
+const { startWith, scan, take } = rxjs.operators
 
-const typeSizes = {
-  "undefined": () => 0,
-  "boolean": () => 4,
-  "number": () => 8,
-  "string": item => 2 * item.length,
-  "object": item => !item ? 0 : Object
-    .keys(item)
-    .reduce((total, key) => sizeOf(key) + sizeOf(item[key]) + total, 0)
-};
+let sv = 1
+let v2 = 2
+const oa = from([sv, v2])
+oa.subscribe(v => console.log(v))
 
-const sizeOf = value => typeSizes[typeof value](value);
-
-console.log(sizeOf(a));
-
-console.log(sizeOf(b));
+setTimeout(() => {
+  sv = 1.1
+}, 0)
 
 
-
-
+new Vue({
+  el: '#app',
+  data () {
+    return {
+      count: 0,
+      minusDelta1: -1,
+      minusDelta2: -1
+    }
+  },
+  // declare callback Subjects
+  observableMethods: {
+    muchMore: 'muchMore$',
+    minus:'minus$'
+  }, // equivalent of above: ['muchMore','minus']
+  subscriptions () {
+    return {
+      count: merge(
+        this.muchMore$,
+        this.minus$
+      ).pipe(
+        startWith(0),
+        scan((total, change) => {
+          console.log(total)
+          return total + change
+        })
+      )
+    }
+  }
+})
 </script>
-</body>
-</html>

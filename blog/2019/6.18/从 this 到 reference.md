@@ -36,7 +36,7 @@ var c = new someFunction();
 但是，了解它能够提升我们对 ECMAScript 的认识。
 
 #### Reference 是什么
-ECMAScript  将 Reference 定义为“被解析的命名绑定（resolved name binding）”，它由三部分组成——base,name, and strict flag。
+ECMAScript  将 Reference 定义为“已解析的命名绑定（resolved name binding）”，它由三部分组成——base,name, and strict flag。
 
 有两种创建 Reference 的途径：
 *  标识符解析
