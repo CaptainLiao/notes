@@ -23,6 +23,7 @@ public class MinStack {
 		
 		int v = data.remove(data.size() - 1);
 		if (v < 0) min = min -v;
+    if (data.size() == 0) min = null;
 	}
 	
 	public boolean isEmpty() {
