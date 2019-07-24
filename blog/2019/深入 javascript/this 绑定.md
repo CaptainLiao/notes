@@ -1,5 +1,10 @@
 
 ### 函数对象
+函数类型：
+* Arrow
+* Normal
+* Method
+
 this 的三种模式：
 * lexical：this 绑定到函数定义时所在的词法环境
 * strict：this 绑定到函数调用时提供的值
@@ -20,7 +25,7 @@ function FunctionInitialize ( F, kind, ParameterList, Body, Scope ) {
   F.[[ScriptOrModule]] = GetActiveScriptOrModule()
 
   /**
-   * kind：Arrow，Normal，Method，
+   * kind：Arrow，Normal，Method
   */
   if (kind === 'Arrow') {
     F.[[thisMode]] = 'lexical'
@@ -41,9 +46,9 @@ function FunctionInitialize ( F, kind, ParameterList, Body, Scope ) {
 我们可以用下面的伪代码表示寻找this绑定对象的过程：
 ````js
 function OrdinaryCallBindThis( F, calleeContext, thisArgument ) {
-    let thisMode = F.[[ThisMode]]
-    if (thisMode === 'lexical') 
-      return NormalCompletion(undefined)
+    const thisMode = F.[[ThisMode]]
+
+    if (thisMode === 'lexical') return NormalCompletion(undefined)
 
     const calleeRealm = F.[[Realm]]
     const localEnv = LexicalEnvironment.calleeContext
