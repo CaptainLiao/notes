@@ -6,20 +6,24 @@
 </div>
 
 <script>
-var a = 1;
+function waitSecond(second) { 
+  return new Promise(resolve => setTimeout(resolve, Number(second) * 1000))
+}
 
-var x = 10;
-(function foo(y = 5) {   
 
-  console.log(x);
+var a = () => waitSecond(3).then(() => {
+  console.log('a')
+})
+var b = () =>waitSecond(4).then(() => {
+  console.log('b')
+})
 
-  console.log(y); // 20 
-
-  function bar(){
-    eval("")
-  }
-  bar()
-  console.log(z);
- 
-})();
+var c = Promise.all([
+  a(),
+  b()
+])
+.then(() => {
+  console.log('c')
+})
+.catch(e => console.error(e))
 </script>

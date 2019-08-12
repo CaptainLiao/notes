@@ -1,26 +1,15 @@
-function wait(second) { 
+function waitSecond(second) { 
   return new Promise(resolve => setTimeout(() => {
-    console.log('tick')
-    resolve()
   }, Number(second) * 1000))
 }
 
 
-var c = () => wait(1)
-  .then(() => 'c')
+var a = waitSecond(1).then(() => console.log('a'))
+var b = waitSecond(2).then(() => console.log('b'))
 
-var b = () => wait(1)
-  .then(() => {
-    console.log('b')
-    return c()
-  })
-
-var a = () => wait(1)
-  .then(() => {
-    console.log('a')
-    return b()
-  })
-  .then(res => console.log('res', res))
-  .catch(e => console.error(e))
-
-a()
+var c = Promise.all([
+  a(),
+  b()
+])
+.then(() => console.log(c))
+.catch(e => console.error(e))
