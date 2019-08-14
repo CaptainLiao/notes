@@ -1,0 +1,50 @@
+.ui-plus {
+  position: relative;
+  width: 10px;
+  height: 2px;
+  background: rgba(25, 133, 255, 1);
+}
+.ui-plus::after {
+  display: block;
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: rgba(25, 133, 255, 1);
+  transform: rotate(90deg);
+}
+
+/* Arrow */
+.ui-arrow {
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid #7799aa;
+  border-top: 1px solid #7799aa;
+  transform: rotate(45deg);
+}
+
+/** table **/
+
+.tabel {
+  margin: 0 auto;
+  width: 335*$px;
+  border: 1px solid $borderColor;
+
+  .tr {
+    display: flex;
+    border-bottom: 1px solid $borderColor;
+    &:last-child {
+      border: none;
+    }
+  }
+  .td {
+    border-right: 1px solid $borderColor;
+    &.left {
+      width: 90*$px;
+      line-height: 22*$px;
+      text-align: center;
+    }
+    &:last-child {
+      border: none;
+    }
+  }
+}
