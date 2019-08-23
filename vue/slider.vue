@@ -55,15 +55,23 @@ export default {
     onLeftSlideEnd(e, distance, speed) {
       if (this.__isLocked) return
       this.$_stopPropagation(e)
-      this.$_transOffsetX(speed*10)
+      this.$_transOffsetX2(speed*300)
+    },
+
+    $_transOffsetX2(speed) {
+      clearTimeout(this.timer$)
+      const duration = 0.5 //s
+      this.offsetX += speed
+      this.transform = `translateX(${this.offsetX}px)`
+      this.transition = `transform ${duration}s ease-out`
+      this.timer$ = setTimeout(() => this.$_resetMove(), duration)
     },
 
     $_transOffsetX(speed) {
-      if (this.$_resetMove()) return
-
+      if (this.$_resetMove()) return 
       if (speed < 5 && speed > -5) return
 
-      const MAX_STEP = 10
+      const MAX_STEP = 20
 
       rAF(() => {
         let dist = ~~speed;
@@ -76,7 +84,7 @@ export default {
         if (this.$_move(dist)) {
           speed = 0;
         }
-        this.$_transOffsetX(speed * 0.96);
+        this.$_transOffsetX(speed - dist);
       });
     },
 
