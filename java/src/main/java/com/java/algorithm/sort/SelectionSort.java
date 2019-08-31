@@ -18,10 +18,12 @@ public class SelectionSort {
   }
 
   public static void main(String[] args) {
-    Integer[] arr = {1,5,3,9,7};
+    Integer[] arr = SortTestHelper.generateRandomArray(12, 1, 9);
     SelectionSort.sort(arr);
-    for (int i: arr) {
-      System.out.println(i);
-    }
+    SortTestHelper.printArray(arr);
+
+    String [] strings = {"a", "p", "c", "d", "b"};
+    SelectionSort.sort(strings);
+    SortTestHelper.printArray(strings);
   }
 }
