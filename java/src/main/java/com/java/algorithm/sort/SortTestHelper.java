@@ -22,12 +22,26 @@ public class SortTestHelper {
     System.out.println();
   }
 
-  public static void testSort(Supplier supplier) {
+  private static <T extends Comparable> boolean isSorted(T[] arr) {
+    for (int i = 0; i < arr.length - 1; i++) {
+      if (arr[i+1].compareTo(arr[i]) < 0) return false;
+    }
+
+    return true;
+  }
+
+  public static <T extends Comparable> void testSort(Supplier supplier, String sortMethodName) {
+    T[] res;
     long start = new Date().getTime();
-    supplier.get();
+    res = (T[]) supplier.get();
     long end = new Date().getTime();
 
-    System.out.println((end - start));
+    if (isSorted(res)) {
+      System.out.println(sortMethodName + ": " + (end - start) + "ms");
+      return;
+    }
+
+    System.out.println(sortMethodName + ": 未能正确的排序" );
   }
 
   public static void main(String[] args) {
