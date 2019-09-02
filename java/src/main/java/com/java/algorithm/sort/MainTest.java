@@ -9,6 +9,7 @@ public class MainTest {
     Integer[] arr2 = Arrays.copyOf(arr, n);
     Integer[] arr3 = Arrays.copyOf(arr, n);
     Integer[] arr4 = Arrays.copyOf(arr, n);
+    Integer[] arr5 = Arrays.copyOf(arr, n);
 
     SortTestHelper.testSort(() -> InsertSort.sort(arr), "InsertSort.sort");
     SortTestHelper.testSort(() -> InsertSort.sort2(arr3), "InsertSort.sort2");
@@ -16,5 +17,6 @@ public class MainTest {
     SortTestHelper.testSort(() -> SelectionSort.sort(arr2), "SelectionSort.sort");
 
     SortTestHelper.testSort(() -> MergeSort.sort(arr4), "MergeSort.sort");
+    SortTestHelper.testSort(() -> MergeSort.sortBU(arr5), "MergeSort.sortBU");
   }
 }
