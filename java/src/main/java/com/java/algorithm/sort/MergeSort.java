@@ -9,6 +9,17 @@ public class MergeSort {
     return arr;
   }
 
+  // 自底向上归并
+  public static <T extends Comparable> T[] sortBU(T[] arr) {
+    int len = arr.length;
+    for (int sz = 1; sz < len; sz += sz)
+      for (int i = 0; i + sz < len; i += sz + sz)
+        // 对 arr[i ... i+sz-1] 和 arr[i+siz-1 。。。 i+2*sz - 1]进行归并
+        merge(arr, i, i + sz - 1, Math.min(i + sz + sz -1, len - 1));
+
+    return arr;
+  }
+
   private static <T extends Comparable> void mergeSort(T[] arr, int left, int right) {
     if (left >= right) return;
 
