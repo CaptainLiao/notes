@@ -33,25 +33,23 @@ public class _148_SortList {
 
   private ListNode merge(ListNode left, ListNode right) {
     ListNode head = new ListNode(0);
+    ListNode cur = head;
 
     while(left != null && right != null) {
       if (left.val < right.val) {
-        head.val = left.val;
-        head.next = left;
+        cur.next = left;
         left = left.next;
-
       } else {
-        head.val = right.val;
-        head.next = right;
+        cur.next = right;
         right = right.next;
       }
-
+      cur = cur.next;
     }
 
     if (left != null) head.next = left;
     if (right != null) head.next = right;
 
-    return head;
+    return head.next;
   }
 
 }
