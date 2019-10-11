@@ -1,29 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  div {
+    width: 300px;
+    height: 300px;
+    border: 1px solid #ccc;
+  }
+  </style>
+</head>
+<body>
+  <div class="outer">
+    <div class="inner"></div>
+  </div>
 
+  <script>
+  // Let's get hold of those elements
+var outer = document.querySelector('.outer');
+var inner = document.querySelector('.inner');
 
-<div id="app">
+// Let's listen for attribute changes on the
+// outer element
+new MutationObserver(function() {
+  console.log('mutate');
+}).observe(outer, {
+  attributes: true
+});
 
+// Here's a click listener…
+function onClick() {
+  console.log('click');
 
-</div>
+  setTimeout(function() {
+    console.log('timeout');
+  }, 0);
 
-<script>
-function waitSecond(second) { 
-  return new Promise(resolve => setTimeout(resolve, Number(second) * 1000))
+  Promise.resolve().then(function() {
+    console.log('promise');
+  });
+
+  outer.setAttribute('data-random', Math.random());
 }
 
-
-var a = () => waitSecond(3).then(() => {
-  console.log('a')
-})
-var b = () =>waitSecond(4).then(() => {
-  console.log('b')
-})
-
-var c = Promise.all([
-  a(),
-  b()
-])
-.then(() => {
-  console.log('c')
-})
-.catch(e => console.error(e))
-</script>
+// …which we'll attach to both elements
+inner.addEventListener('click', onClick);
+outer.addEventListener('click', onClick);
+inner.click()
+  </script>
+</body>
+</html>

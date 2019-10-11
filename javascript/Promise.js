@@ -8,22 +8,38 @@
  * 
  * @class Promise
  */
-class Promise {
-  constructor(excutor) {
-    this.state = 'pending'
-    this.value = undefined
-    this.reason = undefined
 
-    let resolve = value => {
-      if( this.state === 'pending' ) {
-        this.state = 'fulfilled'
-        this.value = value
+const STATE = {
+  pending: 'pending',
+  fulfilled: 'fulfilled',
+  rejected: 'rejected',
+}
+
+let value, reason
+
+const onFulfilledQueue = []
+const onRejectedQueue = []
+const NOOP = r => r
+
+class MyPromise {
+  constructor(excutor) {
+    this.state = STATE.pending
+
+    const resolve = v => {
+      if( this.state === STATE.pending ) {
+        this.state = STATE.fulfilled
+        value = JSON.parse(JSON.stringify(v))
+
+        onFulfilledQueue.forEach(fn => fn(value))
       }
     }
-    let reject = reason => {
-      if( this.state === 'pending' ) {
-        this.state = 'rejected'
-        this.reason = reason
+
+    const reject = r => {
+      if( this.state === STATE.pending ) {
+        this.state = STATE.rejected
+        reason = JSON.parse(JSON.stringify(r))
+
+        onRejectedQueue.forEach(fn => fn(value))
       }
     }
     
@@ -34,24 +50,56 @@ class Promise {
     }
   }
 
-  then(onFulfilled, onRejected) {
-    return new Promise((resolve, reject) => {
-      if( this.state === 'fulfilled' ) {
-        onFulfilled(this.value)
-      }
+  then(onFulfilled = NOOP, onRejected = NOOP) {
 
-      if( this.state === 'rejected' ) {
-        onRejected(this.reason)
-      }
+    if( this.state === STATE.fulfilled ) {
+      
+    }
+
+    if( this.state === STATE.rejected ) {
+      
+    }
+
+    if ( this.state = STATE.pending ) {
+      //
+    }
+  }
+
+}
+
+
+// test
+// var p = new MyPromise(resolve => {
+//   setTimeout(() => {
+//     var o = {a : 1}
+//   resolve(o)
+//   o.b = 4
+//   }, 1000);
+// })
+//   .then(res => {
+//     res.m = 4; 
+//     console.log(res)
+//   })
+//   .then(res => {
+//     res.m = 4; 
+//     console.log('res', res)
+//   })
+
+  var p = new Promise(resolve => {
+    setTimeout(() => {
+      var o = {a : 1}
+    resolve(o)
+    o.b = 4
+    }, 1000);
+  })
+    .then(res => {
+      res.m = 4; 
+      console.log(res)
+      return res
+    })
+    .then(res => {
+      res.m = 6; 
+      console.log(res)
     })
 
-  }
-}
-
-Promise.wrap = fn => {
-  let args = [].slice.call(arguments)
-
-  return new Promise((resolve, reject) => {
-    fn.apply(null, args.concat((e, data) => e ? reject(e) : resolve(data)) )
-  })
-}
+console.log(p)
