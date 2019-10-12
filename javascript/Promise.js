@@ -67,8 +67,8 @@ class MyPromise {
 
 }
 
+// ===================== usage ===================== //
 
-// test
 // var p = new MyPromise(resolve => {
 //   setTimeout(() => {
 //     var o = {a : 1}
