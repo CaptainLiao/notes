@@ -1,12 +1,8 @@
 /**
- * 生成一个 promise 的四种方法
- * new Promise((resolve, reject) => {})
- * Promise.all(arrary)
- * Promise.race(arrary)
- * Promise.resolve(value)
- * Promise.reject(reason)
+ * Promise/A+ spec:
+ * https://promisesaplus.com/#notes
  * 
- * @class Promise
+ * 主要实现构造器和 then
  */
 
 const STATE = {
@@ -15,91 +11,134 @@ const STATE = {
   rejected: 'rejected',
 }
 
-let value, reason
+// TODO: 根据平台设置不同的值，如： MutationObserver, setImmediate, prosess.nextTick
+const nextTick = cb => setTimeout(cb, 0)
 
-const onFulfilledQueue = []
-const onRejectedQueue = []
 const NOOP = r => r
 
 class MyPromise {
-  constructor(excutor) {
+  constructor(callback) {
     this.state = STATE.pending
+    this.value = ''
+    this.onFulfilledCallback = NOOP
+    this.onRejectedCallback = NOOP
 
-    const resolve = v => {
-      if( this.state === STATE.pending ) {
-        this.state = STATE.fulfilled
-        value = JSON.parse(JSON.stringify(v))
+    const resolve = val => {
+      nextTick(() => {
+        if( this.state === STATE.pending ) {
+          this.state = STATE.fulfilled
+          this.value = val
 
-        onFulfilledQueue.forEach(fn => fn(value))
-      }
+          this.onFulfilledCallback()
+          this.onFulfilledCallback = NOOP
+        }
+      })
     }
 
-    const reject = r => {
-      if( this.state === STATE.pending ) {
-        this.state = STATE.rejected
-        reason = JSON.parse(JSON.stringify(r))
-
-        onRejectedQueue.forEach(fn => fn(value))
-      }
+    const reject = reason => {
+      nextTick(() => {
+        if( this.state === STATE.pending ) {
+          this.state = STATE.rejected
+          this.value = reason
+  
+          this.onRejectedCallback()
+          this.onRejectedCallback = NOOP
+        }
+      })
     }
     
     try {
-      excutor(resolve, reject)
+      callback(resolve, reject)
     } catch(e) {
       reject(e)
     }
   }
 
-  then(onFulfilled = NOOP, onRejected = NOOP) {
+  then(onFulfilled = r => r, onRejected = e => {throw e}) {
 
     if( this.state === STATE.fulfilled ) {
-      
+      return new MyPromise((resolve, reject) => doResolve(onFulfilled, resolve, reject, this.value))
     }
 
     if( this.state === STATE.rejected ) {
-      
+      return new MyPromise((resolve, reject) => doReject(onRejected, resolve, reject, this.value))
     }
 
-    if ( this.state = STATE.pending ) {
-      //
+    if ( this.state === STATE.pending ) {
+      return new MyPromise((resolve, reject) => {
+        this.onFulfilledCallback = () => doResolve(onFulfilled, resolve, reject, this.value)
+        this.onRejectedCallback = () => doReject(onRejected, resolve, reject, this.value)
+      })
     }
+  }
+
+  catch(onReject) {
+    return this.then(null, onReject)
   }
 
 }
 
+function doResolve(onResolve, resolve, reject, value) {
+  nextTick(() => {
+    try {
+      const res = onResolve(value)
+      if (res instanceof MyPromise) {
+        res.then(resolve, reject)
+      } else {
+        resolve(res)
+      }
+    } catch (error) {
+      reject(error)
+    }  
+  })
+}
+
+function doReject(onRejected, resolve, reject, value) {
+  nextTick(() => {
+    try {
+      const res = onRejected(value)
+      if (res instanceof MyPromise) {
+        res.then(resolve, reject)
+      } else {
+        resolve(res)
+      }
+    } catch (error) {
+      reject(error)
+    }  
+  })
+}
+
 // ===================== usage ===================== //
 
-// var p = new MyPromise(resolve => {
-//   setTimeout(() => {
-//     var o = {a : 1}
-//   resolve(o)
-//   o.b = 4
-//   }, 1000);
-// })
-//   .then(res => {
-//     res.m = 4; 
-//     console.log(res)
-//   })
-//   .then(res => {
-//     res.m = 4; 
-//     console.log('res', res)
-//   })
-
-  var p = new Promise(resolve => {
-    setTimeout(() => {
-      var o = {a : 1}
-    resolve(o)
-    o.b = 4
-    }, 1000);
+  var p = new MyPromise(resolve => {
+    var o = {a : 1}
+      resolve(o)
+      o.b = 4
   })
     .then(res => {
       res.m = 4; 
-      console.log(res)
-      return res
+      console.log('res', res)
+      throw 'xxx'
     })
     .then(res => {
       res.m = 6; 
-      console.log(res)
+      console.log('res', res)
+    })
+    .catch(e => {
+      console.log(e)
     })
 
-console.log(p)
+  console.log("============")
+
+  p.then(res => {
+    console.log('res', res)
+    return {x: 1}
+  })
+
+  setTimeout(() => {
+    p.then(res => {
+      console.log('res', res)
+    })
+  }, 1000)
+
+
