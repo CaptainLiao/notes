@@ -15,8 +15,25 @@
 </details>
 
 ### web 性能
+#### 加载性能
+<details>
+* 优化内容效率
+  * tree shaking
+  * 代码拆分，延迟加载非关键代码
+  * 源码压缩
+  * GZIP 压缩
+  * 缓存
+
+</details>
+
+#### 渲染性能
 <details>
 
+
+</details>
+
+#### 性能优化策略
+<details>
 * HTTP
   * 减少 HTTP 请求
   * 图片合并、懒加载、使用css3替代
