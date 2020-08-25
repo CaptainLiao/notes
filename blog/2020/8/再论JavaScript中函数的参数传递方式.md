@@ -19,6 +19,7 @@ changeStuff(num, obj1, obj2);
 console.log(num);
 console.log(obj1.item);
 console.log(obj2.item);
+
 ````
 利用上面的结论，你能说出正确的结果并解释原因么？
 
