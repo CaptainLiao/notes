@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <canvas id="canvas2"></canvas>
+
+  <script>
+    const data = {
+      text: {
+        color: '#8d8d8d',
+        fontSize: '14px',
+        fontFamily: `-apple-system, BlinkMacSystemFont, "PingFang SC", "PingFangSC",\
+          "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC",\
+          "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun,sans-serif\
+        `,
+        text: '1255',
+
+        x: 40,
+        y: 60,
+        borderColor: '#333',
+        backgroundColor: '#eee',
+        broderRadius: 8
+      },
+      Block: {
+        x: 0,
+        y: 0,
+        width: 300,
+        height: 300,
+        borderColor: '#ccc',
+        text: {
+          x: 0,
+          y: 20,
+          color: '#333',
+          text: '点我啊'
+        }
+      }
+      
+    }
+  </script>
+  <script>
+    class CanvasStage {
+      constructor({el, width, height, ratio = 1}) {
+        this.canvas = el;
+        // 解决字体/图片模糊
+        this.canvas.width = width * ratio;
+        this.canvas.height = height * ratio;
+        this.canvas.style.width = width + 'px';
+        this.canvas.style.height = height + 'px';
+
+        this.ctx = this.canvas.getContext('2d');
+        this.ctx.scale(ratio, ratio);
+      }
+
+      add(Node) {
+        Node.prototype.ctx = this.ctx;
+        Node.prototype.canvas = this.canvas;
+      }
+    }
+
+    class Node {
+      setFont(fontObj) {
+        const t = fontObj
+        this.ctx.font = `${t.fontSize} ${t.fontFamily}`
+      }
+      setFillStyle(fillStyle) {
+        this.ctx.fillStyle = fillStyle
+      }
+      setStrokeStyle(strokeStyle) {
+        this.ctx.strokeStyle = strokeStyle
+      }
+      setLineWidth(lineWidth) {
+        this.ctx.lineWidth = lineWidth
+      }
+    }
+
+
+    class Text extends Node {
+      constructor(textObj) {
+        super()
+
+        this.textObj = textObj;
+        
+        const rect = measureText(this.textObj)
+        this.textObj.width = rect.width
+        this.textObj.height = rect.height
+
+        if (this.textObj.borderColor) {
+          const block = new Block({
+            ...this.textObj,
+            x: this.textObj.x - rect.halfLineSpace,
+            y: this.textObj.y + rect.halfLineSpace,
+            width: this.textObj.width + 2 * rect.halfLineSpace,
+          })
+        }
+
+        this.render()
+      }
+      render() {
+        this.setFont(this.textObj)
+        this.setFillStyle(this.textObj.color)
+        this.ctx.fillText(this.textObj.text, this.textObj.x, this.textObj.y + this.textObj.height)
+      }
+    }
+
+
+    class Block extends Node {
+      constructor(blockObj) {
+        super()
+        this.blockObj = blockObj
+
+        this.render()
+      }
+      render() {
+        const radius = this.blockObj.broderRadius || 0
+
+        //圆的直径必然要小于矩形的宽高		
+        if(2*radius>this.blockObj.width || 2*radius>this.blockObj.height) return false
+
+        this.ctx.save()
+        this.ctx.translate(this.blockObj.x, this.blockObj.y)
+
+        //绘制圆角矩形的各个边
+        drawRoundRectPath(this.ctx, this.blockObj.width, this.blockObj.height, radius)
+        
+        if (this.blockObj.borderColor) {
+          this.setStrokeStyle(this.blockObj.borderColor)
+          this.ctx.stroke();
+        }
+
+        if (this.blockObj.backgroundColor) {
+          this.setFillStyle(this.blockObj.backgroundColor)
+          this.ctx.fill()
+        }
+
+        this.ctx.restore()
+      }
+    }
+
+    class Line extends Node {
+      constructor(lineObj) {
+        super()
+        this.lineObj = lineObj
+      }
+      render() {
+        this.drawPath()
+
+        this.setStrokeStyle(this.lineObj.color)
+        this.setLineWidth(this.lineObj.lineWidth)
+
+        this.ctx.stroke();
+      }
+      drawPath() {
+        const {
+          startPoint,
+          endPoint,
+        } = this.lineObj
+        this.ctx.beginPath();
+        this.ctx.moveTo(startPoint[0], startPoint[1]);
+        this.ctx.lineTo(endPoint[0], endPoint[1]);
+      }
+    }
+
+    var stage = new CanvasStage({
+      el: document.getElementById('canvas'),
+      width: 300,
+      height: 300,
+      ratio: window.devicePixelRatio || 1
+    })
+    stage.add(Node)
+    
+    var text = new Text(data.text)
+    var block = new Block(data.Block)
+
+
+
+
+
+
+/**
+ * 该方法用来绘制一个有填充色、底边带斜箭头的圆角矩形
+ * http://1017401036.iteye.com/blog/2311141
+ * 
+ * @param cxt:canvas的上下文环境
+ * @param x:左上角x轴坐标
+ * @param y:左上角y轴坐标
+ * @param width:矩形的宽度
+ * @param height:矩形的高度
+ * @param radius:圆的半径
+ * @param fillColor:填充颜色
+**/
+function fillRoundRect(cxt,x,y,width,height,radius,/*optional*/fillColor){
+	//圆的直径必然要小于矩形的宽高		
+	if(2*radius>width || 2*radius>height) return false
+	
+	cxt.save()
+	cxt.translate(x,y)
+	//绘制圆角矩形的各个边
+	drawRoundRectPath(cxt,width,height,radius)
+	cxt.fillStyle=fillColor||"#000"
+	cxt.fill()
+	cxt.restore()
+}
+
+function drawRoundRectPath(cxt,width,height,radius){
+	cxt.beginPath(0);
+	//从右下角顺时针绘制，弧度从0到1/2PI
+	cxt.arc(width-radius,height-radius,radius,0,Math.PI/2);
+
+  //矩形下边线
+	cxt.lineTo(radius,height)
+
+	//左下角圆弧，弧度从1/2PI到PI
+	cxt.arc(radius,height-radius,radius,Math.PI/2,Math.PI);
+
+	//矩形左边线
+	cxt.lineTo(0,radius);
+
+	//左上角圆弧，弧度从PI到3/2PI
+	cxt.arc(radius,radius,radius,Math.PI,Math.PI*3/2);
+
+	//上边线
+	cxt.lineTo(width-radius,0);
+
+	//右上角圆弧
+	cxt.arc(width-radius,radius,radius,Math.PI*3/2,Math.PI*2);
+
+	//右边线
+	cxt.lineTo(width,height-radius);
+	cxt.closePath();
+}
+
+
+    function measureText({
+      text = 'm', 
+      lineHeight,
+      fontSize = '14px', 
+      fontFamily = "Times New Roman",
+    }) {
+      const tmpDiv = document.createElement('span');
+      tmpDiv.innerHTML = text
+      tmpDiv.style.fontSize = fontSize
+      if (lineHeight) {
+        tmpDiv.style.lineHeight = lineHeight
+      }
+      // tmpDiv.style.position = 'fixed'
+      // tmpDiv.style.left = '-10000px'
+      document.body.appendChild(tmpDiv)
+
+      const rect = tmpDiv.getBoundingClientRect()
+      // 半行距
+      const halfLineSpace = (rect.height - parseInt(fontSize)) / 2
+      
+      return {
+        width: Math.ceil(rect.width),
+        height: rect.height - halfLineSpace,
+        halfLineSpace
+      }
+    }
+    
+  </script>
+</body>
+</html>
