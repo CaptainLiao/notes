@@ -10,7 +10,7 @@
   <canvas id="canvas2"></canvas>
 
   <script>
-    const data = {
+    const Data = {
       text: {
         color: '#8d8d8d',
         fontSize: '14px',
@@ -18,12 +18,18 @@
           "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC",\
           "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun,sans-serif\
         `,
-        text: '1255',
+        text: '速度力量的算法理论考试的付款了',
 
-        x: 40,
-        y: 60,
-        borderColor: '#333',
+        marginTop: 10,
+        marginLeft: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        
         backgroundColor: '#eee',
+        borderColor: '#8d8d8d',
+        borderWidth: 2,
         broderRadius: 8
       },
       Block: {
@@ -32,14 +38,12 @@
         width: 300,
         height: 300,
         borderColor: '#ccc',
+
         text: {
-          x: 0,
-          y: 20,
           color: '#333',
           text: '点我啊'
         }
       }
-      
     }
   </script>
   <script>
@@ -83,30 +87,62 @@
       constructor(textObj) {
         super()
 
-        this.textObj = textObj;
+        this.textObj = {
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+          marginTop: 0,
+          marginBottom: 0,
+          marginLeft: 0,
+          marginRight: 0,
+          ...textObj
+        };
         
-        const rect = measureText(this.textObj)
-        this.textObj.width = rect.width
-        this.textObj.height = rect.height
+        const textRect = measureText(this.textObj)
+        this.textObj.width = textRect.width
+        this.textObj.height = textRect.height
+
+        // 内容盒子
+        const contentBlock = {
+          x: this.textObj.marginLeft,
+          y: this.textObj.marginTop,
+
+          width: textRect.width
+            + this.textObj.paddingLeft
+            + this.textObj.paddingRight
+            + 2 * textRect.halfLineSpace,
+          height: textRect.height
+            + this.textObj.paddingTop
+            + this.textObj.paddingBottom,
+            
+          borderColor: this.textObj.borderColor,
+          borderWidth: this.textObj.borderWidth,
+          backgroundColor: this.textObj.backgroundColor,
+          broderRadius: this.textObj.broderRadius
+        }
 
         if (this.textObj.borderColor) {
-          const block = new Block({
-            ...this.textObj,
-            x: this.textObj.x - rect.halfLineSpace,
-            y: this.textObj.y + rect.halfLineSpace,
-            width: this.textObj.width + 2 * rect.halfLineSpace,
-          })
+          new Block(contentBlock)
         }
+
+        this.textObj.x = contentBlock.x
+          + this.textObj.paddingLeft
+          + textRect.halfLineSpace
+        this.textObj.y = contentBlock.y
+          + this.textObj.paddingBottom
+          - textRect.halfLineSpace
 
         this.render()
       }
       render() {
+        this.ctx.save()
         this.setFont(this.textObj)
         this.setFillStyle(this.textObj.color)
         this.ctx.fillText(this.textObj.text, this.textObj.x, this.textObj.y + this.textObj.height)
+        this.ctx.restore()
       }
     }
-
 
     class Block extends Node {
       constructor(blockObj) {
@@ -123,6 +159,7 @@
 
         this.ctx.save()
         this.ctx.translate(this.blockObj.x, this.blockObj.y)
+        this.setLineWidth(this.blockObj.borderWidth)
 
         //绘制圆角矩形的各个边
         drawRoundRectPath(this.ctx, this.blockObj.width, this.blockObj.height, radius)
@@ -147,12 +184,16 @@
         this.lineObj = lineObj
       }
       render() {
+        this.ctx.save()
+
         this.drawPath()
 
         this.setStrokeStyle(this.lineObj.color)
         this.setLineWidth(this.lineObj.lineWidth)
 
-        this.ctx.stroke();
+        this.ctx.stroke()
+
+        this.ctx.restore()
       }
       drawPath() {
         const {
@@ -174,6 +215,7 @@
     stage.add(Node)
     
     var text = new Text(data.text)
+
     var block = new Block(data.Block)
 
 
