@@ -1,93 +1,58 @@
-<!-- 选择备选航班 -->
+<!-- tab -->
 <template>
-<div class="select-flight">
-  <div class="panel a-page-head">
-    <div class="a-page-title">8月14日 周一</div>
+  <div class="d-tab fx-row">
+    <div v-for="(item, index) in list" :key="index"
+      class="fx-1 fx-center l"
+      :class="{ active: index == activeIndex }"
+      @click="$emit(index)"
+    >{{item.name}}</div>
   </div>
-  <div class="panel tab-bar" @click="tapSwitchTab">
-    <div class="fx-row">
-      <div ref="tabFlight" id="flight" :class="['tab', {'a-text-medium': tabId === 'flight'}]">按航班抢</div>
-      <div id="time"  :class="['tab', {'a-text-medium': tabId === 'time'}]">按时间段抢</div>
-    </div>
-    <div ref="tabLine" class="line" :style="lineOffsetLeft"></div>
-  </div>
-
-  <div></div>
-
-</div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      tabId: '',
-      lineOffsetLeft: '',
-    };
-  },
-
-  components: {},
-
-  computed: {},
-
-  mounted() {
-    this.tapSwitchTab()
+  props: {
+    list: {
+      type: Array,
+      default: () => [{name: '机票预订'}, {name: '省钱管家'}]
+    },
+    activeIndex: 0
   },
 
   methods: {
-    tapSwitchTab(e) {
-      let tabFlight = this.$refs.tabFlight
-      let {
-        id,
-        offsetLeft,
-        clientWidth
-      } = e && e.target || tabFlight;
 
-      if (!id) return
-
-      let lineWidth = this.$refs.tabLine.clientWidth
-      let x = offsetLeft - tabFlight.offsetLeft + (clientWidth - lineWidth)/2
-
-      this.tabId = id
-      this.lineOffsetLeft = `transform: translateX(${x}px)`
-    }
   }
 }
 
 </script>
 <style lang='scss' scoped>
-$px: 1rem / 20;
-.select-flight {
-  min-height: 100vh;
-  background-color: #f6f6f6;
-}
+@import "@/scss/_vars.scss";
+.d-tab {
+  padding-top: 10 * $px;
+  font-size: 15 * $px;
+  line-height: 21 * $px;
+  font-weight: 500;
+  text-align: center;
+  background-color: #ffffff;
 
-.tab-bar {
-  position: relative;
-  color: #333;
-  border-bottom: 1px solid rgba(1,1,1,.2);
-  .tab {
-    margin-right: 40*$px;
-    padding-bottom: 10*$px;
+  .l,
+  .r {
+    position: relative;
+    padding-bottom: 8 * $px;
   }
-  .line {
-    margin-bottom: -1px;
-    width: 56*$px;
-    height: 2px;
-    border-radius: 1px;
-    background-color: #1188FF;
-    transform-origin: 0;
-    transition: transform 300ms ease;
+
+  .active {
+    color: #1188ff;
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 25 * $px;
+      height: 2 * $px;
+      background-color: #1188ff;
+      transform: translateX(-50%);
+    }
   }
-}
-
-
-
-.color-666 {
-  color: #666;
-}
-.panel {
-  padding-left: 20*$px;
-  background-color: #fff;
 }
 </style>
