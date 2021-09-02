@@ -4,7 +4,7 @@
  * 用例：
   const rotate = rotateAnything({elemId: 'rotateElementId'})
   rotate.start(startParam)
-  rotate.end(endParam, callback)
+  rotate.end(endParam) // 返回 promise
   rotate.stop() // 返回旋转的总角度（单位deg）
 
   startParam 参数如下：
@@ -60,11 +60,11 @@ export function rotateAnything({elemId}) {
       angle = 0,
       easingFn = easeOutQuad,
       duration = 1200
-    } = {}, cb) {
-      if (rotateStatu !== ROTATE_STATUS.START) return;
+    } = {}) {
+      if (rotateStatu !== ROTATE_STATUS.START) return Promise.resolve();
+      tweenRes.stop();
 
       rotateStatu = ROTATE_STATUS.END
-      tweenRes.stop();
       const currentValue = tweenRes.getState()
       const remainAngle = ONE_CIRCLE - currentValue % ONE_CIRCLE + angle
 
@@ -78,19 +78,10 @@ export function rotateAnything({elemId}) {
           elem.style.transform = `rotate(${v}deg)`
         }
       })
-
-      setTimeout(cb, duration)
+      return sleep(duration)
     },
     stop() {
-      const statu = rotateStatu
       rotateStatu = ROTATE_STATUS.STOP
-      if (statu !== ROTATE_STATUS.START) {
-        throw {
-          type: 'statu error',
-          message: `当前状态为 ${statu}，不能调用 stop()`
-        }
-      }
-
       tweenRes.stop()
       return tweenRes.getState()
     }
@@ -161,3 +152,8 @@ function tweenHelper ({
 function rAF(cb) {
   requestAnimationFrame(cb)
 }
+
+function sleep(time) {
+  return new Promise(resolve => setTimeout(resolve, time))
+}
+
