@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<style>
+  .wrap {
+    margin: 200px auto 0 auto;
+    width: 400px;
+    height: 400px;
+  }
+  .box {
+    width: 200px;
+    height: 200px;
+    background: #eee;
+    /* transform: rotate(60deg); */
+    /* animation: loading 3s linear; */
+  }
+
+
+    @keyframes loading {
+      0% {
+
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(60deg);
+      }
+    }
+</style>
+<body>
+
+  <div class="wrap">
+    <div class="box" id="box"></div>
+  </div>
+  
+  <button id="startBtn">点击开始</button>
+  <button id="endBtn">点击结束</button>
+
+  <script src="./rotate-anything.js"></script>
+  <script>
+
+    var startBtn = document.querySelector('#startBtn')
+    var endBtn = document.querySelector('#endBtn')
+
+    var rotate = rotateAnything({elemId: 'box'})
+
+    startBtn.addEventListener('click', () => {
+      rotate.start()
+    })
+
+    endBtn.addEventListener('click', () => {
+      rotate.end({angle: 60})
+      
+    })
+
+  </script>
+</body>
+</html>
