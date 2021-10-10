@@ -2,6 +2,7 @@
 
 ## 从 dev-tool 看页面 parse 过程
 
+
 ### request - response
 当浏览器发送一个请求到接受所有响应数据，这个过程发生了什么？
 
