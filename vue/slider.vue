@@ -35,14 +35,13 @@ export default {
   components: {CSlide},
 
   mounted() {
-    const slots = this.$refs['slider-wrap'].$el.children
-    if (!slots || !slots.length) return
+    const {children, offsetWidth: totalWidth} = this.$refs['slider-wrap'].$el
+    if (!children || !children.length) return
 
-    const totalWidth = slots[0].clientWidth * slots.length
     const sliderWidth = this.$refs['slider'].offsetWidth
-
-    this.__minDistance = Math.min(sliderWidth - totalWidth - 40, 0)
-    this.__isLocked = this.__minDistance === 0
+    const maxScrollDistance = Math.floor(totalWidth / sliderWidth) * sliderWidth - (sliderWidth - totalWidth % sliderWidth)
+    this.__minDistance = -maxScrollDistance
+    this.__isLocked = totalWidth <= sliderWidth
   },
 
   methods: {
@@ -60,11 +59,10 @@ export default {
 
     $_transOffsetX2(speed) {
       clearTimeout(this.timer$)
-      const duration = 0.5 //s
       this.offsetX += speed
       this.transform = `translateX(${this.offsetX}px)`
-      this.transition = `transform ${duration}s ease-out`
-      this.timer$ = setTimeout(() => this.$_resetMove(), duration)
+      this.transition = `transform ${this.duration}ms ease-out`
+      this.timer$ = setTimeout(() => this.$_resetMove(), 0)
     },
 
     $_transOffsetX(speed) {
@@ -127,10 +125,5 @@ $px: 1rem / 20;
 .slider {
   width: 100%;
   overflow: hidden;
-}
-
-.slider-wrap {
-  width: 10000000%;
-  padding-right: 20*$px;
 }
 </style>
