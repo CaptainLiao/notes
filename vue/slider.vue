@@ -22,6 +22,12 @@ const rAF = window.requestAnimationFram || function(f) {
 };
 
 export default {
+  props: {
+    showAll: { // 向左滚动显示全部内容后，复位
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       barWidth: 0,
@@ -35,13 +41,20 @@ export default {
   components: {CSlide},
 
   mounted() {
-    const {children, offsetWidth: totalWidth} = this.$refs['slider-wrap'].$el
+    const {children} = this.$refs['slider-wrap'].$el
     if (!children || !children.length) return
 
+    const totalWidth = [...children].map(el => getRealWidth(el)).reduce((acc, w) => acc + w, 0)
     const sliderWidth = this.$refs['slider'].offsetWidth
     const maxScrollDistance = Math.floor(totalWidth / sliderWidth) * sliderWidth - (sliderWidth - totalWidth % sliderWidth)
     this.__minDistance = -maxScrollDistance
     this.__isLocked = totalWidth <= sliderWidth
+
+    if (this.showAll) {
+      if (this.__isLocked) return
+      this.$_transOffsetX2(this.__minDistance)
+      setTimeout(() => this.$_transOffsetX2(-this.__minDistance), ~~this.duration + 200)
+    }
   },
 
   methods: {
@@ -119,11 +132,22 @@ export default {
   }
 }
 
+
+function getRealWidth(ele) {
+  const sty = window.getComputedStyle(ele, null)
+  return ele.offsetWidth 
+    + parseFloat(sty.getPropertyValue('margin-left'))
+    + parseFloat(sty.getPropertyValue('margin-right'))
+}
 </script>
 <style lang='scss' scoped>
 $px: 1rem / 20;
 .slider {
   width: 100%;
   overflow: hidden;
+}
+
+.slider-wrap {
+  width: 10000000%;
 }
 </style>
