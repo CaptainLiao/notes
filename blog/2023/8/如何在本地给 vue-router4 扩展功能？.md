@@ -41,8 +41,17 @@ const tapSubmit = () => {
 import 'vue-router'
 
 declare module 'vue-router' {
+  // for router
+  interface LocationAsRelativeRaw {
+    callback?: anyFn
+  }
+  // for route
   interface RouteLocationNormalizedLoaded {
     callback?: anyFn
+  }
+  interface Router {
+    pushAlive(to: RouteLocationRaw): Promise<NavigationFailure | void | undefined>
+    replaceAlive(to: RouteLocationRaw): Promise<NavigationFailure | void | undefined>
   }
 }
 
