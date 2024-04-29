@@ -1,6 +1,5 @@
-# 把SPA的加载速度提升一倍，有没有搞头？
 众所周知，**纯前端渲染**的单页应用（SPA）渲染比较慢，其中一个问题是：先加载公共js，再根据路由动态加载页面需要的js。如下图：
-
+![](https://img2024.cnblogs.com/blog/1085489/202404/1085489-20240429085917702-1300665796.png)
 1. `commons.e7c0f857.js`加载并解析完毕后（2.53s）
 2. 再发起对`order.15cd187e.js`的加载(2.24s)。
 
@@ -29,7 +28,60 @@
 2.  当请求到达服务器时，将匹配到的文件写入到`html`后，再返回给浏览器
 
 #### 生成 path 对应的配置文件
-如果你用的是`webpack`进行打包，很容易通过自定义插件，在`emit hook`得到`path`对应的js/css依赖文件，最终生成一个配置文件。
+如果你用的是`webpack`进行打包，很容易通过自定义插件，在`emit hook`得到`path`对应的js/css依赖文件，最终生成一个配置文件。以下代码仅作参考：
+````js
+
+class PreloadChunkPlugin {
+  apply(compiler) {
+    const webpackChunkNameMap = pathList.reduce((acc, item) => {
+      acc[item.webpackChunkName] = {
+        path: item.path,
+        chunks: []
+      }
+      return acc
+    }, {})
+    
+    const mode = compiler.options.mode;
+    compiler.hooks.emit.tapAsync(pluginName, (compilation, callback) => {
+      const chunkDepSet = compilation.chunks.reduce((acc, chunk) => {
+        const chunkName = chunk.name
+        if (chunkName && webpackChunkNameMap[chunkName]) {
+          if (!acc[chunkName]) acc[chunkName] = {
+            chunkSet: new Set(),
+            chunkIdSet: new Set()
+          }
+          ;[...chunk._groups].forEach(chunkGroup => {
+            chunkGroup.chunks.forEach(subChunk => {
+              const hash = mode === 'production' ? subChunk.contentHash.javascript.substring(0, 8) : ''
+              acc[chunkName].chunkSet.add(`${(subChunk.name || subChunk.id)}${hash ? '.' + hash : ''}.js`)
+              acc[chunkName].chunkIdSet.add(subChunk.id)
+            })
+          })
+        }
+        return acc
+      }, {})
+
+      const pathMap = {}
+      Object.keys(chunkDepSet).forEach(key => {
+        const {
+          chunkSet,
+          chunkIdSet,
+        } = chunkDepSet[key]
+        pathMap[webpackChunkNameMap[key].path] = {
+          chunks: [...chunkSet],
+          chunkIds: [...chunkIdSet]
+        }
+      })
+
+      fs.writeFileSync(
+        path.resolve(__dirname, '../../app/assets-path2chunks.json'),
+        JSON.stringify(pathMap)
+      );
+
+      callback();
+    });
+}
+````
 
 当然，`vite`插件也可以在`generateBundle`中做到。
 
@@ -45,7 +97,7 @@
 如果你使用的是`nginx`，也可以考虑编写`lua`脚本，实现动态写入的过程。
 
 下图是改造后的效果：
-
+![](https://img2024.cnblogs.com/blog/1085489/202404/1085489-20240429085936580-166302439.png)
 
 ### 问题
 q: 为什么不用多页？
@@ -53,5 +105,3 @@ a: 多页应用之间跳转比较慢，应用之间通信也相对麻烦。改�
 
 q: 为什么不用服务端渲染（ssr）
 a: ssr 效果当然更好。但我们项目很大，改造成本过高。新项目当然推荐！
-
-
